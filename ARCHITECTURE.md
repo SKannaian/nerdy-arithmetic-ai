@@ -1,469 +1,446 @@
-# 🏛️ Nerdy AI Learning Suite — System Architecture
+# 🏛️ Nerdy Arithmetic AI — Comprehensive System Architecture
 
-Comprehensive architectural specification, visual sequence diagrams, state machines, and data flows for the **Nerdy AI Learning Suite**.
-
----
-
-## 📑 Table of Contents
-
-1. [High-Level System Architecture](#1-high-level-system-architecture)
-2. [Multi-Tier AI Pedagogy Cascade](#2-multi-tier-ai-pedagogy-cascade)
-3. [Educational Domain Engines](#3-educational-domain-engines)
-   - [3.1 Prompt 01: K–5 Math Game Engine (CRA Framework)](#31-prompt-01-k5-math-game-engine-cra-framework)
-   - [3.2 Prompt 02: Language Learning Engine (SuperMemo SM-2)](#32-prompt-02-language-learning-engine-supermemo-sm-2)
-   - [3.3 Prompt 03: Reading & Comprehension Engine (Bloom's Taxonomy)](#33-prompt-03-reading--comprehension-engine-blooms-taxonomy)
-4. [Universal Gamification & Audio Synthesizer Pipeline](#4-universal-gamification--audio-synthesizer-pipeline)
-5. [Local Testbed vs. Cloud Production Topology](#5-local-testbed-vs-cloud-production-topology)
-6. [Security, COPPA/FERPA Compliance, & Socratic Guardrails](#6-security-coppaferpa-compliance--socratic-guardrails)
-7. [Component & Data Model Specifications](#7-component--data-model-specifications)
+> **An IXL-Inspired, AI-Native Socratic Mathematics Learning Platform (Grades K–5)**  
+> Engineered for the **[Nerdy AI Hackathon Challenge](https://hackathon.nerdy.com)** (Prompt 01: K–5 Math Game)  
+> Live Deployment: **[https://nerdy-arithmetic-ai.web.app](https://nerdy-arithmetic-ai.web.app)** | Repository: **[GitHub](https://github.com/SKannaian/nerdy-arithmetic-ai)**
 
 ---
 
-## 1. High-Level System Architecture
+## 📑 Architecture Walkthrough Index
 
-The Nerdy AI Learning Suite is constructed on a **decoupled, edge-capable, local-first architecture**. The application is designed to function seamlessly as an offline-capable Single Page Application (SPA), while dynamically upgrading to real-time Socratic intelligence via Google Gemini 2.5 Flash when connectivity or API credentials are provided.
+1. [High-Level System Topology](#1-high-level-system-topology)
+2. [End-to-End Learner Journey & Onboarding Flow](#2-end-to-end-learner-journey--onboarding-flow)
+3. [Anti-Repetition & Spaced Repetition Engine](#3-anti-repetition--spaced-repetition-engine)
+4. [Jerome Bruner's CRA Manipulatives Architecture](#4-jerome-bruners-cra-manipulatives-architecture)
+5. [The Socratic AI Feedback & Cognitive Misconception Loop ("Byte")](#5-the-socratic-ai-feedback--cognitive-misconception-loop-byte)
+6. [IXL SmartScore Progression & Mastery State Machine](#6-ixl-smartscore-progression--mastery-state-machine)
+7. [Varsity Tutors Live Human Tutoring Telemetry Hand-Off](#7-varsity-tutors-live-human-tutoring-telemetry-hand-off)
+8. [Automated Sunday Evening Parent Summary Pipeline](#8-automated-sunday-evening-parent-summary-pipeline)
+9. [Component & Data Model Specifications](#9-component--data-model-specifications)
+
+---
+
+## 1. High-Level System Topology
+
+Nerdy Arithmetic AI is built on a **modern, decoupled, edge-capable architecture**. The frontend Single Page Application (SPA) runs client-side with zero external build dependencies, persisting state locally while dynamically interfacing with Google Cloud Firebase Hosting and Google Gemini 2.5 Flash via FastAPI.
 
 ```mermaid
 graph TB
-    subgraph Client["Client Tier (Modern Web Browser)"]
-        UI["Modern Glassmorphism UI (HTML5 / Vanilla CSS)"]
-        Router["Client Tab Router (Prompt 01 / 02 / 03)"]
+    subgraph ClientTier["Client Tier (Browser / iPad / Chromebook)"]
+        UI["IXL-Inspired UI (TailwindCSS / Outfit / Fredoka)"]
+        HUD["IXL HUD (SmartScore 0-100 · Questions · Stopwatch)"]
         
-        subgraph SubEngines["Pedagogical Engines"]
-            MathEng["K-5 CRA Math Engine"]
-            LangEng["SM-2 Language Engine"]
-            ReadEng["Bloom's Reading Engine"]
+        subgraph Manipulatives["CRA Virtual Manipulatives"]
+            TenFrame["Ten-Frames Engine (K–1 Addition & Subtraction ✕)"]
+            Base10["Base-10 Regrouping (Grades 2–3 Tens/Ones)"]
+            AreaArray["Area Arrays Grid (Grades 4–5 Multiplication)"]
         end
-        
-        subgraph BrowserAPIs["Native Browser Web APIs"]
-            WebAudio["Web Audio API (Oscillator Synthesis)"]
-            WebSpeech["Web Speech API (SpeechSynthesis)"]
-            LocalStore["LocalStorage (State & Progress Persistence)"]
+
+        subgraph Engines["Core Client Engines"]
+            AntiRep["Anti-Repetition & Spaced Review Buffer"]
+            AudioSynth["Web Audio Chimes + Web Speech TTS"]
+            Scratchpad["Drawing Scratchpad Canvas"]
+            UserDB["Persistent User Database (localStorage['nerdy_users_db'])"]
         end
-        
-        MentorWidget["'Byte' Socratic AI Mentor Interface"]
-        CascadeCtrl["AI Cascade Controller & Heuristic Engine"]
     end
 
-    subgraph BackendGateway["Local / Cloud Gateway (FastAPI / Cloud Functions)"]
-        FastAPI["FastAPI / Uvicorn Server (:8765)"]
-        CORS["CORS & Request Sanitizer"]
-        SocraticPrompt["System Pedagogy Guardrails"]
+    subgraph BackendTier["API Gateway & Telemetry Service (FastAPI :8765)"]
+        Router["/api/chat Endpoint"]
+        Classifier["Cognitive Misconception Classifier"]
+        Guardrails["Socratic Anti-Spoil Guardrails"]
+        OfflineHeuristic["Zero-Crash Offline Heuristic Engine"]
     end
 
-    subgraph ExternalServices["Google Cloud Platform & AI"]
-        GeminiAPI["Google Gemini 2.5 Flash API"]
+    subgraph CloudTier["Google Cloud Platform & Varsity Tutors Ecosystem"]
+        Firebase["Google Cloud Firebase Hosting"]
+        GeminiFlash["Google Gemini 2.5 Flash API"]
+        VarsityTutor["Varsity Tutors 1-on-1 Human Tutoring Bridge"]
+        WeeklyEmail["Sunday Evening Parent Summary Dispatcher"]
     end
 
-    %% Wiring
-    UI --> Router
-    Router --> MathEng
-    Router --> LangEng
-    Router --> ReadEng
+    %% Client Interactions
+    UI --> HUD
+    UI --> Manipulatives
+    UI --> Scratchpad
+    UI --> AntiRep
+    UI --> UserDB
+    Manipulatives --> AudioSynth
 
-    MathEng & LangEng & ReadEng --> WebAudio
-    LangEng --> WebSpeech
-    MathEng & LangEng & ReadEng --> LocalStore
-
-    MentorWidget --> CascadeCtrl
+    %% Gateway & AI
+    UI -- "Answer Check / Hint Request" --> Router
+    Router --> Classifier
+    Classifier --> Guardrails
+    Guardrails --> GeminiFlash
+    GeminiFlash -. "Offline Fallback" .-> OfflineHeuristic
     
-    CascadeCtrl -- "Tier 1: Proxy Request" --> FastAPI
-    FastAPI --> CORS --> SocraticPrompt --> GeminiAPI
-    
-    CascadeCtrl -. "Tier 2: Direct REST Fallback" .-> GeminiAPI
-    CascadeCtrl -- "Tier 3: Heuristic Engine (Offline)" --> MentorWidget
+    %% Hosting & Ecosystem
+    ClientTier -. "Hosted On" .-> Firebase
+    UI -- "Live Human Help" --> VarsityTutor
+    UserDB -- "7-Day Progress Sync" --> WeeklyEmail
 
-    style Client fill:#0B132B,stroke:#1C2541,color:#fff
-    style BackendGateway fill:#1C2541,stroke:#48CAE4,color:#fff
-    style ExternalServices fill:#0A192F,stroke:#F77F00,color:#fff
+    classDef client fill:#f0f9ff,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
+    classDef backend fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#14532d;
+    classDef cloud fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#78350f;
+    class ClientTier client;
+    class BackendTier backend;
+    class CloudTier cloud;
 ```
 
 ---
 
-## 2. Multi-Tier AI Pedagogy Cascade
+## 2. End-to-End Learner Journey & Onboarding Flow
 
-To guarantee **zero downtime** and ensure a seamless experience for students during judging and real-world school usage, the AI companion ("Byte") employs a **3-Tier Cascade Decision Flow**:
+Students or parents access the application using passwordless Email OTP authentication with evaluator bypass, ensuring immediate access while preserving individual multi-day learning records.
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Student as Student / Learner
-    participant UI as Byte Chat Widget
-    participant Cascade as Cascade Controller
-    participant LocalProxy as Local Gateway (:8765)
-    participant CloudGemini as Gemini 2.5 Flash API
-    participant Heuristic as Socratic Heuristic Fallback
+    actor Learner as Student / Parent
+    participant UI as Onboarding Modal
+    participant Engine as Client State Machine
+    participant DB as User DB (localStorage)
+    participant HUD as IXL Header & HUD
 
-    Student->>UI: Types question or clicks "Ask Hint"
-    UI->>Cascade: dispatchPrompt(context, history, userMsg)
+    Learner->>UI: Enter Email Address (e.g., alex.parent@gmail.com)
+    UI->>Engine: requestActivationCode(email)
+    Engine->>Engine: Generate 6-digit numeric OTP (e.g. 748291)
+    Engine-->>UI: Display verification step (with 1-click "Auto-fill Code" for Judges)
     
-    alt Tier 1: Local FastAPI Server Active
-        Cascade->>LocalProxy: POST /chat {message, context}
-        alt Server OK & API Key valid
-            LocalProxy->>CloudGemini: genai.models.generate_content(...)
-            CloudGemini-->>LocalProxy: Return Socratic Guidance
-            LocalProxy-->>Cascade: 200 OK {reply}
-            Cascade-->>UI: Render AI Coach response
-        else Server Down / Timeout (2000ms)
-            LocalProxy--xCascade: Connection Refused / Timeout
-        end
+    alt Evaluator Fast-Pass
+        Learner->>UI: Click "Auto-fill Code ⚡"
+    else Manual Entry
+        Learner->>UI: Types 6-digit OTP
     end
 
-    alt Tier 2: Direct REST via Browser Key
-        Cascade->>CloudGemini: POST /v1beta/models/gemini-2.5-flash:generateContent?key=...
-        alt Cloud API Responded
-            CloudGemini-->>Cascade: 200 OK (Candidate text)
-            Cascade-->>UI: Render AI Coach response
-        else Key Missing or Quota Exceeded
-            CloudGemini--xCascade: 403 / 429 / Offline
-        end
+    UI->>Engine: verifyOtpCode(code)
+    
+    alt Returning User Detected
+        Engine->>DB: loadUsersDb()[email]
+        DB-->>Engine: Return profile (streak, sessions, history, avatar)
+        Engine->>HUD: Populate Header avatar, name, streak badge
+    else New User
+        UI->>Learner: Prompt for Student Name, Avatar (🦊, 🚀, 🦄, 🦖), & Grade Tier
+        Learner->>UI: Selects Avatar & Grade
+        Engine->>DB: Persist new profile to nerdy_users_db
     end
 
-    alt Tier 3: Zero-Dependency Offline Heuristic Engine
-        Cascade->>Heuristic: evaluateContext(activeTab, problemState, query)
-        Heuristic->>Heuristic: Pattern Match (Math decompose, Lang mnemonic, Reading infer)
-        Heuristic-->>Cascade: Contextual Socratic Hint
-        Cascade-->>UI: Render heuristic guidance with offline badge
-    end
+    Engine->>HUD: Initialize SmartScore (0), Timer (00:00), Fresh Question Tag
+    Engine->>Learner: Audio Welcome & Interactive Problem Display
 ```
 
 ---
 
-## 3. Educational Domain Engines
+## 3. Anti-Repetition & Spaced Repetition Engine
 
-### 3.1 Prompt 01: K–5 Math Game Engine (CRA Framework)
-
-The Math Engine adheres to Jerome Bruner's **Concrete–Representational–Abstract (CRA)** sequence:
-1. **Concrete/Representational:** Dynamic SVG Ten-Frames and grouping boxes with color-coded dot counters.
-2. **Abstract:** Symbolic numerical equations ($A + B = ?$).
-3. **Adaptive Tiers:** 
-   - Tier 1: Grades K–1 (Addition & Subtraction $\le 10$, visual ten-frame representation)
-   - Tier 2: Grades 2–3 (Two-digit regrouping $\le 50$)
-   - Tier 3: Grades 4–5 (Multiplication arrays & mental math facts up to $12 \times 12$)
-
-```mermaid
-stateDiagram-v2
-    [*] --> SelectTier: User selects K-1, 2-3, or 4-5
-    SelectTier --> GenerateProblem: RNG bounded by Tier Constraints
-    
-    state GenerateProblem {
-        [*] --> ComputeOperands
-        ComputeOperands --> RenderTenFrames: If Tier == K-1
-        ComputeOperands --> RenderRegroupingBox: If Tier == 2-3
-        ComputeOperands --> RenderArrayGrid: If Tier == 4-5
-    }
-
-    GenerateProblem --> AwaitingAnswer: Student views visual + abstract math
-    
-    AwaitingAnswer --> AskAIHint: Clicks "Ask AI Mentor for a Hint"
-    AskAIHint --> SocraticHint: Byte returns scaffolding without direct answer
-    SocraticHint --> AwaitingAnswer
-
-    AwaitingAnswer --> EvaluateAnswer: Clicks Submit / Presses Enter
-    
-    EvaluateAnswer --> Correct: User Input == Expected Value
-    EvaluateAnswer --> Incorrect: User Input != Expected Value
-
-    state Correct {
-        IncrementStreak: Streak = Streak + 1
-        PlaySynthSuccess: Web Audio 587.33Hz -> 880Hz chime
-        AwardXP: XP += 10 * (1 + Streak * 0.2)
-        CheckAchievements: Evaluate 'First Step', 'On Fire' badges
-    }
-
-    state Incorrect {
-        ResetStreak: Streak = 0
-        PlaySynthSoftError: Web Audio 220Hz -> 164Hz gentle tone
-        ShowScaffolding: Highlight ten-frame dots & offer step-by-step cue
-    }
-
-    Correct --> GenerateProblem: Next Question after 1200ms
-    Incorrect --> AwaitingAnswer: Retry problem
-```
-
----
-
-### 3.2 Prompt 02: Language Learning Engine (SuperMemo SM-2)
-
-The Language Engine uses the proven **SuperMemo-2 (SM-2)** algorithm for optimal spaced repetition, paired with the browser's native **SpeechSynthesis API** for genuine pronunciation in Spanish, French, and English:
+To prevent mindless rote repetition and assess genuine conceptual understanding, every candidate question undergoes deterministic hashing, same-day exclusion, and spaced difficulty scheduling.
 
 ```mermaid
 flowchart TD
-    StartCard["Card Display (Front: Target Word, Phonetic, Example)"] --> FlipCard["Student Flips Card (3D CSS Perspective Flip)"]
-    FlipCard --> AudioPlay["Native SpeechSynthesis Pronunciation Triggered"]
-    AudioPlay --> StudentRating["Student Selects Self-Rating Quality (q: 0 to 5)"]
+    StartGen["Request Next Arithmetic Question"] --> ExtractState["Read Active Grade Tier (k1, 23, 45) & Operation (add, sub, mixed)"]
+    ExtractState --> BoundedRNG["Generate Bounded Operands (n1, n2, op)"]
+    BoundedRNG --> ComputeHash["Compute Conceptual Signature:<br/><code>key = tier : op : n1 : n2</code><br/>(e.g., <code>k1:sub:9:9</code>)"]
+    
+    ComputeHash --> CheckHistory{"Check <code>state.profile.history[key]</code>"}
+    
+    CheckHistory -- "Seen Today (lastSeenDate == Today)" --> DiscardCandidate["Discard Candidate (Zero Same-Day Repetition)"]
+    DiscardCandidate --> RetryRNG["Regenerate with New Permutations (Max 25 attempts)"]
+    RetryRNG --> BoundedRNG
+    
+    CheckHistory -- "Missed in Past (wrongCount > 0) OR Not Seen in 24h+" --> SpacedReview["Flag as: 🎯 Smart Spaced Review<br/>Prioritize for Long-Term Memory"]
+    
+    CheckHistory -- "Never Seen Before" --> FreshPerm["Flag as: ✨ Fresh Question"]
+    
+    SpacedReview --> RenderQuestion["Render Equation Card & CRA Manipulatives"]
+    FreshPerm --> RenderQuestion
+    
+    RenderQuestion --> AwaitingResponse["Awaiting Student Submission"]
 
-    subgraph SM2Algorithm["SuperMemo SM-2 Interval Calculation"]
-        CalcEF["Update Easiness Factor (EF):<br/>EF' = EF + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))<br/>EF = max(EF', 1.3)"]
-        
-        CalcInterval{"Evaluation of Quality (q)"}
-        CalcInterval -- "q < 3 (Failed)" --> RepReset["Repetitions = 0<br/>Interval = 1 Day<br/>Queue Immediate Re-review"]
-        CalcInterval -- "q >= 3 (Passed)" --> RepInc["Repetitions += 1"]
-        
-        RepInc --> CheckRep{"Repetition Count"}
-        CheckRep -- "n == 1" --> Int1["Interval = 1 Day"]
-        CheckRep -- "n == 2" --> Int6["Interval = 6 Days"]
-        CheckRep -- "n > 2" --> IntN["Interval = Round(PriorInterval * EF)"]
-    end
-
-    StudentRating --> CalcEF
-    CalcEF --> CalcInterval
-    RepReset --> NextCard["Load Next Scheduled Flashcard"]
-    Int1 & Int6 & IntN --> NextCard
-    NextCard --> PersistState["Commit updated deck state to LocalStorage"]
-
-    style SM2Algorithm fill:#1C2541,stroke:#48CAE4,stroke-width:2px,color:#fff
+    classDef proc fill:#f0f9ff,stroke:#0284c7,stroke-width:1.5px,color:#0c4a6e;
+    classDef decision fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f;
+    classDef success fill:#f0fdf4,stroke:#16a34a,stroke-width:1.5px,color:#14532d;
+    class StartGen,ExtractState,BoundedRNG,ComputeHash,DiscardCandidate,RetryRNG proc;
+    class CheckHistory decision;
+    class SpacedReview,FreshPerm,RenderQuestion,AwaitingResponse success;
 ```
 
 ---
 
-### 3.3 Prompt 03: Reading & Comprehension Engine (Bloom's Taxonomy)
+## 4. Jerome Bruner's CRA Manipulatives Architecture
 
-The Reading Module structures literary comprehension through **interactive text parsing**, an instant **Vocabulary Vault**, and multi-level **Bloom's Taxonomy Assessment**:
+The platform implements the research-backed **Concrete–Representational–Abstract (CRA)** pedagogical sequence across all three elementary grade tiers.
 
 ```mermaid
 graph TD
-    subgraph TextPipeline["1. Interactive Reading Stage"]
-        Passage["Grade-Appropriate Passage (Lexile 650L - 850L)"]
-        Tokenizer["Passage Tokenizer & Highlighter"]
-        Passage --> Tokenizer
-        Tokenizer --> ClickableWords["Tokenized Text with Highlighted Key Terms"]
+    subgraph ConcreteTier["1. Concrete (Sensory Interaction)"]
+        TF["Ten-Frames 2x5 Grid (K–1)"]
+        TFClick["Click / Touch Slot to Place Counter"]
+        TFAuto["Auto-Model Equation Button"]
+        TFSub["Subtraction ✕ Cross-Out (e.g., 9 - 9 = 0)"]
     end
 
-    subgraph VocabVault["2. Click-to-Define Vocabulary Vault"]
-        ClickableWords -- "Student Clicks Key Word" --> DefModal["Floating Definition Popover (Meaning, Etymology, Context)"]
-        DefModal --> SaveWord["Save to Personal Word Vault"]
-        SaveWord --> LocalVaultStorage[("LocalStorage: Saved Words Collection")]
+    subgraph RepTier["2. Representational (Visual Grouping)"]
+        B10["Base-10 Blocks (Grades 2–3)"]
+        B10Tens["Tens Rods (Strips of 10)"]
+        B10Ones["Ones Unit Cubes"]
+        ArrayGrid["Area Arrays Grid (Grades 4–5 Rows × Cols)"]
     end
 
-    subgraph BloomsAssessment["3. Bloom's Taxonomy Comprehension Check"]
-        L1["Level 1: Recall & Remember (Literal Facts)"]
-        L2["Level 2: Infer & Interpret (Character Motivations & Subtext)"]
-        L3["Level 3: Synthesize & Evaluate (Thematic Meaning & Morals)"]
-        
-        ClickableWords --> L1
-        L1 -- Correct --> L2
-        L2 -- Correct --> L3
-        L3 -- Completed --> ChapterCleared["Award 'Bookworm' Master Achievement Badge"]
+    subgraph AbstractTier["3. Abstract (Symbolic Mathematics)"]
+        EqCard["Dynamic Equation Card: 9 − 9 = ?"]
+        TouchPad["Kid-Friendly Touch Keypad (0–9, ⌫)"]
+        KeyInput["Keyboard / Text Answer Input"]
+        ScratchCanvas["Drawing Scratchpad Canvas"]
     end
 
-    style TextPipeline fill:#0B132B,stroke:#3A506B,color:#fff
-    style VocabVault fill:#1C2541,stroke:#F77F00,color:#fff
-    style BloomsAssessment fill:#0A192F,stroke:#48CAE4,color:#fff
+    TF --> TFClick & TFAuto & TFSub
+    B10 --> B10Tens & B10Ones
+    
+    ConcreteTier --> RepTier
+    RepTier --> AbstractTier
+
+    classDef concrete fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f;
+    classDef rep fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
+    classDef abstract fill:#f3e8ff,stroke:#9333ea,stroke-width:2px,color:#581c87;
+    class ConcreteTier concrete;
+    class RepTier rep;
+    class AbstractTier abstract;
 ```
 
 ---
 
-## 4. Universal Gamification & Audio Synthesizer Pipeline
+## 5. The Socratic AI Feedback & Cognitive Misconception Loop ("Byte")
 
-To avoid broken sound effects or external MP3 dependency 404s, the application incorporates a **pure Web Audio API synthesizer** that dynamically shapes harmonic frequencies using oscillator and gain envelope nodes:
+When a student makes an error, Byte acts as an experienced classroom tutor: diagnosing the specific cognitive misconception and delivering a **non-spoiling Socratic hint** accompanied by audio synthesis.
 
 ```mermaid
-graph LR
-    subgraph Synthesizer["Zero-Asset Web Audio API Synthesizer"]
-        Ctx["AudioContext (44.1 kHz)"]
-        Osc["OscillatorNode (Sine / Triangle / Square)"]
-        Gain["GainEnvelopeNode (Attack / Decay / Sustain / Release)"]
-        Dest["AudioContext.destination (Device Speakers)"]
-        
-        Ctx --> Osc --> Gain --> Dest
+sequenceDiagram
+    autonumber
+    actor Learner as Student
+    participant UI as Arithmetic Card & Keypad
+    participant Classifier as Cognitive Misconception Classifier
+    participant Gemini as Gemini 2.5 Flash (Cloud / Edge)
+    participant Fallback as Zero-Crash Socratic Heuristics
+    participant Audio as Web Speech API (TTS)
+
+    Learner->>UI: Submits incorrect value (e.g. 4 + 3 = 1)
+    UI->>UI: Play gentle error tone & shake card
+    UI->>Classifier: analyzeMisconception(equation, expected=7, submitted=1)
+
+    alt Inverted Operator (Subtracted instead of Added)
+        Classifier-->>UI: Diagnosis: "Inverted Operator (+ vs -)"
+    else Off-by-One Counting Slip (Submitted 6 or 8)
+        Classifier-->>UI: Diagnosis: "Off-by-One Counting Slip"
+    else Regrouping Place-Value Slip
+        Classifier-->>UI: Diagnosis: "Base-10 Regrouping Slip"
     end
 
-    subgraph AudioEvents["Triggered Synthesizer Chimes"]
-        E1["Correct Answer: Arpeggio C5 (523Hz) -> G5 (784Hz) -> C6 (1046Hz)"]
-        E2["Gentle Retry: Low Sine 220Hz -> 164Hz with smooth exponential decay"]
-        E3["Card Flip: Click tone 800Hz (15ms transient)"]
-        E4["Streak Milestone (5x): Harmonic chord fanfare with sparkle vibrato"]
+    alt Google Gemini API Active
+        UI->>Gemini: POST /api/chat with strict prompt: "Never spoil the number!"
+        Gemini-->>UI: Socratic Hint: "Look closely at the sign! It is a plus (+), so combine both groups!"
+    else Offline / No API Key
+        UI->>Fallback: Query heuristic ladder level 1
+        Fallback-->>UI: Contextual Hint: "Count the total dots on your ten-frame together!"
     end
 
-    AudioEvents --> Synthesizer
-
-    subgraph GamificationEngine["Global Gamification Core"]
-        State[("Active State")]
-        XP["XP Counter (Levels 1 to 10)"]
-        Streak["Streak Multiplier (1.0x to 2.5x)"]
-        Badges["Badge Matrix (First Step, On Fire, Polyglot, Bookworm)"]
-        
-        State --> XP & Streak & Badges
-    end
-
-    Synthesizer -.-> GamificationEngine
-
-    style Synthesizer fill:#1C2541,stroke:#48CAE4,color:#fff
-    style AudioEvents fill:#0B132B,stroke:#F77F00,color:#fff
-    style GamificationEngine fill:#0A192F,stroke:#00F0FF,color:#fff
+    UI->>UI: Render Byte's Socratic callout box
+    UI->>Audio: Speak hint aloud (0.9x natural child-friendly rate)
+    Learner->>UI: Attempts problem again with visual ten-frame scaffolding
 ```
 
 ---
 
-## 5. Local Testbed vs. Cloud Production Topology
+## 6. IXL SmartScore Progression & Mastery State Machine
 
-The application supports identical runtime behavior across two operational environments:
+The SmartScore algorithm replicates IXL's research-backed scoring model: rapid initial progression, challenging intermediate ribbons, and a high-stakes Gold Challenge Zone enforcing genuine mastery.
 
 ```mermaid
-graph TB
-    subgraph LocalDev["Environment A: Local Development & Judging Testbed"]
-        LocalBrowser["Chrome / Edge / Safari Browser"]
-        FileSPA["Local Single-Page App (test/index.html)"]
-        LocalFastAPI["Python FastAPI Server (:8765)"]
-        LocalEnv[".env (GEMINI_API_KEY)"]
-        
-        LocalBrowser --> FileSPA
-        FileSPA -- "localhost:8765" --> LocalFastAPI
-        LocalFastAPI --> LocalEnv
-    end
+stateDiagram-v2
+    [*] --> PracticeZone: SmartScore = 0
 
-    subgraph CloudProd["Environment B: Production Cloud & Edge Deployment"]
-        WebUser["Global Student / Judge Web Browser"]
-        FirebaseHosting["Firebase Hosting CDN / Vercel Edge"]
-        CloudFunc["Google Cloud Functions (2nd Gen / Python 3.12)"]
-        SecretMgr["Google Cloud Secret Manager (GEMINI_API_KEY)"]
-        
-        WebUser --> FirebaseHosting
-        FirebaseHosting -- "Rewrite /chat" --> CloudFunc
-        CloudFunc --> SecretMgr
-    end
+    state PracticeZone {
+        desc1: SmartScore 0 to 69
+        note1: +12 pts per correct answer<br/>-4 pts per mistake
+    }
 
-    subgraph GoogleAI["Google Cloud AI Core"]
-        GeminiFlash["Gemini 2.5 Flash Foundation Model"]
-    end
+    state BronzeRibbon {
+        desc2: SmartScore 70 to 79
+        note2: +7 pts per correct answer<br/>-4 pts per mistake<br/>Confetti & Milestone Audio
+    }
 
-    LocalFastAPI --> GeminiFlash
-    CloudFunc --> GeminiFlash
+    state SilverRibbon {
+        desc3: SmartScore 80 to 89
+        note3: +3 pts per correct answer<br/>-6 pts per mistake
+    }
 
-    style LocalDev fill:#0B132B,stroke:#48CAE4,color:#fff
-    style CloudProd fill:#1C2541,stroke:#7000FF,color:#fff
-    style GoogleAI fill:#0A192F,stroke:#00F0FF,color:#fff
+    state GoldChallengeZone {
+        desc4: SmartScore 90 to 99
+        note4: +1 pt per correct answer<br/>-8 pts per mistake<br/>Requires strict precision
+    }
+
+    state MasteryAchieved {
+        desc5: SmartScore = 100
+        note5: Full Confetti Celebration<br/>+1 Skills Mastered Trophy 🏆<br/>Unlock Official Certificate of Math Mastery 🎓
+    }
+
+    PracticeZone --> BronzeRibbon: Score >= 70
+    BronzeRibbon --> SilverRibbon: Score >= 80
+    SilverRibbon --> GoldChallengeZone: Score >= 90
+    GoldChallengeZone --> MasteryAchieved: Score == 100
+
+    MasteryAchieved --> PracticeZone: Keep Practicing / Next Skill
 ```
 
 ---
 
-## 6. Security, COPPA/FERPA Compliance, & Socratic Guardrails
+## 7. Varsity Tutors Live Human Tutoring Telemetry Hand-Off
 
-Because the Nerdy AI Learning Suite targets K–12 and higher education learners, strict safety and regulatory guardrails are embedded into the architectural design:
+Nerdy Arithmetic AI bridges autonomous AI learning with Nerdy’s flagship live tutoring business (**Varsity Tutors**). If a child encounters persistent cognitive hurdles, real-time diagnostic telemetry is compiled into an expert briefing dossier.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Student as Student / Parent
+    participant UI as Nerdy Arithmetic AI App
+    participant Telemetry as Diagnostic Telemetry Compiler
+    participant Modal as Live Hand-Off Briefing Dossier
+    actor Tutor as Certified Varsity Math Specialist
+
+    Student->>UI: Clicks "Live Varsity Tutor Help" (or after 2+ mistakes)
+    UI->>Telemetry: compileDiagnosticDossier()
+    
+    Telemetry->>Telemetry: Extract Profile: "Alex" (K–1, avatar=🦊)
+    Telemetry->>Telemetry: Extract Goal: "Ten-Frames Subtraction within 10"
+    Telemetry->>Telemetry: Extract Score: "78 / 100"
+    Telemetry->>Telemetry: Extract Misconception: "Inverted Operator (+ vs -)"
+    Telemetry->>Telemetry: Extract Manipulative Readiness: "Ten-frame modeled successfully"
+    Telemetry->>Telemetry: Synthesize Action: "Reinforce part-part-whole number bonds before abstract symbols"
+
+    Telemetry-->>Modal: Populate Dossier & verify certified specialist availability
+    Modal-->>Student: Display Live Hand-Off Briefing
+    Student->>Modal: Click "Connect with Live Tutor (Demo) 🚀"
+    Modal->>Tutor: Dispatch WebRTC Handshake & Telemetry Payload
+    Tutor-->>Student: 1-on-1 Interactive Video & Shared Canvas Connected
+```
+
+---
+
+## 8. Automated Sunday Evening Parent Summary Pipeline
+
+To sustain multi-day engagement and give parents complete pedagogical transparency, the platform automatically schedules and dispatches an automated 7-day progress digest every Sunday evening at 6:00 PM EST.
 
 ```mermaid
 flowchart TD
-    UserQuery["Incoming User Interaction / Chat Prompt"] --> PreFilter["1. Sanitization & Length Guardrail (< 500 chars)"]
-    PreFilter --> SystemPromptInject["2. Socratic System Prompt Injection"]
-
-    subgraph SocraticGuardrails["Socratic System Constraints"]
-        G1["Rule 1: NEVER output direct numerical or factual answers"]
-        G2["Rule 2: Respond with scaffolding questions and visual cues"]
-        G3["Rule 3: Keep responses under 3 concise sentences for children"]
-        G4["Rule 4: Use encouraging, growth-mindset emotional framing"]
-    end
-
-    SystemPromptInject --> SocraticGuardrails
-    SocraticGuardrails --> GeminiCall["3. Execution via Gemini 2.5 Flash"]
-    GeminiCall --> OutputScan["4. Output Answer Leak Detector"]
+    CronTrigger["Sunday Evening 6:00 PM EST Trigger"] --> ReadUserDB["Query <code>state.profile.sessions</code> & <code>history</code>"]
     
-    OutputScan -- "Answer Detected" --> Redact["Wrap answer in reflective question"]
-    OutputScan -- "Compliant Socratic Hint" --> ClientRender["5. Deliver to Learner Chat UI"]
-    Redact --> ClientRender
-
-    subgraph PrivacyDataLayer["Data Privacy (COPPA & FERPA)"]
-        P1["Zero PII collection (No name, email, or biometric storage)"]
-        P2["Ephemeral Session Tokens"]
-        P3["All learning progress stored exclusively in local client storage"]
+    subgraph MetricAggregation["7-Day Telemetry Computation"]
+        CalcSolved["Sum Questions Solved (Past 7 Days)"]
+        CalcAccuracy["Calculate Accuracy Rate (92%+)"]
+        CalcStreak["Verify Active Daily Streak (e.g. 3d 🔥)"]
+        CalcTrophies["Count Mastery Trophies Won (🏆)"]
+        CalcCRA["Compute CRA Engagement Index (100%)"]
     end
 
-    ClientRender -.-> PrivacyDataLayer
+    subgraph SocraticSynthesizer["AI Socratic Recommendation Engine"]
+        ByteAI["Byte Analyzes Trouble Spots & Misconceptions"]
+        GenRec["Synthesize Personalized Next-Week Goal:<br/><i>'Mastered number bonds! Next week, practice differences with zero (9-9=0).'</i>"]
+    end
 
-    style SocraticGuardrails fill:#1C2541,stroke:#F77F00,color:#fff
-    style PrivacyDataLayer fill:#0B132B,stroke:#00F0FF,color:#fff
+    subgraph DispatchPipeline["Multi-Channel Dispatch"]
+        FormatHTML["Render High-Res Parent Email Template"]
+        SMTP["Simulated Live SMTP Dispatcher"]
+        MagicLink["Attach Personalized Direct Practice Deep Link"]
+        ParentInbox["Parent Email Inbox (alex.parent@gmail.com)"]
+    end
+
+    ReadUserDB --> MetricAggregation
+    MetricAggregation --> SocraticSynthesizer
+    SocraticSynthesizer --> DispatchPipeline
+    FormatHTML --> SMTP --> ParentInbox
+    MagicLink --> ParentInbox
+
+    classDef trigger fill:#fffbeb,stroke:#f59e0b,stroke-width:1.5px,color:#78350f;
+    classDef agg fill:#f0f9ff,stroke:#0284c7,stroke-width:1.5px,color:#0c4a6e;
+    classDef ai fill:#f3e8ff,stroke:#9333ea,stroke-width:1.5px,color:#581c87;
+    classDef dispatch fill:#f0fdf4,stroke:#16a34a,stroke-width:1.5px,color:#14532d;
+    class CronTrigger trigger;
+    class MetricAggregation agg;
+    class SocraticSynthesizer ai;
+    class DispatchPipeline dispatch;
 ```
 
 ---
 
-## 7. Component & Data Model Specifications
+## 9. Component & Data Model Specifications
 
-### 7.1 Client-Side State Schema (`localStorage`)
+### 9.1 Learner Profile Data Schema (`state.profile`)
 
 ```json
 {
-  "nerdy_suite_v1": {
-    "user": {
-      "level": 2,
-      "xp": 145,
-      "streak": 5,
-      "activeTier": "k1"
+  "email": "alex.parent@gmail.com",
+  "name": "Alex",
+  "avatar": "🦊",
+  "gradeTier": "k1",
+  "dailyStreak": 3,
+  "lastActiveDate": "2026-09-15",
+  "dailyReminder": true,
+  "onboarded": true,
+  "totalQuestionsSolved": 42,
+  "skillsMastered": 2,
+  "troubleSpots": ["k1:sub:9:9"],
+  "history": {
+    "k1:add:4:3": {
+      "lastSeenDate": "2026-09-15",
+      "timesSeen": 1,
+      "correctCount": 1,
+      "wrongCount": 0
     },
-    "math": {
-      "solvedCount": 18,
-      "currentTier": "k1",
-      "mistakeHistory": []
-    },
-    "language": {
-      "activeLanguage": "es",
-      "deck": [
-        {
-          "id": "es_01",
-          "target": "la manzana",
-          "translation": "the apple",
-          "reps": 3,
-          "ef": 2.5,
-          "interval": 6,
-          "nextReviewDate": "2026-09-08T00:00:00.000Z"
-        }
-      ]
-    },
-    "reading": {
-      "activeStoryId": "story_01",
-      "savedWords": ["ancient", "luminous", "curiosity"],
-      "comprehensionLevel": 2
-    },
-    "achievements": {
-      "first_step": true,
-      "on_fire": true,
-      "polyglot": false,
-      "bookworm": false
+    "k1:sub:9:9": {
+      "lastSeenDate": "2026-09-15",
+      "timesSeen": 2,
+      "correctCount": 1,
+      "wrongCount": 1
     }
-  }
+  },
+  "sessions": [
+    {
+      "date": "2026-09-15",
+      "time": "10:30 PM",
+      "tier": "k1",
+      "op": "mixed",
+      "questionsSolved": 14,
+      "smartScore": 100
+    }
+  ]
 }
 ```
 
-### 7.2 Backend API Contract (`FastAPI / Cloud Functions`)
+### 9.2 API Endpoint Contract (`/api/chat`)
 
-#### Endpoint: `POST /chat`
-- **Request Headers:** `Content-Type: application/json`
-- **Request Body:**
+* **Method:** `POST`
+* **Path:** `/api/chat`
+* **Request Payload:**
   ```json
   {
-    "message": "Why is 2 + 6 equal to 8?",
-    "context": {
-      "tab": "math",
-      "tier": "k1",
-      "problem": "2 + 6 = ?",
-      "streak": 3
-    }
+    "user_message": "1",
+    "user_answer": "1",
+    "equation": "4 + 3",
+    "expected_answer": "7",
+    "tier": "k1",
+    "hint_level": 1,
+    "api_key": ""
   }
   ```
-- **Response Body (200 OK):**
+* **Response Payload:**
   ```json
   {
-    "status": "success",
-    "reply": "Look closely at the ten-frame! You have 2 blue dots and 6 yellow dots. What happens when you count on from the 6 yellow dots?",
-    "model": "gemini-2.5-flash",
-    "source": "gemini_api"
-  }
-  ```
-
-#### Endpoint: `GET /health`
-- **Response Body (200 OK):**
-  ```json
-  {
-    "status": "healthy",
-    "service": "nerdy-hackathon-backend",
-    "version": "1.0.0",
-    "gemini_configured": true
+    "reply": "Look at the sign! It is a plus sign (+), which means we put the two groups together. Count all the blue and yellow dots!",
+    "cognitive_diagnosis": "Inverted Operator (+ vs -)",
+    "encouragement_emoji": "💡",
+    "hint_level": 1
   }
   ```
 
 ---
 
-## 8. Summary & Architectural Highlights
-
-1. **Self-Contained & Resilient:** Zero broken images, zero external audio 404s, and multi-tier AI fallback ensuring the app is always functional.
-2. **Pedagogically Rigorous:** Integrates real learning science (Bruner's CRA, SuperMemo SM-2, and Bloom's Taxonomy).
-3. **Built for Scale:** Clean separation of concerns allows immediate conversion to a global multi-tenant microservices architecture as outlined in [`STARTUP_IDEA_AI_EDUCATION_SHOPIFY.md`](file:///C:/Users/sath7/.gemini/nerdy-hackathon-repo/STARTUP_IDEA_AI_EDUCATION_SHOPIFY.md).
+*Authored for the Nerdy AI Hackathon Challenge (Prompt 01: K–5 Math Game)*  
+*Architecture conforms to Common Core Mathematics, Jerome Bruner's CRA framework, and Bloom's Cognitive Taxonomy.*
