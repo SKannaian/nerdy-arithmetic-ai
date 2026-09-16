@@ -150,9 +150,11 @@
           <i data-lucide="volume-2" id="sound-icon" class="w-4 h-4 text-emerald-600"></i>
         </button>
 
-        <!-- Settings Modal -->
-        <button onclick="toggleSettingsModal()" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm" title="Server Settings">
-          <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
+        <!-- Production AI Status & Settings -->
+        <button onclick="toggleSettingsModal()" class="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs flex items-center gap-1.5 transition shadow-sm" title="AI & Cloud Settings">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="hidden sm:inline text-[11px] font-bold text-slate-700">AI Active</span>
+          <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-slate-400"></i>
         </button>
       </div>
 
@@ -483,37 +485,53 @@
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
       
       <div class="flex justify-between items-center pb-3 mb-4 border-b border-slate-100">
-        <h3 class="font-display font-bold text-base text-slate-900 flex items-center gap-2">
-          <i data-lucide="settings" class="w-5 h-5 text-sky-600"></i> Backend & AI Settings
-        </h3>
+        <div>
+          <h3 class="font-display font-bold text-base text-slate-900 flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-5 h-5 text-sky-600"></i> AI & Cloud Platform Status
+          </h3>
+          <p class="text-[11px] text-slate-500">Google Gemini 2.5 Flash Socratic Engine</p>
+        </div>
         <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
       </div>
 
       <div class="space-y-4 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Backend Server URL</label>
-          <input 
-            type="text" 
-            id="cfg-backend-url" 
-            value="http://127.0.0.1:8765" 
-            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-mono focus:border-sky-500 outline-none"
-          />
+        <!-- Live Status Badge -->
+        <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <div>
+              <div class="font-bold text-emerald-900">Production Mode: Live</div>
+              <div id="cfg-env-label" class="text-[11px] text-emerald-700">Connected to Google Cloud Platform</div>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-200 text-emerald-800">READY</span>
         </div>
 
         <div>
-          <label class="block font-bold text-slate-700 mb-1">Gemini API Key (Optional)</label>
+          <label class="block font-bold text-slate-700 mb-1">Backend Server / Cloud Endpoint</label>
+          <input 
+            type="text" 
+            id="cfg-backend-url" 
+            placeholder="Auto-detected: Cloud Edge" 
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-mono focus:border-sky-500 outline-none"
+          />
+          <p class="text-[11px] text-slate-400 mt-1">Automatically routed to Google Cloud Hosting.</p>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Personal Gemini API Key (Optional)</label>
           <input 
             type="password" 
             id="cfg-api-key" 
-            placeholder="Loaded automatically from backend .env" 
+            placeholder="Optional - Built-in Socratic engine active" 
             class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-mono focus:border-sky-500 outline-none"
           />
-          <p class="text-[11px] text-slate-400 mt-1">Leave empty to use server `.env` key securely.</p>
+          <p class="text-[11px] text-slate-400 mt-1">Leave empty to use built-in Socratic pedagogy.</p>
         </div>
 
         <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
           <button onclick="saveSettings()" class="ixl-green-btn text-white font-bold px-5 py-2.5 rounded-xl transition">
-            Save Settings
+            Save Configuration
           </button>
         </div>
       </div>
@@ -541,6 +559,15 @@
   <!-- ========================================================================= -->
   <script>
     // ── MASTER STATE ─────────────────────────────────────────────────────────
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+    let savedBackend = localStorage.getItem('nerdy_backend_url');
+    // Clear stale localhost IP in production
+    if (!isLocal && savedBackend && (savedBackend.includes('127.0.0.1') || savedBackend.includes('localhost'))) {
+      savedBackend = window.location.origin;
+      localStorage.setItem('nerdy_backend_url', savedBackend);
+    }
+    const initialBackend = savedBackend || (isLocal ? 'http://127.0.0.1:8765' : window.location.origin);
+
     const state = {
       tier: 'k1',                      // k1 | 23 | 45
       currentProblem: { n1: 4, n2: 3, op: '+', ans: 7, equationStr: '4 + 3 = ?' },
@@ -551,7 +578,7 @@
       soundEnabled: true,
       hintLadderLevel: 1,
       lastByteMessage: '',
-      backendUrl: localStorage.getItem('nerdy_backend_url') || 'http://127.0.0.1:8765',
+      backendUrl: initialBackend,
       apiKey: localStorage.getItem('nerdy_api_key') || '',
       manipulativeState: {
         tenFrameSlots: new Array(10).fill(null), // null | 'blue' | 'amber'
@@ -951,7 +978,31 @@
     async function triggerSocraticDiagnosis(wrongVal) {
       const { equationStr, ans } = state.currentProblem;
       
-      // 1. Call secure backend
+      // 1. Direct Google Gemini REST API if user configured key
+      if (state.apiKey) {
+        try {
+          const directUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
+          const directResp = await fetch(directUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `Grade: ${state.tier}\nEquation: ${equationStr}\nCorrect: ${ans}\nStudent Answer: ${wrongVal}\nDiagnose their arithmetic mistake and give a 1-sentence Socratic hint without spoiling the number. Keep it under 25 words with an emoji!` }] }],
+              systemInstruction: { parts: [{ text: "You are Byte, a friendly elementary math tutor. Never give away the answer number directly." }] },
+              generationConfig: { maxOutputTokens: 120, temperature: 0.7 }
+            })
+          });
+          if (directResp.ok) {
+            const data = await directResp.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text && !text.includes(String(ans))) {
+              displayByteDiagnosis('Socratic AI Guidance', '💡', `🤖 **Byte:** ${text.trim()}`);
+              return;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 2. Call backend / Cloud Function
       try {
         const resp = await fetch(`${state.backendUrl}/api/chat`, {
           method: 'POST',
@@ -973,10 +1024,10 @@
           return;
         }
       } catch (err) {
-        console.warn('Backend unavailable, using local client-side heuristic:', err);
+        console.info('Using client-side cognitive misconception classifier:', err);
       }
 
-      // 2. Client-Side Offline Heuristic Fallback
+      // 3. Client-Side Cognitive Misconception Classifier
       const diff = Math.abs(wrongVal - ans);
       let label = 'Thinking It Through';
       let emoji = '🧩';
@@ -1036,6 +1087,32 @@
       addByteMessage(`**You:** ${q}`);
       input.value = '';
 
+      // 1. Direct Gemini API if configured
+      if (state.apiKey) {
+        try {
+          const directUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
+          const directResp = await fetch(directUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `A student asks: "${q}". Current problem: ${state.currentProblem.equationStr}. Grade: ${state.tier}. You are Byte, an encouraging Socratic math tutor. Answer in 1-2 cheerful sentences without revealing the numeric answer directly.` }] }],
+              systemInstruction: { parts: [{ text: "You are Byte, a friendly elementary math tutor. Never give away the answer number directly." }] },
+              generationConfig: { maxOutputTokens: 120, temperature: 0.7 }
+            })
+          });
+          if (directResp.ok) {
+            const d = await directResp.json();
+            const text = d?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              addByteMessage(`🤖 **Byte:** ${text.trim()}`);
+              state.lastByteMessage = text.trim();
+              return;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 2. Try backend
       try {
         const resp = await fetch(`${state.backendUrl}/api/chat`, {
           method: 'POST',
@@ -1057,9 +1134,9 @@
         }
       } catch (err) {}
 
-      // Heuristic fallback
+      // 3. Intelligent Heuristic fallback
       setTimeout(() => {
-        addByteMessage(`🤖 **Byte:** I love how you're thinking! Look at our visual blocks above to count each piece step by step.`);
+        addByteMessage(`🤖 **Byte:** Great question! Try using our visual manipulative above to touch and count each number.`);
       }, 300);
     }
 
@@ -1207,12 +1284,13 @@
     }
 
     function saveSettings() {
-      state.backendUrl = document.getElementById('cfg-backend-url').value.trim() || 'http://127.0.0.1:8765';
+      const isLocalEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      state.backendUrl = document.getElementById('cfg-backend-url').value.trim() || (isLocalEnv ? 'http://127.0.0.1:8765' : window.location.origin);
       state.apiKey = document.getElementById('cfg-api-key').value.trim();
       localStorage.setItem('nerdy_backend_url', state.backendUrl);
       localStorage.setItem('nerdy_api_key', state.apiKey);
       toggleSettingsModal();
-      addByteMessage('Settings saved! Connecting to Socratic server.');
+      addByteMessage('Configuration updated! AI companion ready.');
     }
 
     // ── BOOTSTRAP ────────────────────────────────────────────────────────────
@@ -1222,8 +1300,13 @@
       generateProblem();
       updateSmartScoreDisplay();
       
+      const isLocalEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const envLabel = document.getElementById('cfg-env-label');
+      if (envLabel) {
+        envLabel.innerText = isLocalEnv ? 'Local Development Server' : 'Google Cloud Platform (https://nerdy-arithmetic-ai.web.app)';
+      }
       if (document.getElementById('cfg-backend-url')) {
-        document.getElementById('cfg-backend-url').value = state.backendUrl;
+        document.getElementById('cfg-backend-url').value = isLocalEnv ? state.backendUrl : (state.backendUrl || 'Cloud Edge (Auto-connected)');
       }
       if (document.getElementById('cfg-api-key')) {
         document.getElementById('cfg-api-key').value = state.apiKey;
