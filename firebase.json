@@ -1,15 +1,22 @@
 {
   "hosting": {
-    "public": "test",
+    "public": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
       "server.py",
       "requirements.txt",
-      "start.bat"
+      "start.bat",
+      ".env",
+      "test/**"
     ],
     "rewrites": [
+      {
+        "source": "/api/chat",
+        "function": "chat",
+        "region": "us-central1"
+      },
       {
         "source": "/chat",
         "function": "chat",
@@ -29,7 +36,7 @@
   "functions": [
     {
       "source": "functions",
-      "codebase": "nerdy-hackathon-suite",
+      "codebase": "nerdy-arithmetic-ai",
       "runtime": "python312"
     }
   ]
