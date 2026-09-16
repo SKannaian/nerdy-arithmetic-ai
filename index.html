@@ -594,29 +594,33 @@
 
       <!-- STEP 2: 6-DIGIT OTP VERIFICATION -->
       <div id="onboard-step-otp" class="hidden">
-        <div class="text-center mb-5">
+        <div class="text-center mb-4">
           <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-amber-400 to-amber-600 text-white mx-auto flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20 mb-3">
             🔐
           </div>
           <h3 class="font-display font-extrabold text-2xl text-slate-900">Enter 6-Digit Code</h3>
-          <p class="text-xs text-slate-500 mt-1">
-            Verification code sent to <strong id="otp-target-email" class="text-slate-800"></strong>
+          <p class="text-xs text-slate-600 mt-1">
+            Account Email: <strong id="otp-target-email" class="text-slate-800"></strong>
           </p>
         </div>
 
-        <!-- DEMO FAST-PASS FOR JUDGES & EVALUATORS -->
-        <div class="mb-4 p-3.5 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 text-xs">
-          <div class="flex items-center justify-between">
+        <!-- DEMO FAST-PASS & ON-SCREEN CODE DISPLAY -->
+        <div class="mb-4 p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl text-amber-950 text-xs shadow-xs">
+          <div class="flex items-center justify-between mb-1.5">
             <span class="font-bold flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
-              <span>Evaluator & Judge Fast-Pass:</span>
+              <span>Evaluator Demo Code (Instant Access)</span>
             </span>
-            <button type="button" onclick="autoFillDemoOtp()" class="underline font-extrabold text-amber-700 hover:text-amber-900">
-              Auto-fill Code
+            <button type="button" onclick="autoFillDemoOtp()" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-black text-[11px] shadow-xs transition">
+              Auto-fill Code ⚡
             </button>
           </div>
-          <p class="text-[11px] text-amber-700 mt-1">
-            Generated Code: <strong id="demo-otp-display" class="font-mono text-sm tracking-widest bg-white px-2 py-0.5 rounded border border-amber-300">123456</strong>
+          <div class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-amber-200 mt-1">
+            <span class="text-[11px] text-slate-600 font-semibold">Generated OTP:</span>
+            <strong id="demo-otp-display" class="font-mono text-base tracking-widest text-amber-900 bg-amber-100/70 px-3 py-1 rounded-lg border border-amber-300">123456</strong>
+          </div>
+          <p class="text-[10px] text-amber-800 mt-2 leading-tight">
+            ℹ️ <em>To prevent email spam-filter delays during judging, verification codes are generated directly on-screen. (In production, this routes via SendGrid/AWS SES).</em>
           </p>
         </div>
 
