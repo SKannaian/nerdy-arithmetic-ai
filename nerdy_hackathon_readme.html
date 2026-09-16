@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nerdy AI Hackathon - Complete Multi-Prompt Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-cyan-500 selection:text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('overview');
+
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [activeTab]);
+
+            return (
+                <div class="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+                    {/* Header */}
+                    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+                        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="bg-cyan-500/10 border border-cyan-500/30 p-2 rounded-lg text-cyan-400">
+                                    <i data-lucide="cpu" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                                        nerdy <span class="text-xs uppercase px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">AI Hackathon Suite</span>
+                                    </h1>
+                                    <p class="text-xs text-slate-400">Win $10K Cash & Shot at a $200K+ Role at <a href="https://hackathon.nerdy.com" target="_blank" class="text-cyan-400 hover:underline">Nerdy</a></p>
+                                </div>
+                            </div>
+                            <nav class="flex flex-wrap gap-2">
+                                <button 
+                                    onClick={() => setActiveTab('overview')} 
+                                    class={`px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 ${activeTab === 'overview' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
+                                    <i data-lucide="info" class="w-4 h-4"></i> Overview
+                                </button>
+                                <button 
+                                    onClick={() => setActiveTab('math')} 
+                                    class={`px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 ${activeTab === 'math' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
+                                    <i data-lucide="calculator" class="w-4 h-4"></i> Prompt 01: K-5 Math
+                                </button>
+                                <button 
+                                    onClick={() => setActiveTab('language')} 
+                                    class={`px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 ${activeTab === 'language' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
+                                    <i data-lucide="languages" class="w-4 h-4"></i> Prompt 02: Language
+                                </button>
+                                <button 
+                                    onClick={() => setActiveTab('reading')} 
+                                    class={`px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 ${activeTab === 'reading' ? 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/20' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>
+                                    <i data-lucide="book-open" class="w-4 h-4"></i> Prompt 03: Reading
+                                </button>
+                            </nav>
+                        </div>
+                    </header>
+
+                    {/* Main Content Area */}
+                    <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-8">
+                        {activeTab === 'overview' && <OverviewTab onSelectTab={setActiveTab} />}
+                        {activeTab === 'math' && <MathPromptApp />}
+                        {activeTab === 'language' && <LanguagePromptApp />}
+                        {activeTab === 'reading' && <ReadingPromptApp />}
+                    </main>
+
+                    {/* Footer */}
+                    <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+                        <p>Nerdy AI Hackathon Challenge · Live + AI Learning Platform · Submissions Close Sept 18</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        function OverviewTab({ onSelectTab }) {
+            return (
+                <div class="space-y-8">
+                    <div class="bg-gradient-to-r from-cyan-950/40 via-slate-900 to-indigo-950/40 border border-cyan-500/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+                        <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                            <i data-lucide="sparkles" class="w-64 h-64 text-cyan-400"></i>
+                        </div>
+                        <span class="text-xs uppercase tracking-wider font-semibold text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/30">Hackathon Overview</span>
+                        <h2 class="text-3xl font-extrabold text-white mt-4 mb-2">Build an AI Learning Product. Win $10K & A $200K Career Shortcut.</h2>
+                        <p class="text-slate-300 max-w-3xl leading-relaxed mb-6">
+                            Nerdy (NYSE: NRDY) powers Varsity Tutors and is an AI-native ecosystem pairing live expert instruction with a purpose-built AI layer across 3,000+ subjects. Skip the standard resume pile and demo directly to engineering leadership.
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+                                <div class="text-cyan-400 font-bold text-lg">US: $200K+</div>
+                                <div class="text-slate-400 text-xs mt-1">Total compensation for senior AI Product Engineer roles</div>
+                            </div>
+                            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+                                <div class="text-cyan-400 font-bold text-lg">LATAM: $100K</div>
+                                <div class="text-slate-400 text-xs mt-1">Total compensation for remote regional roles</div>
+                            </div>
+                            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+                                <div class="text-cyan-400 font-bold text-lg">INDIA: ₹1 Cr</div>
+                                <div class="text-slate-400 text-xs mt-1">Total compensation depending on level & experience</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">Explore the Three Built-In Challenge Prompt Apps</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between hover:border-cyan-500/50 transition">
+                                <div>
+                                    <span class="text-xs font-semibold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/20">Prompt 01</span>
+                                    <h4 class="text-lg font-bold text-white mt-3">K–5 Math Game</h4>
+                                    <p class="text-sm text-slate-400 mt-2">Interactive, gamified arithmetic challenges designed with progressive difficulty tiers and reward mechanics.</p>
+                                </div>
+                                <button onClick={() => onSelectTab('math')} class="mt-6 w-full py-2 bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2">
+                                    Launch Math App <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between hover:border-cyan-500/50 transition">
+                                <div>
+                                    <span class="text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">Prompt 02</span>
+                                    <h4 class="text-lg font-bold text-white mt-3">Language Learning App</h4>
+                                    <p class="text-sm text-slate-400 mt-2">Structured mobile-first spaced repetition flashcards and daily micro-lessons with Web Speech API audio.</p>
+                                </div>
+                                <button onClick={() => onSelectTab('language')} class="mt-6 w-full py-2 bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2">
+                                    Launch Language App <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+
+                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between hover:border-cyan-500/50 transition">
+                                <div>
+                                    <span class="text-xs font-semibold text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded border border-purple-500/20">Prompt 03</span>
+                                    <h4 class="text-lg font-bold text-white mt-3">English Reading Game</h4>
+                                    <p class="text-sm text-slate-400 mt-2">Literacy app featuring interactive stories with click-to-define vocabulary inspection and comprehension quizzes.</p>
+                                </div>
+                                <button onClick={() => onSelectTab('reading')} class="mt-6 w-full py-2 bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2">
+                                    Launch Reading App <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- PROMPT 01: MATH APP ---
+        function MathPromptApp() {
+            const [tier, setTier] = useState('k1');
+            const [score, setScore] = useState(0);
+            const [streak, setStreak] = useState(0);
+            const [problem, setProblem] = useState({ q: '', a: 0 });
+            const [userAnswer, setUserAnswer] = useState('');
+            const [feedback, setFeedback] = useState(null);
+
+            const generateProblem = (currentTier) => {
+                let n1, n2, op;
+                if (currentTier === 'k1') {
+                    n1 = Math.floor(Math.random() * 10) + 1;
+                    n2 = Math.floor(Math.random() * 10) + 1;
+                    op = Math.random() > 0.5 ? '+' : '-';
+                    if (op === '-' && n1 < n2) [n1, n2] = [n2, n1];
+                } else if (currentTier === '23') {
+                    n1 = Math.floor(Math.random() * 50) + 10;
+                    n2 = Math.floor(Math.random() * 50) + 10;
+                    op = Math.random() > 0.5 ? '+' : '-';
+                } else {
+                    n1 = Math.floor(Math.random() * 12) + 2;
+                    n2 = Math.floor(Math.random() * 12) + 2;
+                    op = '×';
+                }
+                const ans = op === '+' ? n1 + n2 : op === '-' ? n1 - n2 : n1 * n2;
+                setProblem({ q: `${n1} ${op} ${n2} = ?`, a: ans });
+                setUserAnswer('');
+                setFeedback(null);
+            };
+
+            useEffect(() => {
+                generateProblem(tier);
+            }, [tier]);
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (parseInt(userAnswer) === problem.a) {
+                    setFeedback('correct');
+                    setScore(score + 10);
+                    setStreak(streak + 1);
+                    setTimeout(() => generateProblem(tier), 1200);
+                } else {
+                    setFeedback('incorrect');
+                    setStreak(0);
+                }
+            };
+
+            return (
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <span class="text-xs uppercase font-semibold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/20">Prompt 01</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">K-5 Math Arcade</h3>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="bg-slate-800 px-3 py-1.5 rounded-lg text-sm font-semibold text-cyan-400">Score: {score}</div>
+                            <div class="bg-slate-800 px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400">Streak: {streak} 🔥</div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 mb-6">
+                        <button onClick={() => setTier('k1')} class={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${tier === 'k1' ? 'bg-amber-500/20 border-amber-500 text-amber-300' : 'bg-slate-800 border-slate-700 text-slate-400'}`}>Grades K–1</button>
+                        <button onClick={() => setTier('23')} class={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${tier === '23' ? 'bg-amber-500/20 border-amber-500 text-amber-300' : 'bg-slate-800 border-slate-700 text-slate-400'}`}>Grades 2–3</button>
+                        <button onClick={() => setTier('45')} class={`flex-1 py-2 text-xs font-bold rounded-lg border transition ${tier === '45' ? 'bg-amber-500/20 border-amber-500 text-amber-300' : 'bg-slate-800 border-slate-700 text-slate-400'}`}>Grades 4–5</button>
+                    </div>
+
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-8 text-center my-6">
+                        <div class="text-4xl sm:text-5xl font-black text-white tracking-widest mb-6">{problem.q}</div>
+                        <form onSubmit={handleSubmit} class="flex justify-center gap-3">
+                            <input 
+                                type="number" 
+                                value={userAnswer} 
+                                onChange={(e) => setUserAnswer(e.target.value)} 
+                                placeholder="Your answer" 
+                                class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-lg font-bold text-center w-40 text-white focus:outline-none focus:border-amber-500"
+                                autoFocus
+                            />
+                            <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3 rounded-lg transition">Submit</button>
+                        </form>
+                        {feedback === 'correct' && <div class="text-emerald-400 font-bold mt-4 animate-bounce">Correct! Awesome job! 🎉</div>}
+                        {feedback === 'incorrect' && <div class="text-rose-400 font-bold mt-4">Not quite right, try again! 💪</div>}
+                    </div>
+                </div>
+            );
+        }
+
+        // --- PROMPT 02: LANGUAGE APP ---
+        function LanguagePromptApp() {
+            const [lang, setLang] = useState('es');
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [flipped, setFlipped] = useState(false);
+
+            const vocab = {
+                es: [
+                    { word: 'Hola', trans: 'Hello', phonetic: 'OH-lah' },
+                    { word: 'Gracias', trans: 'Thank you', GRO: 'GRAH-syahs' },
+                    { word: 'Agua', trans: 'Water', phonetic: 'AH-gwah' },
+                    { word: 'Amigo', trans: 'Friend', phonetic: 'ah-MEE-goh' }
+                ],
+                fr: [
+                    { word: 'Bonjour', trans: 'Hello', phonetic: 'bohn-ZHOOR' },
+                    { word: 'Merci', trans: 'Thank you', phonetic: 'mair-SEE' },
+                    { word: 'Eau', trans: 'Water', phonetic: 'oh' },
+                    { word: 'Ami', trans: 'Friend', phonetic: 'ah-MEE' }
+                ]
+            };
+
+            const currentList = vocab[lang];
+            const card = currentList[currentIndex];
+
+            const speak = (text) => {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = lang === 'es' ? 'es-ES' : 'fr-FR';
+                    window.speechSynthesis.speak(utterance);
+                }
+            };
+
+            const nextCard = () => {
+                setFlipped(false);
+                setCurrentIndex((currentIndex + 1) % currentList.length);
+            };
+
+            return (
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <span class="text-xs uppercase font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">Prompt 02</span>
+                            <h3 class="text-2xl font-bold text-white mt-1">Spaced Repetition Flashcards</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onClick={() => { setLang('es'); setCurrentIndex(0); setFlipped(false); }} class={`px-3 py-1.5 rounded-lg text-xs font-bold border ${lang === 'es' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300' : 'bg-slate-800 border-slate-700 text-slate-400'}`}>Spanish</button>
+                            <button onClick={() => { setLang('fr'); setCurrentIndex(0); setFlipped(false); }} class={`px-3 py-1.5 rounded-lg text-xs font-bold border ${lang === 'fr' ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300' : 'bg-slate-800 border-slate-700 text-slate-400'}`}>French</button>
+                        </div>
+                    </div>
+
+                    <div 
+                        onClick={() => setFlipped(!flipped)} 
+                        class="bg-slate-950 border border-slate-800 rounded-2xl h-64 flex flex-col items-center justify-center cursor-pointer hover:border-emerald-500/50 transition relative p-6 text-center shadow-inner"
+                    >
+                        <span class="absolute top-4 left-4 text-xs text-slate-500">Card {currentIndex + 1} of {currentList.length} (Click to flip)</span>
+                        {!flipped ? (
+                            <div>
+                                <div class="text-4xl font-black text-white mb-2">{card.word}</div>
+                                <div class="text-sm text-emerald-400">Pronunciation: [{card.phonetic}]</div>
+                            </div>
+                        ) : (
+                            <div>
+                                <div class="text-3xl font-bold text-emerald-400 mb-2">{card.trans}</div>
+                                <div class="text-xs text-slate-400">Target Concept Translation</div>
+                            </div>
+                        )}
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); speak(card.word); }} 
+                            class="absolute bottom-4 right-4 bg-emerald-500/20 border border-emerald-500/30 p-2 rounded-full text-emerald-400 hover:bg-emerald-500 hover:text-slate-950 transition"
+                        >
+                            <i data-lucide="volume-2" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex gap-3 mt-6">
+                        <button onClick={nextCard} class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-3 rounded-lg transition">Hard</button>
+                        <button onClick={nextCard} class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-lg transition">Easy / Mastered</button>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- PROMPT 03: READING APP ---
+        function ReadingPromptApp() {
+            const [selectedWord, setSelectedWord] = useState(null);
+
+            const story = [
+                { word: 'Maya', def: 'Name of the protagonist explorer.' },
+                { word: 'discovered', def: 'Found something hidden or unexpected.' },
+                { word: 'an', def: 'Indefinite article.' },
+                { word: 'ancient', def: 'Very old; belonging to the distant past.' },
+                { word: 'map', def: 'A visual representation of an area.' },
+                { word: 'hidden', def: 'Kept out of sight; concealed.' },
+                { word: 'inside', def: 'Situated on the inner side or interior.' },
+                { word: 'the', def: 'Definite article.' },
+                { word: 'mystic', def: 'Inspiring a sense of spiritual mystery or awe.' },
+                { word: 'library.', def: 'A building or room containing collections of books.' }
+            ];
+
+            return (
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl max-w-2xl mx-auto">
+                    <div class="mb-6">
+                        <span class="text-xs uppercase font-semibold text-purple-400 bg-purple-500/10 px-2.5 py-1 rounded border border-purple-500/20">Prompt 03</span>
+                        <h3 class="text-2xl font-bold text-white mt-1">Interactive Story Reader</h3>
+                        <p class="text-xs text-slate-400 mt-1">Click any word below to inspect its contextual definition.</p>
+                    </div>
+
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 text-lg leading-relaxed flex flex-wrap gap-2 items-center justify-center min-h-[160px]">
+                        {story.map((item, idx) => (
+                            <button 
+                                key={idx} 
+                                onClick={() => setSelectedWord(item)} 
+                                class="px-2 py-1 bg-slate-900 hover:bg-purple-500/20 hover:text-purple-300 border border-slate-800 rounded transition font-medium text-slate-200"
+                            >
+                                {item.word}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div class="mt-6 bg-slate-950 border border-slate-800 rounded-xl p-4 min-h-[90px] flex items-center justify-center text-center">
+                        {selectedWord ? (
+                            <div>
+                                <span class="text-purple-400 font-bold uppercase text-xs tracking-wider">Definition for "{selectedWord.word}":</span>
+                                <p class="text-slate-300 text-sm mt-1">{selectedWord.def}</p>
+                            </div>
+                        ) : (
+                            <p class="text-slate-500 text-sm italic">Select a word from above to view its definition.</p>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

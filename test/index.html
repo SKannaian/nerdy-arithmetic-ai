@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nerdy AI Learning Suite — Full Multi-Prompt Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg: #070913;
+      --surface: #0f1425;
+      --surface2: #171d36;
+      --border: rgba(255, 255, 255, 0.12);
+      --cyan: #17e2ea;
+      --amber: #f59e0b;
+      --emerald: #10b981;
+      --purple: #a855f7;
+      --rose: #f43f5e;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: #f1f5f9;
+    }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .serif-story { font-family: 'Lora', serif; }
+    .perspective-card { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+    .shake-animation {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- TOP APP BAR -->
+  <header class="border-b border-slate-800 bg-[#0b1021]/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="bg-cyan-500/10 border border-cyan-500/30 p-2 rounded-xl text-cyan-400">
+          <i data-lucide="cpu" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight text-white">nerdy</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">AI Learning Suite</span>
+          </div>
+          <p class="text-xs text-slate-400">Live + AI Learning Platform · Local Test Edition</p>
+        </div>
+      </div>
+
+      <!-- MAIN PROMPT NAVIGATION TABS -->
+      <nav class="flex items-center bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800">
+        <button onclick="switchAppTab('math')" id="tab-btn-math" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-amber-500 text-slate-950 shadow-md">
+          <i data-lucide="calculator" class="w-4 h-4"></i> Prompt 01: Math
+        </button>
+        <button onclick="switchAppTab('lang')" id="tab-btn-lang" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white">
+          <i data-lucide="languages" class="w-4 h-4"></i> Prompt 02: Language
+        </button>
+        <button onclick="switchAppTab('read')" id="tab-btn-read" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white">
+          <i data-lucide="book-open" class="w-4 h-4"></i> Prompt 03: Reading
+        </button>
+      </nav>
+
+      <!-- Global Stats & Controls -->
+      <div class="flex items-center flex-wrap gap-3">
+        <!-- API Status Indicator -->
+        <div class="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs">
+          <span id="backend-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+          <span id="backend-status-text" class="text-slate-300">Local Socratic Mode</span>
+          <button onclick="toggleApiModal()" class="text-cyan-400 hover:underline ml-1 font-semibold">Settings</button>
+        </div>
+
+        <!-- Global XP & Level -->
+        <div class="flex items-center gap-2 bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5">
+          <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+          <span id="player-level" class="text-xs font-bold text-amber-400">Lvl 1 Scout</span>
+          <div class="w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div id="player-xp-bar" class="h-full bg-gradient-to-r from-amber-500 to-cyan-400 transition-all duration-300" style="width: 15%"></div>
+          </div>
+          <span id="player-xp" class="text-xs font-mono font-bold text-slate-300">15 XP</span>
+        </div>
+
+        <!-- Audio Toggle -->
+        <button id="audio-btn" onclick="toggleAudio()" class="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 transition">
+          <i data-lucide="volume-2" id="audio-icon" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT / CENTER COLUMN (Cols 1-8): DYNAMIC PER PROMPT -->
+    <section class="lg:col-span-8 flex flex-col space-y-6">
+
+      <!-- ==================================================================== -->
+      <!-- VIEW 1: PROMPT 01 — K-5 MATH ARCADE & CRA MANIPULATIVES              -->
+      <!-- ==================================================================== -->
+      <div id="view-math" class="space-y-6">
+        <!-- TIER SELECTOR BAR -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-2 flex gap-2">
+          <button onclick="setGradeTier('k1')" id="tier-btn-k1" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/40">
+            <i data-lucide="shapes" class="w-4 h-4"></i>
+            <span>Grades K–1</span>
+            <span class="text-[10px] opacity-75 hidden sm:inline">(10-Frames)</span>
+          </button>
+          <button onclick="setGradeTier('23')" id="tier-btn-23" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-slate-800/60 text-slate-400 border border-transparent hover:text-white">
+            <i data-lucide="calculator" class="w-4 h-4"></i>
+            <span>Grades 2–3</span>
+            <span class="text-[10px] opacity-75 hidden sm:inline">(Regrouping)</span>
+          </button>
+          <button onclick="setGradeTier('45')" id="tier-btn-45" class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-slate-800/60 text-slate-400 border border-transparent hover:text-white">
+            <i data-lucide="flame" class="w-4 h-4"></i>
+            <span>Grades 4–5</span>
+            <span class="text-[10px] opacity-75 hidden sm:inline">(Times Tables)</span>
+          </button>
+        </div>
+
+        <!-- THE MATH ARENA CARD -->
+        <div id="game-card" class="bg-gradient-to-b from-[#12182d] to-[#0d1222] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden transition-all duration-300">
+          <div class="flex justify-between items-center mb-6 relative z-10">
+            <div class="flex items-center gap-2">
+              <span id="tier-badge" class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30">Tier: Grades K–1</span>
+              <span class="text-xs text-slate-400">Concrete-Representational-Abstract</span>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-950/70 border border-slate-800 px-3.5 py-1.5 rounded-full">
+              <span class="text-xs text-slate-400 font-semibold">Streak:</span>
+              <span id="streak-counter" class="text-sm font-extrabold text-amber-400 flex items-center gap-1 font-mono">
+                0 ⚡
+              </span>
+            </div>
+          </div>
+
+          <div class="text-center my-4 relative z-10">
+            <div id="equation-display" class="text-5xl sm:text-7xl font-black text-white tracking-wider font-mono drop-shadow-md py-2">
+              4 + 3 = ?
+            </div>
+            <p class="text-sm text-slate-400 mt-1">Count the items or solve using mental math!</p>
+          </div>
+
+          <!-- CRA Manipulatives -->
+          <div class="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-4 my-6 min-h-[100px] flex flex-col items-center justify-center relative z-10">
+            <div class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-2 flex items-center gap-1.5">
+              <i data-lucide="eye" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span>Interactive Visual Manipulative</span>
+            </div>
+            <div id="manipulative-canvas" class="flex flex-wrap items-center justify-center gap-2 max-w-md w-full"></div>
+          </div>
+
+          <!-- Answer Form -->
+          <form onsubmit="handleAnswerSubmit(event)" class="flex flex-col sm:flex-row justify-center items-center gap-3 relative z-10 max-w-md mx-auto">
+            <input 
+              type="number" 
+              id="user-answer-input" 
+              class="w-full sm:w-44 bg-slate-950 border-2 border-slate-700 focus:border-amber-500 rounded-2xl px-5 py-4 text-2xl font-black text-center text-white outline-none transition font-mono shadow-inner"
+              placeholder="?"
+              required
+              autocomplete="off"
+            />
+            <button 
+              type="submit" 
+              id="submit-btn" 
+              class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 text-slate-950 font-black px-8 py-4 rounded-2xl transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2"
+            >
+              <span>Submit</span>
+              <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+          </form>
+
+          <div id="feedback-banner" class="mt-4 text-center min-h-[28px] font-bold text-sm"></div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800/60 flex flex-wrap justify-between items-center text-xs text-slate-400 gap-2">
+            <button type="button" id="hint-btn" onclick="requestAiHint()" class="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1.5 hover:underline">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Ask AI Mentor for a Hint
+            </button>
+            <button type="button" onclick="skipProblem()" class="text-slate-400 hover:text-slate-300 flex items-center gap-1">
+              <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i> Skip Question
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- VIEW 2: PROMPT 02 — LANGUAGE LEARNING & SPACED REPETITION (SM-2)     -->
+      <!-- ==================================================================== -->
+      <div id="view-lang" class="space-y-6 hidden">
+        <div class="bg-gradient-to-b from-[#0e1925] to-[#0a121e] border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          
+          <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <div>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Prompt 02 · Spaced Repetition (SM-2)</span>
+              <h3 class="text-2xl font-bold text-white mt-2">Tactile Audio Flashcards</h3>
+            </div>
+            <!-- Language Selector -->
+            <div class="flex gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-bold">
+              <button onclick="setLangMode('es')" id="lang-btn-es" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 transition">Spanish</button>
+              <button onclick="setLangMode('fr')" id="lang-btn-fr" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition">French</button>
+            </div>
+          </div>
+
+          <!-- THE 3D FLIP FLASHCARD -->
+          <div class="perspective-card w-full max-w-md mx-auto my-4 cursor-pointer" onclick="flipFlashcard()">
+            <div id="flashcard-inner" class="relative w-full h-72 rounded-3xl border-2 border-slate-700 bg-slate-950/90 shadow-2xl transition-transform duration-500 transform-style-3d p-6 flex flex-col items-center justify-center text-center">
+              
+              <!-- Front of Card -->
+              <div id="card-front" class="absolute inset-0 p-6 flex flex-col items-center justify-center backface-hidden">
+                <span class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-4">Target Vocabulary · Click to Flip</span>
+                <div id="card-term" class="text-4xl sm:text-5xl font-black text-white mb-2">Gracias</div>
+                <div id="card-phonetic" class="text-sm font-mono text-emerald-400 mb-6">[GRAH-syahs]</div>
+                <button onclick="event.stopPropagation(); playVocabAudio()" class="bg-emerald-500/20 hover:bg-emerald-500 hover:text-slate-950 border border-emerald-500/40 p-3 rounded-full text-emerald-400 transition flex items-center gap-2 text-xs font-bold">
+                  <i data-lucide="volume-2" class="w-5 h-5"></i>
+                  <span>Listen (Native Voice)</span>
+                </button>
+              </div>
+
+              <!-- Back of Card -->
+              <div id="card-back" class="absolute inset-0 p-6 flex flex-col items-center justify-center backface-hidden rotate-y-180 bg-gradient-to-b from-slate-900 to-slate-950 rounded-3xl">
+                <span class="text-xs text-emerald-400 uppercase tracking-widest font-bold mb-2">Meaning & Context</span>
+                <div id="card-translation" class="text-3xl font-black text-white mb-3">Thank you</div>
+                <p id="card-example" class="text-xs text-slate-300 italic max-w-xs mb-4">"Muchas gracias por tu ayuda." (Thank you very much for your help.)</p>
+                <span class="text-[11px] text-slate-500">Rate your recall below to update SM-2 interval</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Spaced Repetition Grading Buttons -->
+          <div class="flex gap-3 max-w-md mx-auto mt-6">
+            <button onclick="gradeFlashcard(1)" class="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-rose-950/50 border border-slate-800 text-rose-400 font-bold text-xs transition">
+              Hard / Repeat (1d)
+            </button>
+            <button onclick="gradeFlashcard(3)" class="flex-1 py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-amber-300 font-bold text-xs transition">
+              Good (3d)
+            </button>
+            <button onclick="gradeFlashcard(5)" class="flex-1 py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs transition shadow-lg shadow-emerald-500/20">
+              Mastered (6d)
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================================================================== -->
+      <!-- VIEW 3: PROMPT 03 — ENGLISH READING & CLICK-TO-DEFINE GLOSSARY       -->
+      <!-- ==================================================================== -->
+      <div id="view-read" class="space-y-6 hidden">
+        <div class="bg-gradient-to-b from-[#180f25] to-[#0f0918] border border-purple-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+          
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30">Prompt 03 · Literacy & Contextual Story Reader</span>
+              <h3 class="text-2xl font-bold text-white mt-2">Maya and the Sunken Citadel</h3>
+            </div>
+            <button onclick="readStoryAloud()" class="px-3.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500 hover:text-slate-950 border border-purple-500/40 text-purple-300 text-xs font-bold transition flex items-center gap-1.5">
+              <i data-lucide="headphones" class="w-4 h-4"></i> Read to Me
+            </button>
+          </div>
+
+          <!-- THE INTERACTIVE STORY PASSAGE -->
+          <div class="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-6 sm:p-8 leading-loose text-lg sm:text-xl text-slate-200 serif-story select-none" id="story-text-container">
+            <!-- Words dynamically tokenized with click-to-define -->
+          </div>
+
+          <!-- CONTEXTUAL WORD INSPECTOR POPOVER -->
+          <div id="word-inspector" class="mt-6 p-4 rounded-2xl bg-purple-950/40 border border-purple-500/30 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <div class="text-xs font-bold uppercase text-purple-400 tracking-wider flex items-center gap-2">
+                <i data-lucide="book-marked" class="w-4 h-4"></i> Contextual Glossary
+              </div>
+              <div id="inspector-word" class="text-xl font-bold text-white mt-1">Click any underlined word above</div>
+              <div id="inspector-def" class="text-xs text-slate-300 mt-1">Tap words to view child-friendly definitions without losing reading flow.</div>
+            </div>
+            <button id="add-vault-btn" onclick="saveToWordVault()" class="hidden bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5 flex-shrink-0">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Save to Word Vault
+            </button>
+          </div>
+
+          <!-- In-Story Comprehension Check -->
+          <div class="mt-6 pt-6 border-t border-slate-800">
+            <h4 class="text-xs uppercase font-bold text-slate-400 mb-3 flex items-center gap-1.5">
+              <i data-lucide="help-circle" class="w-4 h-4 text-purple-400"></i> Bloom's Taxonomy Comprehension Check
+            </h4>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs">
+              <p class="text-slate-200 font-medium mb-3">Why did Maya tread cautiously into the ancient submerged hallway?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button onclick="checkComprehension(false)" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-left text-slate-300">A) She was afraid of the dark.</button>
+                <button onclick="checkComprehension(true)" class="p-2.5 rounded-lg bg-slate-900 hover:bg-purple-950 border border-slate-800 text-left text-slate-300">B) The ancient stonework was perilous and slick with moss.</button>
+              </div>
+              <div id="comp-feedback" class="mt-2 font-bold text-emerald-400 hidden">✓ Correct inference! +15 Reading XP.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- MASTER ACHIEVEMENT BADGES -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-5">
+        <h4 class="text-xs uppercase tracking-wider font-bold text-slate-400 mb-3 flex items-center gap-2">
+          <i data-lucide="award" class="w-4 h-4 text-amber-400"></i> Master Achievements
+        </h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div id="badge-first" class="p-3 bg-slate-950/80 border border-cyan-500/50 bg-cyan-500/10 rounded-xl flex items-center gap-2.5 transition">
+            <span class="text-2xl">🌱</span>
+            <div>
+              <div class="text-xs font-bold text-white">First Step</div>
+              <div class="text-[10px] text-slate-400">1st correct answer</div>
+            </div>
+          </div>
+          <div id="badge-streak" class="p-3 bg-slate-950/80 border border-slate-800 rounded-xl flex items-center gap-2.5 opacity-40 transition">
+            <span class="text-2xl">⚡</span>
+            <div>
+              <div class="text-xs font-bold text-white">On Fire</div>
+              <div class="text-[10px] text-slate-400">Reach 5-streak</div>
+            </div>
+          </div>
+          <div id="badge-tenframe" class="p-3 bg-slate-950/80 border border-slate-800 rounded-xl flex items-center gap-2.5 opacity-40 transition">
+            <span class="text-2xl">🌍</span>
+            <div>
+              <div class="text-xs font-bold text-white">Polyglot</div>
+              <div class="text-[10px] text-slate-400">5 vocab mastered</div>
+            </div>
+          </div>
+          <div id="badge-knight" class="p-3 bg-slate-950/80 border border-slate-800 rounded-xl flex items-center gap-2.5 opacity-40 transition">
+            <span class="text-2xl">📖</span>
+            <div>
+              <div class="text-xs font-bold text-white">Bookworm</div>
+              <div class="text-[10px] text-slate-400">Chapter cleared</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: SOCRATIC AI MENTOR ("BYTE") (Cols 9-12) -->
+    <aside class="lg:col-span-4 flex flex-col space-y-4">
+      <div class="bg-gradient-to-b from-[#11162c] to-[#0c1020] border border-cyan-500/20 rounded-3xl p-5 flex-1 flex flex-col shadow-xl relative overflow-hidden">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl font-bold">
+              🤖
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+                Byte <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded font-mono">Socratic AI</span>
+              </h3>
+              <p class="text-[11px] text-slate-400">Adaptive Learning Companion</p>
+            </div>
+          </div>
+          <span class="inline-flex items-center gap-1.5 text-[10px] text-emerald-400 font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Active
+          </span>
+        </div>
+
+        <!-- Chat Feed -->
+        <div id="socratic-feed" class="flex-1 overflow-y-auto space-y-3 my-4 pr-1 text-xs max-h-[460px]">
+          <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-3.5 text-slate-200 leading-relaxed shadow-sm">
+            <span class="font-bold text-cyan-400 block mb-1">🤖 Byte:</span>
+            Welcome to the Nerdy AI Learning Suite! Whether you're exploring K-5 math with ten-frames, practicing languages with spaced repetition, or exploring stories, I'm here to coach and guide you without spoiling the answers! 🚀
+          </div>
+        </div>
+
+        <!-- Input -->
+        <form onsubmit="handleManualAiQuestion(event)" class="mt-auto pt-3 border-t border-slate-800/80 flex gap-2">
+          <input 
+            type="text" 
+            id="ai-question-input" 
+            placeholder="Ask Byte anything..." 
+            class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
+          />
+          <button 
+            type="submit" 
+            class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center"
+          >
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          </button>
+        </form>
+
+        <p class="text-[10px] text-slate-500 mt-2 text-center">
+          Powered by Gemini 2.5 Flash & Cognitive Pedagogy
+        </p>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- SETTINGS / API MODAL -->
+  <div id="api-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="settings" class="w-5 h-5 text-cyan-400"></i> Local Server & Gemini API
+        </h3>
+        <button onclick="toggleApiModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-300">
+        <div>
+          <label class="block font-semibold mb-1 text-slate-200">Gemini API Key</label>
+          <input 
+            type="password" 
+            id="gemini-key-input" 
+            placeholder="AIzaSy..." 
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:border-cyan-500 outline-none"
+          />
+          <p class="text-[11px] text-slate-500 mt-1">
+            Optional if loaded in backend `.env` file.
+          </p>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1 text-slate-200">Backend Server URL</label>
+          <input 
+            type="text" 
+            id="backend-url-input" 
+            value="http://127.0.0.1:8765" 
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:border-cyan-500 outline-none"
+          />
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex justify-end gap-2">
+          <button onclick="saveApiSettings()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl transition">
+            Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION JAVASCRIPT LOGIC -->
+  <script>
+    // ── MASTER STATE ────────────────────────────────────────────────────────
+    const state = {
+      activeTab: 'math',
+      tier: 'k1',
+      score: 0,
+      streak: 0,
+      xp: 15,
+      level: 1,
+      soundEnabled: true,
+      
+      // Math State
+      currentProblem: { n1: 4, n2: 3, op: '+', ans: 7, equationStr: '4 + 3 = ?' },
+      
+      // Language State
+      lang: 'es',
+      vocabIndex: 0,
+      isFlipped: false,
+      vocabDecks: {
+        es: [
+          { term: 'Gracias', phonetic: 'GRAH-syahs', trans: 'Thank you', ex: 'Muchas gracias por tu ayuda.', locale: 'es-ES' },
+          { term: 'Desafortunadamente', phonetic: 'deh-sah-for-too-nah-dah-MEN-teh', trans: 'Unfortunately', ex: 'Desafortunadamente no puedo ir hoy.', locale: 'es-ES' },
+          { term: 'Aprender', phonetic: 'ah-pren-DARE', trans: 'To learn', ex: 'Me encanta aprender cosas nuevas.', locale: 'es-ES' },
+          { term: 'Maravilloso', phonetic: 'mah-rah-vee-YOH-soh', trans: 'Wonderful / Marvelous', ex: 'Este día es maravilloso.', locale: 'es-ES' }
+        ],
+        fr: [
+          { term: 'Bonjour', phonetic: 'bohn-ZHOOR', trans: 'Hello / Good day', ex: 'Bonjour! Comment allez-vous?', locale: 'fr-FR' },
+          { term: 'Enchanté', phonetic: 'ahn-shahn-TAY', trans: 'Pleased to meet you', ex: 'Enchanté de faire votre connaissance.', locale: 'fr-FR' },
+          { term: 'Écureuil', phonetic: 'ay-koo-RUH-yuh', trans: 'Squirrel', ex: "L'écureuil mange des noisettes.", locale: 'fr-FR' }
+        ]
+      },
+
+      // Reading State
+      storyText: "Maya discovered an ancient stone tablet hidden inside the subterranean temple. The glyphs illuminated with a mystical cyan light, revealing a perilous secret passage that twisted downward into the sunken citadel.",
+      storyGlossary: {
+        ancient: { def: 'Belonging to the very distant past; thousands of years old.', phonetic: 'AYN-shunt' },
+        subterranean: { def: 'Existing, occurring, or done under the earth\'s surface.', phonetic: 'sub-tuh-RAY-nee-un' },
+        illuminated: { def: 'Lit up; brightly decorated or shining with light.', phonetic: 'ih-LOO-mih-nay-tid' },
+        mystical: { def: 'Inspiring a sense of spiritual mystery, wonder, or magic.', phonetic: 'MIS-tih-kul' },
+        perilous: { def: 'Full of danger or risk; hazardous.', phonetic: 'PAIR-uh-lus' }
+      },
+      selectedWord: null,
+
+      apiKey: localStorage.getItem('nerdy_gemini_key') || 'AQ.Ab8RN6IQktTGV6qsBmlIna7hG_GDpjVZ83MDmQAq-IdX8jxfGw',
+      backendUrl: localStorage.getItem('nerdy_backend_url') || 'http://127.0.0.1:8765'
+    };
+
+    // ── AUDIO SYNTHESIZER (ZERO ASSET DEPENDENCIES) ──────────────────────────
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+    }
+    function playSound(type) {
+      if (!state.soundEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+
+      if (type === 'correct') {
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.15, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.4);
+        });
+      } else if (type === 'streak') {
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.09);
+          gain.gain.setValueAtTime(0.2, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.4);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.45);
+        });
+      }
+    }
+
+    function toggleAudio() {
+      state.soundEnabled = !state.soundEnabled;
+      const icon = document.getElementById('audio-icon');
+      icon.setAttribute('data-lucide', state.soundEnabled ? 'volume-2' : 'volume-x');
+      lucide.createIcons();
+    }
+
+    // ── TAB SWITCHING LOGIC ─────────────────────────────────────────────────
+    function switchAppTab(tab) {
+      state.activeTab = tab;
+      ['math', 'lang', 'read'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        const view = document.getElementById(`view-${t}`);
+        if (t === tab) {
+          btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-cyan-500 text-slate-950 shadow-md';
+          view.classList.remove('hidden');
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white';
+          view.classList.add('hidden');
+        }
+      });
+
+      if (tab === 'math') {
+        addFeedMessage('🤖 Byte', 'Switched to **K-5 Math Game**! Ready to build foundational numeracy?');
+      } else if (tab === 'lang') {
+        addFeedMessage('🤖 Byte', 'Switched to **Language Spaced Repetition**! Listen to native pronunciations and grade your memory.');
+        renderFlashcard();
+      } else if (tab === 'read') {
+        addFeedMessage('🤖 Byte', 'Switched to **Literacy Story Reader**! Click any underlined word to inspect its meaning in context.');
+        renderStory();
+      }
+      lucide.createIcons();
+    }
+
+    // ── MATH LOGIC (PROMPT 01) ──────────────────────────────────────────────
+    function setGradeTier(tier) {
+      state.tier = tier;
+      ['k1', '23', '45'].forEach(t => {
+        const btn = document.getElementById(`tier-btn-${t}`);
+        if (t === tier) {
+          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        } else {
+          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 bg-slate-800/60 text-slate-400 border border-transparent hover:text-white';
+        }
+      });
+      const badge = document.getElementById('tier-badge');
+      badge.innerText = tier === 'k1' ? 'Tier: Grades K–1' : tier === '23' ? 'Tier: Grades 2–3' : 'Tier: Grades 4–5';
+      generateProblem();
+    }
+
+    function generateProblem() {
+      let n1, n2, op;
+      if (state.tier === 'k1') {
+        n1 = Math.floor(Math.random() * 8) + 2;
+        n2 = Math.floor(Math.random() * 6) + 1;
+        op = Math.random() > 0.4 ? '+' : '-';
+        if (op === '-' && n1 < n2) [n1, n2] = [n2, n1];
+      } else if (state.tier === '23') {
+        n1 = Math.floor(Math.random() * 40) + 15;
+        n2 = Math.floor(Math.random() * 30) + 10;
+        op = Math.random() > 0.5 ? '+' : '-';
+        if (op === '-' && n1 < n2) [n1, n2] = [n2, n1];
+      } else {
+        n1 = Math.floor(Math.random() * 10) + 3;
+        n2 = Math.floor(Math.random() * 10) + 2;
+        op = '×';
+      }
+      const ans = op === '+' ? n1 + n2 : op === '-' ? n1 - n2 : n1 * n2;
+      state.currentProblem = { n1, n2, op, ans, equationStr: `${n1} ${op} ${n2} = ?` };
+      document.getElementById('equation-display').innerText = state.currentProblem.equationStr;
+      document.getElementById('user-answer-input').value = '';
+      document.getElementById('feedback-banner').innerHTML = '';
+      renderManipulatives();
+    }
+
+    function renderManipulatives() {
+      const container = document.getElementById('manipulative-canvas');
+      container.innerHTML = '';
+      const { n1, n2, op } = state.currentProblem;
+
+      if (state.tier === 'k1' && op === '+') {
+        const tenFrame = document.createElement('div');
+        tenFrame.className = 'grid grid-cols-5 gap-1.5 bg-slate-900 border-2 border-slate-700 p-2 rounded-xl';
+        for (let i = 0; i < 10; i++) {
+          const slot = document.createElement('div');
+          slot.className = 'w-7 h-7 rounded-lg border border-slate-800 flex items-center justify-center text-xs font-bold';
+          if (i < n1) {
+            slot.classList.add('bg-cyan-500', 'text-slate-950');
+            slot.innerText = '●';
+          } else if (i < n1 + n2 && i < 10) {
+            slot.classList.add('bg-amber-400', 'text-slate-950');
+            slot.innerText = '▲';
+          } else {
+            slot.classList.add('bg-slate-950/60');
+          }
+          tenFrame.appendChild(slot);
+        }
+        container.appendChild(tenFrame);
+      } else if (state.tier === 'k1' && op === '-') {
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-wrap gap-2 justify-center items-center';
+        for (let i = 0; i < n1; i++) {
+          const item = document.createElement('div');
+          if (i >= n1 - n2) {
+            item.className = 'w-7 h-7 rounded-lg bg-rose-500/30 border border-rose-500/50 flex items-center justify-center text-xs text-rose-400 font-bold line-through';
+            item.innerText = '✕';
+          } else {
+            item.className = 'w-7 h-7 rounded-lg bg-cyan-500 text-slate-950 font-bold flex items-center justify-center text-xs';
+            item.innerText = (i + 1);
+          }
+          wrap.appendChild(item);
+        }
+        container.appendChild(wrap);
+      } else {
+        const decomp = document.createElement('div');
+        decomp.className = 'flex items-center gap-2 text-xs font-mono text-slate-300';
+        decomp.innerHTML = `
+          <div class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">Tens: <span class="text-amber-400 font-bold">${Math.floor(n1 / 10) * 10}</span></div>
+          <span>+</span>
+          <div class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">Ones: <span class="text-cyan-400 font-bold">${n1 % 10}</span></div>
+        `;
+        container.appendChild(decomp);
+      }
+    }
+
+    function handleAnswerSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('user-answer-input');
+      const val = parseInt(input.value.trim());
+      if (isNaN(val)) return;
+
+      const { ans } = state.currentProblem;
+      const banner = document.getElementById('feedback-banner');
+
+      if (val === ans) {
+        playSound('correct');
+        state.streak += 1;
+        state.score += 10;
+        state.xp += 15;
+        banner.innerHTML = `<span class="text-emerald-400 font-bold animate-bounce">✓ Awesome job! Correct! (+15 XP)</span>`;
+        updateGlobalStats();
+        setTimeout(generateProblem, 1000);
+      } else {
+        state.streak = 0;
+        updateGlobalStats();
+        banner.innerHTML = `<span class="text-rose-400 font-bold">Not quite right. Let's try again!</span>`;
+        triggerAiSocraticDiagnosis(val);
+      }
+    }
+
+    function requestAiHint() {
+      const { n1, n2, op } = state.currentProblem;
+      addFeedMessage('🤖 Byte', `Hint: Try starting with **${Math.max(n1, n2)}** in your mind, then count up **${Math.min(n1, n2)}** more with the dots!`);
+    }
+
+    function skipProblem() {
+      generateProblem();
+    }
+
+    async function triggerAiSocraticDiagnosis(wrongAnswer) {
+      const { equationStr, ans } = state.currentProblem;
+      // 1. Try local FastAPI backend first
+      try {
+        const resp = await fetch(`${state.backendUrl}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_key: state.apiKey,
+            user_message: String(wrongAnswer),
+            tier: state.tier,
+            equation: equationStr,
+            expected_answer: String(ans)
+          })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          addFeedMessage('🤖 Byte', data.reply);
+          return;
+        }
+      } catch (e) {}
+
+      // 2. Try Direct Google Gemini REST API if user configured key
+      if (state.apiKey) {
+        try {
+          const prompt = `Student Grade Tier: ${state.tier}\nEquation: ${equationStr}\nCorrect Answer: ${ans}\nStudent Answer: ${wrongAnswer}\nDiagnose their mistake and provide an encouraging Socratic question or visual hint to help them discover the answer themselves. Keep it under 30 words with an emoji!`;
+          const directUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
+          const directResp = await fetch(directUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              systemInstruction: { parts: [{ text: "You are Byte, a warm Socratic math companion for elementary students. Never give away the final number directly." }] },
+              generationConfig: { maxOutputTokens: 120, temperature: 0.7 }
+            })
+          });
+          if (directResp.ok) {
+            const data = await directResp.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              addFeedMessage('🤖 Byte (Gemini 2.5)', text.trim());
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('Direct Gemini API call fallback:', err);
+        }
+      }
+
+      // 3. Heuristic Pedagogical Fallback
+      const diff = Math.abs(wrongAnswer - ans);
+      if (diff === 1) {
+        addFeedMessage('🤖 Byte', `You are super close—just 1 step away! Recount the visual marks carefully.`);
+      } else {
+        addFeedMessage('🤖 Byte', `Good effort! Check if you added instead of subtracted, or count up from the larger number.`);
+      }
+    }
+
+    // ── LANGUAGE LOGIC (PROMPT 02) ──────────────────────────────────────────
+    function setLangMode(lang) {
+      state.lang = lang;
+      state.vocabIndex = 0;
+      state.isFlipped = false;
+      document.getElementById('lang-btn-es').className = lang === 'es' ? 'px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 transition' : 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition';
+      document.getElementById('lang-btn-fr').className = lang === 'fr' ? 'px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 transition' : 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition';
+      renderFlashcard();
+    }
+
+    function renderFlashcard() {
+      const deck = state.vocabDecks[state.lang];
+      const card = deck[state.vocabIndex % deck.length];
+      document.getElementById('card-term').innerText = card.term;
+      document.getElementById('card-phonetic').innerText = `[${card.phonetic}]`;
+      document.getElementById('card-translation').innerText = card.trans;
+      document.getElementById('card-example').innerText = `"${card.ex}"`;
+
+      const inner = document.getElementById('flashcard-inner');
+      if (state.isFlipped) {
+        inner.classList.add('rotate-y-180');
+      } else {
+        inner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function flipFlashcard() {
+      state.isFlipped = !state.isFlipped;
+      renderFlashcard();
+    }
+
+    function playVocabAudio() {
+      const deck = state.vocabDecks[state.lang];
+      const card = deck[state.vocabIndex % deck.length];
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(card.term);
+        utter.lang = card.locale;
+        utter.rate = 0.85;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function gradeFlashcard(grade) {
+      state.xp += 10;
+      updateGlobalStats();
+      state.isFlipped = false;
+      state.vocabIndex = (state.vocabIndex + 1) % state.vocabDecks[state.lang].length;
+      renderFlashcard();
+      addFeedMessage('🤖 Byte', `Spaced Repetition updated! Next review scheduled in ${grade === 5 ? '6 days' : grade === 3 ? '3 days' : 'tomorrow'}.`);
+    }
+
+    // ── READING LOGIC (PROMPT 03) ───────────────────────────────────────────
+    function renderStory() {
+      const container = document.getElementById('story-text-container');
+      container.innerHTML = '';
+      const words = state.storyText.split(/(\s+)/);
+
+      words.forEach(word => {
+        const clean = word.toLowerCase().replace(/[^a-z]/g, '');
+        if (state.storyGlossary[clean]) {
+          const span = document.createElement('span');
+          span.className = 'cursor-pointer font-semibold text-purple-300 border-b-2 border-purple-400/80 hover:bg-purple-500/20 px-1 rounded transition';
+          span.innerText = word;
+          span.onclick = () => selectWord(clean, state.storyGlossary[clean]);
+          container.appendChild(span);
+        } else {
+          const span = document.createElement('span');
+          span.innerText = word;
+          container.appendChild(span);
+        }
+      });
+    }
+
+    function selectWord(word, info) {
+      state.selectedWord = { word, info };
+      document.getElementById('inspector-word').innerHTML = `<span class="capitalize text-purple-300">${word}</span> <span class="text-xs font-mono text-slate-400">[${info.phonetic}]</span>`;
+      document.getElementById('inspector-def').innerText = info.def;
+      document.getElementById('add-vault-btn').classList.remove('hidden');
+
+      if ('speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(word);
+        utter.lang = 'en-US';
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function saveToWordVault() {
+      if (!state.selectedWord) return;
+      state.xp += 5;
+      updateGlobalStats();
+      addFeedMessage('🤖 Byte', `Saved **${state.selectedWord.word}** to your personal Word Vault! +5 XP.`);
+    }
+
+    function readStoryAloud() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(state.storyText);
+        utter.lang = 'en-US';
+        utter.rate = 0.9;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function checkComprehension(isCorrect) {
+      const banner = document.getElementById('comp-feedback');
+      banner.classList.remove('hidden');
+      if (isCorrect) {
+        state.xp += 15;
+        updateGlobalStats();
+        banner.className = 'mt-2 font-bold text-emerald-400';
+        banner.innerText = '✓ Correct inference! +15 Reading XP.';
+        playSound('correct');
+      } else {
+        banner.className = 'mt-2 font-bold text-rose-400';
+        banner.innerText = 'Rethink the passage! Look at how the stonework was described.';
+      }
+    }
+
+    // ── GLOBAL UTILS & SOCRATIC FEED ────────────────────────────────────────
+    function updateGlobalStats() {
+      document.getElementById('streak-counter').innerText = `${state.streak} ⚡`;
+      document.getElementById('player-xp').innerText = `${state.xp} XP`;
+      const progress = ((state.xp % 100) / 100) * 100;
+      document.getElementById('player-xp-bar').style.width = `${progress}%`;
+    }
+
+    function addFeedMessage(sender, text) {
+      const feed = document.getElementById('socratic-feed');
+      const item = document.createElement('div');
+      item.className = 'bg-slate-900/90 border border-slate-800/80 rounded-2xl p-3.5 text-slate-200 leading-relaxed shadow-sm transition-all';
+      item.innerHTML = `<span class="font-bold text-cyan-400 block mb-1">${sender}:</span> ${text}`;
+      feed.appendChild(item);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    async function handleManualAiQuestion(e) {
+      e.preventDefault();
+      const input = document.getElementById('ai-question-input');
+      const q = input.value.trim();
+      if (!q) return;
+      addFeedMessage('Student', q);
+      input.value = '';
+
+      // 1. Try local FastAPI backend
+      try {
+        const resp = await fetch(`${state.backendUrl}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            api_key: state.apiKey,
+            user_message: q,
+            tier: state.tier,
+            equation: state.currentProblem ? state.currentProblem.equationStr : ''
+          })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          addFeedMessage('🤖 Byte', data.reply);
+          return;
+        }
+      } catch (err) {}
+
+      // 2. Try Direct Gemini REST API
+      if (state.apiKey) {
+        try {
+          const directUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
+          const directResp = await fetch(directUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `A student asks: "${q}". You are Byte, a friendly elementary learning copilot. Answer warmly in 1-2 encouraging sentences without giving direct homework answers.` }] }],
+              generationConfig: { maxOutputTokens: 120, temperature: 0.7 }
+            })
+          });
+          if (directResp.ok) {
+            const data = await directResp.json();
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+              addFeedMessage('🤖 Byte (Gemini 2.5)', text.trim());
+              return;
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 3. Heuristic fallback
+      setTimeout(() => {
+        addFeedMessage('🤖 Byte', `I see your curiosity! For this problem, remember to look at the visual pattern on your screen.`);
+      }, 300);
+    }
+
+    function toggleApiModal() {
+      document.getElementById('api-modal').classList.toggle('hidden');
+    }
+
+    function saveApiSettings() {
+      state.apiKey = document.getElementById('gemini-key-input').value.trim();
+      state.backendUrl = document.getElementById('backend-url-input').value.trim();
+      localStorage.setItem('nerdy_gemini_key', state.apiKey);
+      localStorage.setItem('nerdy_backend_url', state.backendUrl);
+      toggleApiModal();
+    }
+
+    // ── BOOTSTRAP ────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      generateProblem();
+      renderStory();
+      if (document.getElementById('gemini-key-input')) {
+        document.getElementById('gemini-key-input').value = state.apiKey;
+      }
+      if (state.apiKey) {
+        const dot = document.getElementById('backend-status-dot');
+        const text = document.getElementById('backend-status-text');
+        if (dot && text) {
+          dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400';
+          text.innerText = 'Gemini 2.5 Live';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

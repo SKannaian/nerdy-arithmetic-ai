@@ -1,0 +1,19 @@
+# Environment & Secrets
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# Logs
+*.log
+firebase-debug.log
+
+# OS
+.DS_Store
+Thumbs.db

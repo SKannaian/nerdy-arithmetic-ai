@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nerdy Arithmetic AI — IXL-Style K–5 Socratic Math</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+            },
+            ixlGreen: {
+              50: '#f0fdf4',
+              500: '#16a34a',
+              600: '#15803d',
+              700: '#166534',
+            },
+            ixlAmber: {
+              50: '#fffbeb',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            display: ['Fredoka', 'Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-page: #f8fafc;
+      --card-border: #e2e8f0;
+      --primary: #0284c7;
+      --success: #16a34a;
+    }
+    body {
+      background-color: #f8fafc;
+      background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: #1e293b;
+      font-family: 'Outfit', sans-serif;
+    }
+    .ixl-shadow {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(226, 232, 240, 0.8);
+    }
+    .ixl-btn-shadow {
+      box-shadow: 0 4px 0 #0f766e, 0 6px 12px rgba(15, 118, 110, 0.25);
+    }
+    .ixl-btn-shadow:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #0f766e;
+    }
+    .ixl-green-btn {
+      background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+      box-shadow: 0 4px 0 #15803d, 0 6px 14px rgba(22, 163, 74, 0.3);
+    }
+    .ixl-green-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #15803d;
+    }
+    .smartscore-ring {
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .bounce-in {
+      animation: bounceIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .shake-card {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(4px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+      40%, 60% { transform: translate3d(6px, 0, 0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-sky-200 selection:text-sky-900">
+
+  <!-- TOP HEADER (IXL / NERDY LEARNING STYLE) -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-3">
+      
+      <!-- Logo and Brand -->
+      <div class="flex items-center space-x-3">
+        <div class="bg-gradient-to-tr from-sky-500 to-blue-600 p-2.5 rounded-2xl text-white shadow-md shadow-sky-500/30 flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-display font-extrabold text-2xl tracking-tight text-slate-900">nerdy</span>
+            <span class="font-display font-bold text-xs uppercase px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-300">
+              Arithmetic AI
+            </span>
+          </div>
+          <p class="text-xs font-medium text-slate-500 hidden sm:block">K–5 Socratic Math Game · Hackathon Prompt 01</p>
+        </div>
+      </div>
+
+      <!-- GRADE RIBBON SELECTOR -->
+      <nav class="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-inner">
+        <button onclick="switchGradeTier('k1')" id="tier-nav-k1" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-amber-400 text-slate-900 shadow-sm">
+          <span>Kindergarten – 1st</span>
+          <span class="text-[10px] opacity-75 hidden md:inline">(Ten-Frames)</span>
+        </button>
+        <button onclick="switchGradeTier('23')" id="tier-nav-23" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
+          <span>Grades 2 – 3</span>
+          <span class="text-[10px] opacity-75 hidden md:inline">(Regrouping)</span>
+        </button>
+        <button onclick="switchGradeTier('45')" id="tier-nav-45" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
+          <span>Grades 4 – 5</span>
+          <span class="text-[10px] opacity-75 hidden md:inline">(Times Tables)</span>
+        </button>
+      </nav>
+
+      <!-- Global Actions -->
+      <div class="flex items-center space-x-2">
+        <!-- Scratchpad Toggle -->
+        <button onclick="toggleScratchpad()" id="scratchpad-btn" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs flex items-center gap-1.5 transition shadow-sm">
+          <i data-lucide="pencil" class="w-4 h-4 text-sky-600"></i>
+          <span class="hidden sm:inline">Scratchpad</span>
+        </button>
+
+        <!-- Sound Toggle -->
+        <button onclick="toggleSound()" id="sound-btn" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm" title="Toggle Sound">
+          <i data-lucide="volume-2" id="sound-icon" class="w-4 h-4 text-emerald-600"></i>
+        </button>
+
+        <!-- Settings Modal -->
+        <button onclick="toggleSettingsModal()" class="p-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition shadow-sm" title="Server Settings">
+          <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- SKILL BREADCRUMB BAR (IXL-STYLE) -->
+  <section class="bg-sky-50/80 border-b border-sky-100 py-2.5 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2 text-xs font-medium text-slate-600">
+      <div class="flex items-center gap-2">
+        <span class="bg-sky-600 text-white font-black px-2 py-0.5 rounded text-[11px] font-mono">MATH</span>
+        <span class="text-slate-400">›</span>
+        <span id="breadcrumb-tier" class="font-bold text-sky-900">Kindergarten & Grade 1</span>
+        <span class="text-slate-400">›</span>
+        <span id="breadcrumb-skill" class="text-slate-700">A.1 Add numbers using interactive Ten-Frames (Sums up to 10)</span>
+      </div>
+      <button onclick="toggleExampleDrawer()" class="text-sky-700 hover:text-sky-900 font-bold flex items-center gap-1 underline underline-offset-2">
+        <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
+        <span>Learn with an example</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- EXAMPLE COLLAPSIBLE DRAWER -->
+  <div id="example-drawer" class="hidden bg-amber-50/90 border-b-2 border-amber-200 transition-all">
+    <div class="max-w-5xl mx-auto px-4 py-5 text-sm text-slate-800 space-y-3">
+      <div class="flex justify-between items-center">
+        <h4 class="font-display font-bold text-base text-amber-900 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: Solving with Ten-Frames
+        </h4>
+        <button onclick="toggleExampleDrawer()" class="text-xs font-bold text-amber-800 hover:text-amber-950">Close ✕</button>
+      </div>
+      <p class="text-xs text-slate-700 leading-relaxed">
+        A <strong>ten-frame</strong> has 10 spaces organized in 2 rows of 5. To add numbers like <strong>4 + 3</strong>:
+      </p>
+      <div class="flex flex-wrap items-center gap-4 bg-white p-3 rounded-2xl border border-amber-200 shadow-sm max-w-lg">
+        <div class="text-xs font-semibold text-sky-800">1. Place 4 blue counters ●●●●</div>
+        <div class="text-xs font-semibold text-amber-800">2. Add 3 yellow counters ▲▲▲</div>
+        <div class="text-xs font-bold text-emerald-800">3. Count all tokens = 7 total!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN PRACTICE WORKSPACE (9-COL PROBLEM + 3-COL IXL HUD) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+    <!-- LEFT COLUMN: PROBLEM ARENA (COLS 1-8) -->
+    <section class="lg:col-span-8 flex flex-col space-y-6">
+
+      <!-- MAIN PROBLEM CARD -->
+      <div id="problem-card" class="bg-white rounded-3xl p-6 sm:p-9 ixl-shadow relative transition-all duration-300">
+        
+        <!-- CARD HEADER -->
+        <div class="flex justify-between items-center pb-4 mb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <span id="tier-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
+              Kindergarten · Concrete CRA
+            </span>
+            <span id="streak-badge" class="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+              <span id="streak-num">0</span> in a row ⚡
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="readEquationAloud()" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Read Question Aloud">
+              <i data-lucide="headphones" class="w-4 h-4 text-sky-600"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- EQUATION DISPLAY -->
+        <div class="text-center my-4">
+          <h2 class="text-xs uppercase tracking-wider font-extrabold text-slate-400 mb-1">Arithmetic Challenge</h2>
+          <div id="equation-display" class="font-mono text-5xl sm:text-7xl font-black text-slate-900 tracking-wider my-2 select-none drop-shadow-sm">
+            4 + 3 = ?
+          </div>
+          <p id="problem-subtext" class="text-sm font-medium text-slate-500">
+            Use the interactive ten-frame below to model the arithmetic!
+          </p>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- INTERACTIVE CONCRETE-REPRESENTATIONAL-ABSTRACT (CRA) CANVAS         -->
+        <!-- =================================================================== -->
+        <div class="my-6 p-5 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center relative">
+          
+          <div class="w-full flex justify-between items-center mb-3">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+              <i data-lucide="shapes" class="w-4 h-4 text-sky-600"></i>
+              <span id="manipulative-title">Interactive Ten-Frame Manipulative</span>
+            </span>
+            <span class="text-[11px] font-semibold text-slate-400">Click boxes to add/remove counters</span>
+          </div>
+
+          <!-- DYNAMIC MANIPULATIVE CONTAINER -->
+          <div id="manipulative-viewport" class="w-full flex flex-col items-center justify-center min-h-[130px] p-2">
+            <!-- Dynamically populated per tier: Ten-Frame, Base-10 Blocks, or Area Array -->
+          </div>
+
+          <!-- Manipulative Helper Controls -->
+          <div class="mt-3 flex flex-wrap gap-2 justify-center">
+            <button type="button" onclick="autoPopulateManipulative()" class="px-3 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm transition">
+              🪄 Auto-Model Equation
+            </button>
+            <button type="button" onclick="clearManipulative()" class="px-3 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-xs font-semibold text-slate-500 shadow-sm transition">
+              Clear Scratchpad
+            </button>
+          </div>
+        </div>
+
+        <!-- ANSWER SUBMISSION FORM -->
+        <form onsubmit="handleFormSubmit(event)" class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+          <div class="relative w-full sm:w-44">
+            <input 
+              type="number" 
+              id="answer-input" 
+              placeholder="?" 
+              class="w-full text-center text-3xl font-mono font-black py-3.5 px-4 rounded-2xl bg-white border-2 border-slate-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-100 outline-none transition text-slate-900 shadow-inner"
+              required 
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            id="submit-btn" 
+            class="w-full sm:w-auto ixl-green-btn text-white font-display font-bold text-lg px-8 py-3.5 rounded-2xl transition flex items-center justify-center gap-2 cursor-pointer select-none"
+          >
+            <span>Submit</span>
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+        </form>
+
+        <!-- FEEDBACK NOTIFICATION BANNER -->
+        <div id="feedback-banner" class="mt-4 min-h-[32px] text-center font-bold text-base transition-all"></div>
+
+        <!-- SOCRATIC PROMPT & SKIP BAR -->
+        <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap justify-between items-center text-xs font-semibold text-slate-500 gap-2">
+          <button type="button" onclick="requestByteHint()" class="text-sky-600 hover:text-sky-800 flex items-center gap-1.5 hover:underline">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+            <span>Ask Byte for a Socratic Hint</span>
+          </button>
+          <button type="button" onclick="skipProblem()" class="text-slate-400 hover:text-slate-600 flex items-center gap-1">
+            <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
+            <span>Skip Question</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ON-SCREEN KEYPAD (FOR YOUNG TOUCH-SCREEN LEARNERS) -->
+      <div id="touch-keypad" class="bg-white rounded-3xl p-4 ixl-shadow flex flex-col items-center">
+        <div class="text-[11px] font-bold text-slate-400 uppercase mb-2 flex items-center gap-1">
+          <i data-lucide="grid" class="w-3.5 h-3.5 text-slate-400"></i> Kid-Friendly Touch Keypad
+        </div>
+        <div class="grid grid-cols-6 gap-2 w-full max-w-md">
+          <button type="button" onclick="keypadPress('1')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">1</button>
+          <button type="button" onclick="keypadPress('2')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">2</button>
+          <button type="button" onclick="keypadPress('3')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">3</button>
+          <button type="button" onclick="keypadPress('4')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">4</button>
+          <button type="button" onclick="keypadPress('5')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">5</button>
+          <button type="button" onclick="keypadPress('6')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">6</button>
+          <button type="button" onclick="keypadPress('7')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">7</button>
+          <button type="button" onclick="keypadPress('8')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">8</button>
+          <button type="button" onclick="keypadPress('9')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">9</button>
+          <button type="button" onclick="keypadPress('0')" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base transition">0</button>
+          <button type="button" onclick="keypadPress('back')" class="col-span-2 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-bold text-xs transition">⌫ Back</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: THE SIGNATURE IXL HUD (COLS 9-12) -->
+    <aside class="lg:col-span-4 flex flex-col space-y-6">
+
+      <!-- IXL MASTERY SCORECARD (SMARTSCORE HUD) -->
+      <div class="bg-white rounded-3xl p-6 ixl-shadow flex flex-col items-center text-center relative overflow-hidden">
+        
+        <!-- Scorecard Header -->
+        <span class="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-4">
+          Session Mastery Scorecard
+        </span>
+
+        <!-- Circular SmartScore Gauge -->
+        <div class="relative w-36 h-36 flex items-center justify-center my-2">
+          <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+            <!-- Background track -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
+            <!-- Progress track -->
+            <circle 
+              id="smartscore-circle" 
+              class="smartscore-ring" 
+              cx="60" 
+              cy="60" 
+              r="50" 
+              fill="none" 
+              stroke="#0284c7" 
+              stroke-width="12" 
+              stroke-linecap="round"
+              stroke-dasharray="314.159" 
+              stroke-dashoffset="314.159"
+            ></circle>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span class="text-[11px] font-bold uppercase text-slate-400 tracking-wider">SmartScore</span>
+            <span id="smartscore-val" class="font-display font-black text-4xl text-sky-600 leading-none">0</span>
+            <span class="text-[10px] font-semibold text-slate-400">out of 100</span>
+          </div>
+        </div>
+
+        <!-- Mastery Milestone Badge -->
+        <div class="mt-3">
+          <div id="mastery-ribbon" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">
+            <span>🌱 Practice Zone</span>
+          </div>
+        </div>
+
+        <!-- IXL Stat Counters (Questions & Timer) -->
+        <div class="grid grid-cols-2 gap-3 w-full mt-6 pt-5 border-t border-slate-100 text-left">
+          <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Questions</div>
+            <div id="questions-counter" class="font-mono text-2xl font-black text-slate-800 mt-0.5">0</div>
+          </div>
+          <div class="bg-slate-50 p-3 rounded-2xl border border-slate-100">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Time</div>
+            <div id="time-counter" class="font-mono text-2xl font-black text-slate-800 mt-0.5">00:00</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BYTE: SOCRATIC AI COMPANION CARD -->
+      <div class="bg-gradient-to-b from-sky-50 to-white rounded-3xl p-5 border border-sky-200 ixl-shadow flex flex-col relative overflow-hidden">
+        
+        <!-- Byte Header -->
+        <div class="flex items-center justify-between pb-3 border-b border-sky-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center text-xl shadow-md shadow-sky-500/20">
+              🤖
+            </div>
+            <div>
+              <h3 class="text-sm font-display font-bold text-slate-900 flex items-center gap-1.5">
+                Byte <span class="text-[10px] bg-sky-100 text-sky-700 px-1.5 py-0.5 rounded-md font-sans font-bold">Socratic AI</span>
+              </h3>
+              <p class="text-[11px] text-slate-500">Elementary Math Copilot</p>
+            </div>
+          </div>
+          <button onclick="readByteAloud()" class="p-1.5 text-sky-600 hover:bg-sky-100 rounded-lg transition" title="Read Byte aloud">
+            <i data-lucide="volume-2" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Cognitive Misconception Indicator -->
+        <div id="misconception-pill" class="hidden mt-3 px-2.5 py-1 bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold flex items-center gap-1.5">
+          <span id="misconception-emoji">🎯</span>
+          <span id="misconception-text">Thinking it through...</span>
+        </div>
+
+        <!-- Byte Live Dialogue Feed -->
+        <div id="byte-feed" class="overflow-y-auto space-y-2.5 my-3 pr-1 text-xs max-h-56">
+          <div class="bg-white p-3.5 rounded-2xl border border-sky-100 text-slate-700 leading-relaxed shadow-sm">
+            <span class="font-bold text-sky-700 block mb-1">🤖 Byte:</span>
+            Hi friend! I'm Byte, your friendly Socratic math buddy! When you're stuck, I'll give you hints and clues with our visual blocks—without ever spoiling the answer! 🚀
+          </div>
+        </div>
+
+        <!-- Interactive Question Form to Byte -->
+        <form onsubmit="handleByteQuestion(event)" class="mt-auto pt-2 border-t border-sky-100 flex gap-2">
+          <input 
+            type="text" 
+            id="byte-input" 
+            placeholder="Ask Byte for a hint..." 
+            class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-sky-500 transition shadow-inner"
+          />
+          <button 
+            type="submit" 
+            class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition flex items-center justify-center shadow-sm"
+          >
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+          </button>
+        </form>
+
+        <div class="mt-2 text-[10px] text-slate-400 text-center font-medium">
+          Powered by Gemini 2.5 Flash · Socratic Pedagogy
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- HTML5 DRAWING SCRATCHPAD MODAL (FULL OVERLAY) -->
+  <div id="scratchpad-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex flex-col p-4 sm:p-8">
+    <div class="bg-white rounded-3xl border border-slate-200 flex-1 flex flex-col shadow-2xl overflow-hidden max-w-5xl w-full mx-auto">
+      
+      <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-sky-100 text-sky-700 rounded-xl">
+            <i data-lucide="pencil" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Virtual Math Scratchpad</h3>
+            <p class="text-xs text-slate-500">Draw, scribble numbers, and count tokens directly on screen</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="clearScratchpadCanvas()" class="px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-xs font-semibold text-slate-700 transition">
+            Clear Canvas
+          </button>
+          <button onclick="toggleScratchpad()" class="px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold transition">
+            Done ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas Area -->
+      <div class="flex-1 relative bg-white cursor-crosshair overflow-hidden">
+        <canvas id="scratchpad-canvas" class="w-full h-full block"></canvas>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SETTINGS / BACKEND MODAL -->
+  <div id="settings-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      
+      <div class="flex justify-between items-center pb-3 mb-4 border-b border-slate-100">
+        <h3 class="font-display font-bold text-base text-slate-900 flex items-center gap-2">
+          <i data-lucide="settings" class="w-5 h-5 text-sky-600"></i> Backend & AI Settings
+        </h3>
+        <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Backend Server URL</label>
+          <input 
+            type="text" 
+            id="cfg-backend-url" 
+            value="http://127.0.0.1:8765" 
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-mono focus:border-sky-500 outline-none"
+          />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Gemini API Key (Optional)</label>
+          <input 
+            type="password" 
+            id="cfg-api-key" 
+            placeholder="Loaded automatically from backend .env" 
+            class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-mono focus:border-sky-500 outline-none"
+          />
+          <p class="text-[11px] text-slate-400 mt-1">Leave empty to use server `.env` key securely.</p>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
+          <button onclick="saveSettings()" class="ixl-green-btn text-white font-bold px-5 py-2.5 rounded-xl transition">
+            Save Settings
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MASTERY TROPHY CELEBRATION MODAL (100 SMARTSCORE) -->
+  <div id="mastery-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border-4 border-amber-400 bounce-in">
+      <div class="text-6xl mb-2">🏆</div>
+      <h3 class="font-display font-extrabold text-2xl text-slate-900">Mastery Achieved!</h3>
+      <p class="text-xs text-slate-600 mt-1">You reached a perfect <strong>100 SmartScore</strong>!</p>
+      <div class="my-4 p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs font-bold text-amber-900">
+        Gold Challenge Zone Mastered! 🌟
+      </div>
+      <button onclick="continueAfterMastery()" class="w-full ixl-green-btn text-white font-bold py-3 rounded-xl transition">
+        Keep Practicing! 🚀
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- APPLICATION JAVASCRIPT & CRA STATE MACHINE                                -->
+  <!-- ========================================================================= -->
+  <script>
+    // ── MASTER STATE ─────────────────────────────────────────────────────────
+    const state = {
+      tier: 'k1',                      // k1 | 23 | 45
+      currentProblem: { n1: 4, n2: 3, op: '+', ans: 7, equationStr: '4 + 3 = ?' },
+      smartScore: 0,
+      questionsAnswered: 0,
+      streak: 0,
+      startTime: Date.now(),
+      soundEnabled: true,
+      hintLadderLevel: 1,
+      lastByteMessage: '',
+      backendUrl: localStorage.getItem('nerdy_backend_url') || 'http://127.0.0.1:8765',
+      apiKey: localStorage.getItem('nerdy_api_key') || '',
+      manipulativeState: {
+        tenFrameSlots: new Array(10).fill(null), // null | 'blue' | 'amber'
+      }
+    };
+
+    // ── WEB AUDIO SYNTHESIZER (ZERO ASSET LAG) ───────────────────────────────
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+    }
+
+    function playSoundEffect(type) {
+      if (!state.soundEnabled) return;
+      initAudio();
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+
+      if (type === 'correct') {
+        // High, cheerful major chord (C5 - E5 - G5)
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.18, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.4);
+        });
+      } else if (type === 'milestone') {
+        // Fanfare chord
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.09);
+          gain.gain.setValueAtTime(0.22, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.5);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.55);
+        });
+      } else if (type === 'tap') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
+    }
+
+    function toggleSound() {
+      state.soundEnabled = !state.soundEnabled;
+      const icon = document.getElementById('sound-icon');
+      icon.setAttribute('data-lucide', state.soundEnabled ? 'volume-2' : 'volume-x');
+      icon.className = state.soundEnabled ? 'w-4 h-4 text-emerald-600' : 'w-4 h-4 text-slate-400';
+      lucide.createIcons();
+    }
+
+    // ── IXL TIMER ───────────────────────────────────────────────────────────
+    setInterval(() => {
+      const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+      const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+      const secs = String(elapsed % 60).padStart(2, '0');
+      document.getElementById('time-counter').innerText = `${mins}:${secs}`;
+    }, 1000);
+
+    // ── GRADE TIER SWITCHING ────────────────────────────────────────────────
+    function switchGradeTier(tier) {
+      state.tier = tier;
+      ['k1', '23', '45'].forEach(t => {
+        const btn = document.getElementById(`tier-nav-${t}`);
+        if (t === tier) {
+          btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-amber-400 text-slate-900 shadow-sm';
+        } else {
+          btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900';
+        }
+      });
+
+      const badge = document.getElementById('tier-badge');
+      const breadTier = document.getElementById('breadcrumb-tier');
+      const breadSkill = document.getElementById('breadcrumb-skill');
+
+      if (tier === 'k1') {
+        badge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-300';
+        badge.innerText = 'Kindergarten · Concrete CRA';
+        breadTier.innerText = 'Kindergarten & Grade 1';
+        breadSkill.innerText = 'A.1 Add numbers using interactive Ten-Frames (Sums up to 10)';
+        addByteMessage('Welcome to **Kindergarten – 1st Grade**! Let\'s count with the ten-frame blocks together.');
+      } else if (tier === '23') {
+        badge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-sky-100 text-sky-800 border border-sky-300';
+        badge.innerText = 'Grades 2–3 · Regrouping';
+        breadTier.innerText = 'Grades 2 & 3';
+        breadSkill.innerText = 'B.4 Multi-digit addition and subtraction with Base-10 blocks';
+        addByteMessage('Switched to **Grades 2 – 3**! Watch for carrying tens and regrouping ones!');
+      } else {
+        badge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-purple-100 text-purple-800 border border-purple-300';
+        badge.innerText = 'Grades 4–5 · Multiplication';
+        breadTier.innerText = 'Grades 4 & 5';
+        breadSkill.innerText = 'C.2 Model multiplication arrays and mental math strategies';
+        addByteMessage('Switched to **Grades 4 – 5**! Let\'s master times tables and area models!');
+      }
+
+      state.hintLadderLevel = 1;
+      generateProblem();
+    }
+
+    // ── COMMON CORE ARITHMETIC PROBLEM GENERATOR ─────────────────────────────
+    function generateProblem() {
+      let n1, n2, op;
+      
+      if (state.tier === 'k1') {
+        // Addition & Subtraction <= 10
+        op = Math.random() > 0.35 ? '+' : '-';
+        if (op === '+') {
+          n1 = Math.floor(Math.random() * 6) + 1; // 1..6
+          n2 = Math.floor(Math.random() * (10 - n1)) + 1; // n1+n2 <= 10
+        } else {
+          n1 = Math.floor(Math.random() * 7) + 3; // 3..10
+          n2 = Math.floor(Math.random() * n1) + 1; // n2 <= n1
+        }
+      } else if (state.tier === '23') {
+        // Multi-digit addition/subtraction <= 60
+        op = Math.random() > 0.5 ? '+' : '-';
+        if (op === '+') {
+          n1 = Math.floor(Math.random() * 35) + 12;
+          n2 = Math.floor(Math.random() * 25) + 8;
+        } else {
+          n1 = Math.floor(Math.random() * 40) + 20;
+          n2 = Math.floor(Math.random() * (n1 - 10)) + 5;
+        }
+      } else {
+        // Multiplication facts up to 12x12
+        op = '×';
+        n1 = Math.floor(Math.random() * 10) + 3;
+        n2 = Math.floor(Math.random() * 10) + 2;
+      }
+
+      const ans = op === '+' ? n1 + n2 : op === '-' ? n1 - n2 : n1 * n2;
+      state.currentProblem = { n1, n2, op, ans, equationStr: `${n1} ${op} ${n2} = ?` };
+
+      document.getElementById('equation-display').innerText = state.currentProblem.equationStr;
+      document.getElementById('answer-input').value = '';
+      document.getElementById('feedback-banner').innerHTML = '';
+      document.getElementById('misconception-pill').classList.add('hidden');
+      
+      renderManipulative();
+    }
+
+    // ── CRA VIRTUAL MANIPULATIVES ───────────────────────────────────────────
+    function renderManipulative() {
+      const container = document.getElementById('manipulative-viewport');
+      container.innerHTML = '';
+      const { n1, n2, op } = state.currentProblem;
+
+      if (state.tier === 'k1') {
+        document.getElementById('manipulative-title').innerText = 'Interactive Ten-Frame Manipulative';
+        document.getElementById('problem-subtext').innerText = 'Touch the slots to count or click "Auto-Model"!';
+
+        // Render 2x5 Ten-Frame grid
+        const frame = document.createElement('div');
+        frame.className = 'grid grid-cols-5 gap-2.5 bg-white border-4 border-slate-300 p-3 rounded-2xl shadow-inner';
+        
+        for (let i = 0; i < 10; i++) {
+          const slot = document.createElement('button');
+          slot.type = 'button';
+          slot.className = 'w-11 h-11 sm:w-13 sm:h-13 rounded-xl border-2 border-slate-200 flex items-center justify-center text-xl font-bold transition hover:border-sky-400 bg-slate-50';
+          
+          if (state.manipulativeState.tenFrameSlots[i] === 'blue') {
+            slot.className += ' bg-sky-500 text-white shadow-md transform scale-95';
+            slot.innerText = '●';
+          } else if (state.manipulativeState.tenFrameSlots[i] === 'amber') {
+            slot.className += ' bg-amber-400 text-slate-900 shadow-md transform scale-95';
+            slot.innerText = '▲';
+          }
+
+          slot.onclick = () => {
+            playSoundEffect('tap');
+            const current = state.manipulativeState.tenFrameSlots[i];
+            state.manipulativeState.tenFrameSlots[i] = current === null ? 'blue' : current === 'blue' ? 'amber' : null;
+            renderManipulative();
+          };
+
+          frame.appendChild(slot);
+        }
+        container.appendChild(frame);
+
+      } else if (state.tier === '23') {
+        document.getElementById('manipulative-title').innerText = 'Base-10 Regrouping Blocks (Tens & Ones)';
+        document.getElementById('problem-subtext').innerText = 'Visualize the tens rods and ones unit cubes!';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-wrap items-center justify-center gap-6 p-2';
+
+        const tensCount = Math.floor(n1 / 10);
+        const onesCount = n1 % 10;
+
+        wrap.innerHTML = `
+          <div class="flex flex-col items-center p-3 bg-white border-2 border-sky-200 rounded-2xl shadow-sm">
+            <span class="text-[11px] font-bold text-sky-700 uppercase mb-1">Tens Rods (${tensCount * 10})</span>
+            <div class="flex gap-1.5 h-16 items-end">
+              ${Array(tensCount).fill(0).map(() => `
+                <div class="w-4 h-16 bg-gradient-to-t from-sky-600 to-sky-400 border border-sky-700 rounded-md flex flex-col justify-between py-0.5">
+                  ${Array(5).fill(0).map(() => `<div class="h-0.5 bg-sky-300/60 w-full"></div>`).join('')}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="text-2xl font-black text-slate-400">+</div>
+
+          <div class="flex flex-col items-center p-3 bg-white border-2 border-amber-200 rounded-2xl shadow-sm">
+            <span class="text-[11px] font-bold text-amber-700 uppercase mb-1">Ones Cubes (${onesCount})</span>
+            <div class="flex flex-wrap gap-1 max-w-[120px] justify-center">
+              ${Array(onesCount).fill(0).map(() => `
+                <div class="w-5 h-5 bg-amber-400 border border-amber-600 rounded-md shadow-sm"></div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        container.appendChild(wrap);
+
+      } else {
+        document.getElementById('manipulative-title').innerText = `Multiplication Area Array (${n1} rows × ${n2} columns)`;
+        document.getElementById('problem-subtext').innerText = `Count the total units in this ${n1} by ${n2} grid!`;
+
+        const grid = document.createElement('div');
+        grid.className = 'bg-white border-2 border-purple-200 p-3 rounded-2xl shadow-sm inline-block';
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = `repeat(${n2}, minmax(0, 1fr))`;
+        grid.style.gap = '4px';
+
+        for (let r = 0; r < n1; r++) {
+          for (let c = 0; c < n2; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'w-4 h-4 sm:w-5 sm:h-5 rounded bg-purple-500 hover:bg-purple-600 border border-purple-600 transition';
+            grid.appendChild(cell);
+          }
+        }
+        container.appendChild(grid);
+      }
+    }
+
+    function autoPopulateManipulative() {
+      const { n1, n2, op } = state.currentProblem;
+      if (state.tier === 'k1') {
+        state.manipulativeState.tenFrameSlots = new Array(10).fill(null);
+        if (op === '+') {
+          for (let i = 0; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
+          for (let i = n1; i < n1 + n2 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'amber';
+        } else {
+          for (let i = 0; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
+        }
+        renderManipulative();
+        playSoundEffect('tap');
+        addByteMessage(`I've modeled **${n1}** blue tokens and **${op === '+' ? n2 : 0}** amber tokens in your ten-frame!`);
+      } else {
+        renderManipulative();
+      }
+    }
+
+    function clearManipulative() {
+      state.manipulativeState.tenFrameSlots = new Array(10).fill(null);
+      renderManipulative();
+      playSoundEffect('tap');
+    }
+
+    // ── ANSWER SUBMISSION & IXL SMARTSCORE LOGIC ─────────────────────────────
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('answer-input');
+      const val = parseInt(input.value.trim());
+      if (isNaN(val)) return;
+
+      const { ans } = state.currentProblem;
+      const banner = document.getElementById('feedback-banner');
+      const card = document.getElementById('problem-card');
+
+      state.questionsAnswered += 1;
+      document.getElementById('questions-counter').innerText = state.questionsAnswered;
+
+      if (val === ans) {
+        // Correct Answer
+        playSoundEffect('correct');
+        state.streak += 1;
+        
+        // IXL SmartScore progression algorithm:
+        // Climbs fast early (10-15 pts), slows in 80s, tight in 90s Challenge Zone
+        let pointGain = 10;
+        if (state.smartScore < 70) pointGain = 12;
+        else if (state.smartScore < 85) pointGain = 7;
+        else if (state.smartScore < 95) pointGain = 3;
+        else pointGain = 1;
+
+        state.smartScore = Math.min(100, state.smartScore + pointGain);
+        updateSmartScoreDisplay();
+
+        banner.className = 'mt-4 min-h-[32px] text-center font-bold text-base text-emerald-600 animate-bounce';
+        banner.innerHTML = `✓ Terrific work! That is correct! (+${pointGain} SmartScore)`;
+
+        // Check milestones
+        if (state.smartScore === 100) {
+          triggerConfetti();
+          playSoundEffect('milestone');
+          document.getElementById('mastery-modal').classList.remove('hidden');
+        } else if (state.smartScore >= 90 && state.smartScore - pointGain < 90) {
+          triggerConfetti();
+          playSoundEffect('milestone');
+          addByteMessage('🌟 **You entered the Gold Challenge Zone (90+)!** Finish strong to win the trophy!');
+        } else if (state.smartScore >= 70 && state.smartScore - pointGain < 70) {
+          triggerConfetti();
+          playSoundEffect('milestone');
+          addByteMessage('🥉 **Bronze Mastery Ribbon earned (70+)!** Keep going!');
+        }
+
+        setTimeout(generateProblem, 1000);
+
+      } else {
+        // Incorrect Answer
+        state.streak = 0;
+        // In IXL, wrong answer drops SmartScore slightly to enforce mastery
+        state.smartScore = Math.max(0, state.smartScore - (state.smartScore >= 90 ? 8 : 4));
+        updateSmartScoreDisplay();
+
+        card.classList.add('shake-card');
+        setTimeout(() => card.classList.remove('shake-card'), 450);
+
+        banner.className = 'mt-4 min-h-[32px] text-center font-bold text-base text-rose-600';
+        banner.innerHTML = `Not quite right. Let's see what Byte thinks!`;
+
+        // Trigger Socratic Diagnosis
+        triggerSocraticDiagnosis(val);
+      }
+
+      updateStreakDisplay();
+    }
+
+    function updateStreakDisplay() {
+      const badge = document.getElementById('streak-badge');
+      const num = document.getElementById('streak-num');
+      if (state.streak >= 2) {
+        badge.classList.remove('hidden');
+        num.innerText = state.streak;
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function updateSmartScoreDisplay() {
+      const score = state.smartScore;
+      document.getElementById('smartscore-val').innerText = score;
+      
+      // Update SVG gauge ring
+      const circle = document.getElementById('smartscore-circle');
+      const maxOffset = 314.159;
+      const offset = maxOffset - (score / 100) * maxOffset;
+      circle.style.strokeDashoffset = offset;
+
+      // Color code by milestone
+      const ribbon = document.getElementById('mastery-ribbon');
+      if (score >= 90) {
+        circle.setAttribute('stroke', '#f59e0b'); // Gold
+        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300';
+        ribbon.innerHTML = '🥇 Gold Challenge Zone';
+      } else if (score >= 80) {
+        circle.setAttribute('stroke', '#a855f7'); // Purple
+        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-900 border border-purple-300';
+        ribbon.innerHTML = '🥈 Silver Ribbon';
+      } else if (score >= 70) {
+        circle.setAttribute('stroke', '#16a34a'); // Green
+        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300';
+        ribbon.innerHTML = '🥉 Bronze Ribbon';
+      } else {
+        circle.setAttribute('stroke', '#0284c7'); // Blue
+        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200';
+        ribbon.innerHTML = '🌱 Practice Zone';
+      }
+    }
+
+    // ── SOCRATIC AI MENTOR (BYTE) INTEGRATION ─────────────────────────────────
+    async function triggerSocraticDiagnosis(wrongVal) {
+      const { equationStr, ans } = state.currentProblem;
+      
+      // 1. Call secure backend
+      try {
+        const resp = await fetch(`${state.backendUrl}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_message: String(wrongVal),
+            user_answer: String(wrongVal),
+            equation: equationStr,
+            expected_answer: String(ans),
+            tier: state.tier,
+            hint_level: state.hintLadderLevel,
+            api_key: state.apiKey
+          })
+        });
+
+        if (resp.ok) {
+          const data = await resp.json();
+          displayByteDiagnosis(data.cognitive_diagnosis, data.encouragement_emoji, data.reply);
+          return;
+        }
+      } catch (err) {
+        console.warn('Backend unavailable, using local client-side heuristic:', err);
+      }
+
+      // 2. Client-Side Offline Heuristic Fallback
+      const diff = Math.abs(wrongVal - ans);
+      let label = 'Thinking It Through';
+      let emoji = '🧩';
+      let hint = 'Count the tokens on the visual manipulative carefully!';
+
+      if (diff === 1) {
+        label = 'Off-by-One Counting Slip';
+        emoji = '🎯';
+        hint = 'You are super close—just 1 away! Touch and count the last dot on the ten-frame one more time.';
+      } else if (wrongVal > ans) {
+        label = 'Answer Too High';
+        emoji = '🎈';
+        hint = `Your answer (${wrongVal}) is a bit too high. Try working backwards or counting down!`;
+      } else {
+        label = 'Answer Too Low';
+        emoji = '🌱';
+        hint = `Your answer (${wrongVal}) is a bit small. Count up from the bigger number!`;
+      }
+
+      displayByteDiagnosis(label, emoji, `🤖 **Byte:** ${hint}`);
+    }
+
+    function displayByteDiagnosis(label, emoji, text) {
+      const pill = document.getElementById('misconception-pill');
+      const pillEmoji = document.getElementById('misconception-emoji');
+      const pillText = document.getElementById('misconception-text');
+
+      pill.classList.remove('hidden');
+      pillEmoji.innerText = emoji || '💡';
+      pillText.innerText = label || 'Socratic Hint';
+
+      addByteMessage(text);
+      state.lastByteMessage = text.replace(/🤖|\*\*Byte:\*\*|\*/g, '').trim();
+    }
+
+    function addByteMessage(msg) {
+      const feed = document.getElementById('byte-feed');
+      const item = document.createElement('div');
+      item.className = 'bg-white p-3.5 rounded-2xl border border-sky-100 text-slate-700 leading-relaxed shadow-sm bounce-in';
+      item.innerHTML = `<span class="font-bold text-sky-700 block mb-1">🤖 Byte:</span> ${msg}`;
+      feed.appendChild(item);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function requestByteHint() {
+      state.hintLadderLevel = Math.min(3, state.hintLadderLevel + 1);
+      const { n1, n2, op } = state.currentProblem;
+      triggerSocraticDiagnosis(Math.max(n1, n2));
+    }
+
+    async function handleByteQuestion(e) {
+      e.preventDefault();
+      const input = document.getElementById('byte-input');
+      const q = input.value.trim();
+      if (!q) return;
+
+      addByteMessage(`**You:** ${q}`);
+      input.value = '';
+
+      try {
+        const resp = await fetch(`${state.backendUrl}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_message: q,
+            equation: state.currentProblem.equationStr,
+            expected_answer: String(state.currentProblem.ans),
+            tier: state.tier,
+            hint_level: state.hintLadderLevel,
+            api_key: state.apiKey
+          })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          addByteMessage(data.reply);
+          state.lastByteMessage = data.reply.replace(/🤖|\*\*Byte:\*\*|\*/g, '').trim();
+          return;
+        }
+      } catch (err) {}
+
+      // Heuristic fallback
+      setTimeout(() => {
+        addByteMessage(`🤖 **Byte:** I love how you're thinking! Look at our visual blocks above to count each piece step by step.`);
+      }, 300);
+    }
+
+    function skipProblem() {
+      generateProblem();
+      addByteMessage(`Skipped! Here is a fresh problem to try. You got this! 🚀`);
+    }
+
+    // ── WEB SPEECH API AUDIO READ-ALOUD ─────────────────────────────────────
+    function readByteAloud() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const textToSpeak = state.lastByteMessage || "Hello! I am Byte, your friendly Socratic math coach.";
+      const utter = new SpeechSynthesisUtterance(textToSpeak);
+      utter.rate = 0.95;
+      utter.pitch = 1.1; // Slightly friendly kid pitch
+      window.speechSynthesis.speak(utter);
+    }
+
+    function readEquationAloud() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const { n1, n2, op } = state.currentProblem;
+      const opWord = op === '+' ? 'plus' : op === '-' ? 'minus' : 'times';
+      const utter = new SpeechSynthesisUtterance(`What is ${n1} ${opWord} ${n2}?`);
+      utter.rate = 0.9;
+      window.speechSynthesis.speak(utter);
+    }
+
+    // ── KID-FRIENDLY TOUCH KEYPAD ───────────────────────────────────────────
+    function keypadPress(val) {
+      playSoundEffect('tap');
+      const input = document.getElementById('answer-input');
+      if (val === 'back') {
+        input.value = input.value.slice(0, -1);
+      } else {
+        input.value += val;
+      }
+      input.focus();
+    }
+
+    // ── CELEBRATION CONFETTI ────────────────────────────────────────────────
+    function triggerConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    function continueAfterMastery() {
+      document.getElementById('mastery-modal').classList.add('hidden');
+      generateProblem();
+    }
+
+    // ── COLLAPSIBLE EXAMPLE DRAWER ──────────────────────────────────────────
+    function toggleExampleDrawer() {
+      document.getElementById('example-drawer').classList.toggle('hidden');
+    }
+
+    // ── SCRATCHPAD CANVAS LOGIC ─────────────────────────────────────────────
+    let scratchpadActive = false;
+    let canvas, ctx, painting = false;
+
+    function initScratchpad() {
+      canvas = document.getElementById('scratchpad-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+
+      canvas.addEventListener('mousedown', startPosition);
+      canvas.addEventListener('mouseup', endPosition);
+      canvas.addEventListener('mousemove', draw);
+
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousedown', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        canvas.dispatchEvent(mouseEvent);
+      });
+      canvas.addEventListener('touchend', (e) => {
+        const mouseEvent = new MouseEvent('mouseup', {});
+        canvas.dispatchEvent(mouseEvent);
+      });
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const mouseEvent = new MouseEvent('mousemove', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        canvas.dispatchEvent(mouseEvent);
+      });
+    }
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+
+    function startPosition(e) {
+      painting = true;
+      draw(e);
+    }
+    function endPosition() {
+      painting = false;
+      ctx.beginPath();
+    }
+    function draw(e) {
+      if (!painting) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#0284c7';
+
+      ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    }
+
+    function toggleScratchpad() {
+      const modal = document.getElementById('scratchpad-modal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        setTimeout(resizeCanvas, 50);
+      }
+    }
+
+    function clearScratchpadCanvas() {
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    // ── SETTINGS MODAL ──────────────────────────────────────────────────────
+    function toggleSettingsModal() {
+      document.getElementById('settings-modal').classList.toggle('hidden');
+    }
+
+    function saveSettings() {
+      state.backendUrl = document.getElementById('cfg-backend-url').value.trim() || 'http://127.0.0.1:8765';
+      state.apiKey = document.getElementById('cfg-api-key').value.trim();
+      localStorage.setItem('nerdy_backend_url', state.backendUrl);
+      localStorage.setItem('nerdy_api_key', state.apiKey);
+      toggleSettingsModal();
+      addByteMessage('Settings saved! Connecting to Socratic server.');
+    }
+
+    // ── BOOTSTRAP ────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      initScratchpad();
+      generateProblem();
+      updateSmartScoreDisplay();
+      
+      if (document.getElementById('cfg-backend-url')) {
+        document.getElementById('cfg-backend-url').value = state.backendUrl;
+      }
+      if (document.getElementById('cfg-api-key')) {
+        document.getElementById('cfg-api-key').value = state.apiKey;
+      }
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+  </script>
+</body>
+</html>
