@@ -968,18 +968,63 @@
           } else if (state.manipulativeState.tenFrameSlots[i] === 'amber') {
             slot.className += ' bg-amber-400 text-slate-900 shadow-md transform scale-95';
             slot.innerText = '▲';
+          } else if (state.manipulativeState.tenFrameSlots[i] === 'crossed') {
+            slot.className += ' bg-rose-50 border-2 border-rose-300 text-rose-500 shadow-inner transform scale-95 relative';
+            slot.innerHTML = '<span class="opacity-25 text-slate-400">●</span><span class="absolute inset-0 flex items-center justify-center text-rose-600 font-black text-2xl drop-shadow-sm">✕</span>';
           }
 
           slot.onclick = () => {
             playSoundEffect('tap');
             const current = state.manipulativeState.tenFrameSlots[i];
-            state.manipulativeState.tenFrameSlots[i] = current === null ? 'blue' : current === 'blue' ? 'amber' : null;
+            if (op === '-') {
+              state.manipulativeState.tenFrameSlots[i] = current === null ? 'blue' : current === 'blue' ? 'crossed' : null;
+            } else {
+              state.manipulativeState.tenFrameSlots[i] = current === null ? 'blue' : current === 'blue' ? 'amber' : null;
+            }
             renderManipulative();
           };
 
           frame.appendChild(slot);
         }
         container.appendChild(frame);
+
+        // Child-friendly pedagogical counter legend
+        const legend = document.createElement('div');
+        legend.className = 'mt-2.5 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-slate-600';
+        
+        let blueCount = 0, amberCount = 0, crossedCount = 0;
+        state.manipulativeState.tenFrameSlots.forEach(s => {
+          if (s === 'blue') blueCount++;
+          if (s === 'amber') amberCount++;
+          if (s === 'crossed') crossedCount++;
+        });
+
+        if (op === '-') {
+          legend.innerHTML = `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-700 shadow-xs">
+              <span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span>
+              Remaining: <strong>${blueCount}</strong>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 shadow-xs">
+              <span class="w-3.5 h-3.5 rounded bg-rose-100 border border-rose-300 text-rose-600 font-black inline-flex items-center justify-center text-[10px] leading-none">✕</span>
+              Taken away: <strong>${crossedCount}</strong>
+            </span>
+            <span class="text-slate-400 font-semibold">Started with: ${n1}</span>
+          `;
+        } else {
+          legend.innerHTML = `
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-700 shadow-xs">
+              <span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span>
+              Group 1: <strong>${blueCount}</strong>
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 shadow-xs">
+              <span class="w-3 h-3 rounded-sm bg-amber-400 inline-block shadow-sm"></span>
+              Group 2: <strong>${amberCount}</strong>
+            </span>
+            <span class="text-slate-400 font-semibold">Total: ${blueCount + amberCount}</span>
+          `;
+        }
+        container.appendChild(legend);
 
       } else if (state.tier === '23') {
         document.getElementById('manipulative-title').innerText = 'Base-10 Regrouping Blocks (Tens & Ones)';
@@ -1003,7 +1048,7 @@
             </div>
           </div>
 
-          <div class="text-2xl font-black text-slate-400">+</div>
+          <div class="text-2xl font-black text-slate-400">${op}</div>
 
           <div class="flex flex-col items-center p-3 bg-white border-2 border-amber-200 rounded-2xl shadow-sm">
             <span class="text-[11px] font-bold text-amber-700 uppercase mb-1">Ones Cubes (${onesCount})</span>
@@ -1044,12 +1089,25 @@
         if (op === '+') {
           for (let i = 0; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
           for (let i = n1; i < n1 + n2 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'amber';
+          addByteMessage(`I've modeled **${n1}** blue tokens plus **${n2}** amber tokens in your ten-frame! Putting them together gives **${n1 + n2}**.`);
         } else {
-          for (let i = 0; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
+          // Subtraction: start with n1 total. First (n1 - n2) stay blue, last n2 are crossed out with ✕
+          const remaining = Math.max(0, n1 - n2);
+          for (let i = 0; i < remaining && i < 10; i++) {
+            state.manipulativeState.tenFrameSlots[i] = 'blue';
+          }
+          for (let i = remaining; i < n1 && i < 10; i++) {
+            state.manipulativeState.tenFrameSlots[i] = 'crossed';
+          }
+
+          if (remaining === 0) {
+            addByteMessage(`We start with **${n1}** tokens and take away all **${n2}** (all crossed out with **✕**)! That leaves **0** remaining!`);
+          } else {
+            addByteMessage(`We start with **${n1}** tokens and take away **${n2}** (crossed out with **✕**). Count the blue tokens left: **${remaining}**!`);
+          }
         }
         renderManipulative();
         playSoundEffect('tap');
-        addByteMessage(`I've modeled **${n1}** blue tokens and **${op === '+' ? n2 : 0}** amber tokens in your ten-frame!`);
       } else {
         renderManipulative();
       }
