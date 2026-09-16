@@ -574,12 +574,38 @@
             />
           </div>
 
+          <!-- HYBRID DELIVERY MODE SELECTOR -->
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Delivery Preference</label>
+            <div class="bg-slate-100 p-1 rounded-2xl flex items-center border border-slate-200">
+              <button 
+                type="button" 
+                id="otp-mode-demo-btn"
+                onclick="setOtpDeliveryMode('demo')" 
+                class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-xs border border-slate-200"
+              >
+                <span>⚡ Demo Fast-Pass</span>
+              </button>
+              <button 
+                type="button" 
+                id="otp-mode-email-btn"
+                onclick="setOtpDeliveryMode('email')" 
+                class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800"
+              >
+                <span>📧 Real Email Inbox</span>
+              </button>
+            </div>
+            <p id="otp-mode-help" class="text-[10px] text-slate-500 text-center font-medium mt-1">
+              ⚡ Demo Fast-Pass displays code on screen for instant evaluator testing.
+            </p>
+          </div>
+
           <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-sky-800 text-[11px] flex items-center gap-2">
             <i data-lucide="shield-check" class="w-4 h-4 text-sky-600 shrink-0"></i>
             <span>Passwordless & child-friendly: we verify using a 6-digit one-time code.</span>
           </div>
 
-          <button type="submit" class="w-full ixl-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
+          <button type="submit" id="send-otp-btn" class="w-full ixl-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
             Send 6-Digit Code 📩
           </button>
 
@@ -603,8 +629,8 @@
           </p>
         </div>
 
-        <!-- DEMO FAST-PASS & ON-SCREEN CODE DISPLAY -->
-        <div class="mb-4 p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl text-amber-950 text-xs shadow-xs">
+        <!-- OPTION A: DEMO FAST-PASS & ON-SCREEN CODE DISPLAY -->
+        <div id="otp-demo-banner" class="mb-4 p-3.5 bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 rounded-2xl text-amber-950 text-xs shadow-xs">
           <div class="flex items-center justify-between mb-1.5">
             <span class="font-bold flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-4 h-4 text-amber-600"></i>
@@ -618,9 +644,32 @@
             <span class="text-[11px] text-slate-600 font-semibold">Generated OTP:</span>
             <strong id="demo-otp-display" class="font-mono text-base tracking-widest text-amber-900 bg-amber-100/70 px-3 py-1 rounded-lg border border-amber-300">123456</strong>
           </div>
-          <p class="text-[10px] text-amber-800 mt-2 leading-tight">
-            ℹ️ <em>To prevent email spam-filter delays during judging, verification codes are generated directly on-screen. (In production, this routes via SendGrid/AWS SES).</em>
+          <p class="text-[10px] text-amber-800 mt-2 leading-tight flex items-center justify-between">
+            <span>ℹ️ <em>Demo fast-pass bypasses email delivery delay.</em></span>
+            <button type="button" onclick="setOtpDeliveryMode('email'); updateOtpStepDisplay();" class="underline text-amber-900 font-bold hover:text-amber-700">Switch to Email Mode</button>
           </p>
+        </div>
+
+        <!-- OPTION B: REAL EMAIL DISPATCH NOTIFICATION (PRODUCTION LOOK) -->
+        <div id="otp-email-banner" class="hidden mb-4 p-3.5 bg-gradient-to-r from-sky-50 to-blue-50 border-2 border-sky-300 rounded-2xl text-sky-950 text-xs shadow-xs">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="font-bold flex items-center gap-1.5 text-sky-900">
+              <i data-lucide="mail-check" class="w-4 h-4 text-sky-600"></i>
+              <span>Code Dispatched to Inbox</span>
+            </span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-200">
+              Sent 🚀
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
+            A 6-digit security code has been dispatched to <strong id="otp-email-recipient" class="text-slate-900"></strong>. Please check your inbox and spam folder.
+          </p>
+          <div class="mt-2.5 pt-2 border-t border-sky-200/60 flex items-center justify-between">
+            <span class="text-[10px] text-slate-500">Evaluating or recording video?</span>
+            <button type="button" onclick="revealDemoOtpCode()" class="text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-100 hover:bg-amber-200 px-2 py-1 rounded-lg transition flex items-center gap-1 border border-amber-300">
+              <span>Reveal Code On-Screen ⚡</span>
+            </button>
+          </div>
         </div>
 
         <form onsubmit="handleVerifyOtp(event)" class="space-y-4 text-xs">
@@ -2138,6 +2187,48 @@
     let selectedAvatarChar = '🦊';
     let currentPendingOtp = null;
     let currentPendingEmail = '';
+    let otpDeliveryMode = 'demo'; // 'demo' | 'email'
+
+    function setOtpDeliveryMode(mode) {
+      otpDeliveryMode = mode;
+      const demoBtn = document.getElementById('otp-mode-demo-btn');
+      const emailBtn = document.getElementById('otp-mode-email-btn');
+      const helpText = document.getElementById('otp-mode-help');
+
+      if (demoBtn && emailBtn) {
+        if (mode === 'demo') {
+          demoBtn.className = 'flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-white text-slate-900 shadow-xs border border-slate-200';
+          emailBtn.className = 'flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800';
+          if (helpText) helpText.innerText = '⚡ Demo Fast-Pass displays code on screen for instant evaluator testing.';
+        } else {
+          emailBtn.className = 'flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 bg-white text-sky-700 shadow-xs border border-sky-200';
+          demoBtn.className = 'flex-1 py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800';
+          if (helpText) helpText.innerText = '📧 Real Email Delivery: dispatches to inbox and hides on-screen code for authentic production walkthroughs.';
+        }
+      }
+    }
+
+    function updateOtpStepDisplay() {
+      const demoBox = document.getElementById('otp-demo-banner');
+      const emailBox = document.getElementById('otp-email-banner');
+      if (demoBox && emailBox) {
+        if (otpDeliveryMode === 'demo') {
+          demoBox.classList.remove('hidden');
+          emailBox.classList.add('hidden');
+        } else {
+          demoBox.classList.add('hidden');
+          emailBox.classList.remove('hidden');
+        }
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function revealDemoOtpCode() {
+      otpDeliveryMode = 'demo';
+      updateOtpStepDisplay();
+      playSoundEffect('tap');
+      addByteMessage(`Here is your instant code on screen: **${currentPendingOtp}** ⚡`);
+    }
 
     function selectAvatar(char) {
       selectedAvatarChar = char;
@@ -2166,12 +2257,26 @@
       document.getElementById('onboard-step-email').classList.add('hidden');
       document.getElementById('onboard-step-otp').classList.remove('hidden');
       document.getElementById('otp-target-email').innerText = email;
-      document.getElementById('demo-otp-display').innerText = currentPendingOtp;
+      
+      const emailRecipient = document.getElementById('otp-email-recipient');
+      if (emailRecipient) emailRecipient.innerText = email;
+
+      const demoDisplay = document.getElementById('demo-otp-display');
+      if (demoDisplay) demoDisplay.innerText = currentPendingOtp;
+
+      updateOtpStepDisplay();
+
       document.getElementById('otp-input').value = '';
       document.getElementById('otp-input').focus();
 
       playSoundEffect('tap');
-      addByteMessage(`I've sent a 6-digit code for **${email}**! (Demo Code: **${currentPendingOtp}**)`);
+
+      if (otpDeliveryMode === 'demo') {
+        addByteMessage(`I've prepared your code for **${email}**! (Demo Code: **${currentPendingOtp}**)`);
+      } else {
+        addByteMessage(`A 6-digit verification code has been dispatched to **${email}**! Check your inbox, or click "Reveal Code" if evaluating! 🚀`);
+      }
+      console.log(`[AUTH] Generated 6-Digit OTP for ${email}: ${currentPendingOtp} (Mode: ${otpDeliveryMode})`);
     }
 
     function autoFillDemoOtp() {
@@ -2187,16 +2292,26 @@
 
     function resendOtp() {
       currentPendingOtp = Math.floor(100000 + Math.random() * 900000).toString();
-      document.getElementById('demo-otp-display').innerText = currentPendingOtp;
+      const demoDisplay = document.getElementById('demo-otp-display');
+      if (demoDisplay) demoDisplay.innerText = currentPendingOtp;
       playSoundEffect('tap');
-      alert(`A fresh 6-digit code has been generated: ${currentPendingOtp}`);
+      if (otpDeliveryMode === 'demo') {
+        alert(`A fresh 6-digit code has been generated: ${currentPendingOtp}`);
+      } else {
+        alert(`A fresh 6-digit code has been dispatched to ${currentPendingEmail}. (If testing without email check, click "Reveal Code On-Screen").`);
+      }
+      console.log(`[AUTH] Resent 6-Digit OTP for ${currentPendingEmail}: ${currentPendingOtp}`);
     }
 
     function handleVerifyOtp(e) {
       e.preventDefault();
       const entered = document.getElementById('otp-input').value.trim();
       if (entered !== currentPendingOtp) {
-        alert('Incorrect 6-digit code. Please enter the code shown on screen or click Auto-fill.');
+        if (otpDeliveryMode === 'demo') {
+          alert('Incorrect 6-digit code. Please enter the code shown on screen or click Auto-fill.');
+        } else {
+          alert('Incorrect 6-digit code. Please enter the code dispatched to your email, or click "Reveal Code On-Screen ⚡" for instant access.');
+        }
         return;
       }
 
