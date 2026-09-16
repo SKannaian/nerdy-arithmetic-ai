@@ -10,6 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -1045,6 +1046,40 @@
             class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-mono focus:border-sky-500 outline-none"
           />
           <p class="text-[11px] text-slate-400 mt-1">Leave empty to use built-in Socratic pedagogy.</p>
+        </div>
+
+        <!-- EMAILJS LIVE EMAIL DELIVERY CONFIGURATION -->
+        <div class="p-3 bg-sky-50 rounded-2xl border border-sky-200">
+          <div class="flex items-center justify-between mb-1.5">
+            <div class="flex items-center gap-1.5 font-bold text-sky-950">
+              <i data-lucide="mail" class="w-4 h-4 text-sky-600"></i>
+              <span>EmailJS Real Email Delivery</span>
+            </div>
+            <span id="emailjs-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">Live SDK Active</span>
+          </div>
+          <p class="text-[11px] text-slate-600 mb-2 leading-relaxed">
+            Sends real 6-digit OTP codes directly to your Gmail inbox via <a href="https://www.emailjs.com/" target="_blank" class="text-sky-700 font-bold underline">EmailJS</a> (Free 200 emails/mo).
+          </p>
+          <div class="space-y-2">
+            <div>
+              <label class="block font-semibold text-slate-700 text-[10px]">EmailJS Public Key</label>
+              <input type="text" id="cfg-emailjs-public-key" placeholder="e.g. user_abcdef12345 or public_key" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block font-semibold text-slate-700 text-[10px]">Service ID</label>
+                <input type="text" id="cfg-emailjs-service-id" placeholder="e.g. service_gmail" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 text-[10px]">Template ID</label>
+                <input type="text" id="cfg-emailjs-template-id" placeholder="e.g. template_otp" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
+              </div>
+            </div>
+            <button type="button" onclick="testEmailJsDispatch()" class="w-full py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-[11px] transition shadow-xs flex items-center justify-center gap-1.5">
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+              <span>Send Test Verification Code to Gmail 📩</span>
+            </button>
+          </div>
         </div>
 
         <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
@@ -2170,17 +2205,98 @@
 
     // ── SETTINGS MODAL ──────────────────────────────────────────────────────
     function toggleSettingsModal() {
-      document.getElementById('settings-modal').classList.toggle('hidden');
+      const modal = document.getElementById('settings-modal');
+      const isHidden = modal.classList.toggle('hidden');
+      if (!isHidden) {
+        document.getElementById('cfg-backend-url').value = localStorage.getItem('nerdy_backend_url') || '';
+        document.getElementById('cfg-api-key').value = localStorage.getItem('nerdy_api_key') || '';
+        document.getElementById('cfg-emailjs-public-key').value = localStorage.getItem('nerdy_emailjs_public_key') || '';
+        document.getElementById('cfg-emailjs-service-id').value = localStorage.getItem('nerdy_emailjs_service_id') || '';
+        document.getElementById('cfg-emailjs-template-id').value = localStorage.getItem('nerdy_emailjs_template_id') || '';
+      }
+      if (window.lucide) lucide.createIcons();
     }
 
     function saveSettings() {
       const isLocalEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       state.backendUrl = document.getElementById('cfg-backend-url').value.trim() || (isLocalEnv ? 'http://127.0.0.1:8765' : window.location.origin);
       state.apiKey = document.getElementById('cfg-api-key').value.trim();
+
+      const emailjsPub = document.getElementById('cfg-emailjs-public-key').value.trim();
+      const emailjsSvc = document.getElementById('cfg-emailjs-service-id').value.trim();
+      const emailjsTpl = document.getElementById('cfg-emailjs-template-id').value.trim();
+
       localStorage.setItem('nerdy_backend_url', state.backendUrl);
       localStorage.setItem('nerdy_api_key', state.apiKey);
+      localStorage.setItem('nerdy_emailjs_public_key', emailjsPub);
+      localStorage.setItem('nerdy_emailjs_service_id', emailjsSvc);
+      localStorage.setItem('nerdy_emailjs_template_id', emailjsTpl);
+
       toggleSettingsModal();
-      addByteMessage('Configuration updated! AI companion ready.');
+      addByteMessage('Configuration saved! Settings updated.');
+    }
+
+    async function testEmailJsDispatch() {
+      const pub = document.getElementById('cfg-emailjs-public-key').value.trim();
+      const svc = document.getElementById('cfg-emailjs-service-id').value.trim();
+      const tpl = document.getElementById('cfg-emailjs-template-id').value.trim();
+      const targetEmail = (state.profile && state.profile.email) || 'sathish.kannaian@gmail.com';
+
+      if (!pub || !svc || !tpl) {
+        alert('Please fill in your EmailJS Public Key, Service ID, and Template ID first!\n\n(Sign up free at https://www.emailjs.com/ in 1 minute to get your keys)');
+        return;
+      }
+
+      if (!window.emailjs) {
+        alert('EmailJS SDK is loading... please check your connection.');
+        return;
+      }
+
+      const testOtp = Math.floor(100000 + Math.random() * 900000).toString();
+      try {
+        emailjs.init({ publicKey: pub });
+        alert(`Sending test OTP ${testOtp} to ${targetEmail} via EmailJS...`);
+        const res = await emailjs.send(svc, tpl, {
+          to_email: targetEmail,
+          recipient: targetEmail,
+          otp_code: testOtp,
+          message: `Your Nerdy Arithmetic AI Test Code is: ${testOtp}`,
+          app_name: 'Nerdy Arithmetic AI'
+        });
+        alert(`🎉 SUCCESS! Real email sent to ${targetEmail}!\nStatus: ${res.status}`);
+        addByteMessage(`Dispatched a real test email to **${targetEmail}** via EmailJS! Check your inbox 📬`);
+      } catch (err) {
+        alert(`EmailJS Send Error: ${err.text || err.message || JSON.stringify(err)}`);
+      }
+    }
+
+    async function sendRealEmailOtp(email, otpCode) {
+      const pub = localStorage.getItem('nerdy_emailjs_public_key');
+      const svc = localStorage.getItem('nerdy_emailjs_service_id');
+      const tpl = localStorage.getItem('nerdy_emailjs_template_id');
+
+      console.log(`[EMAIL DISPATCH] Target: ${email} | OTP: ${otpCode}`);
+
+      if (window.emailjs && pub && svc && tpl) {
+        try {
+          emailjs.init({ publicKey: pub });
+          const res = await emailjs.send(svc, tpl, {
+            to_email: email,
+            recipient: email,
+            otp_code: otpCode,
+            passcode: otpCode,
+            subject: `Your Nerdy Arithmetic AI Code: ${otpCode}`,
+            message: `Your Nerdy Arithmetic AI login code is: ${otpCode}`,
+            app_name: 'Nerdy Arithmetic AI'
+          });
+          console.log('[EMAILJS] Real email sent successfully!', res);
+          return { success: true, provider: 'EmailJS' };
+        } catch (e) {
+          console.warn('[EMAILJS] Live dispatch error:', e);
+          return { success: false, error: e };
+        }
+      }
+      return { success: false, reason: 'unconfigured' };
     }
 
     // ── ONBOARDING & EMAIL OTP AUTHENTICATION ──────────────────────────────
@@ -2275,6 +2391,11 @@
         addByteMessage(`I've prepared your code for **${email}**! (Demo Code: **${currentPendingOtp}**)`);
       } else {
         addByteMessage(`A 6-digit verification code has been dispatched to **${email}**! Check your inbox, or click "Reveal Code" if evaluating! 🚀`);
+        sendRealEmailOtp(email, currentPendingOtp).then(res => {
+          if (res.success) {
+            addByteMessage(`🚀 Live email sent to **${email}** via EmailJS! Check your inbox (or spam folder).`);
+          }
+        });
       }
       console.log(`[AUTH] Generated 6-Digit OTP for ${email}: ${currentPendingOtp} (Mode: ${otpDeliveryMode})`);
     }
@@ -2299,6 +2420,7 @@
         alert(`A fresh 6-digit code has been generated: ${currentPendingOtp}`);
       } else {
         alert(`A fresh 6-digit code has been dispatched to ${currentPendingEmail}. (If testing without email check, click "Reveal Code On-Screen").`);
+        sendRealEmailOtp(currentPendingEmail, currentPendingOtp);
       }
       console.log(`[AUTH] Resent 6-Digit OTP for ${currentPendingEmail}: ${currentPendingOtp}`);
     }

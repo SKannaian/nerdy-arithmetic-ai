@@ -121,9 +121,15 @@ Open **`http://localhost:8765`** in your browser.
 ### 4. Built-in Drawing Scratchpad
 Click **"Scratchpad"** in the top bar to pull up an on-screen drawing canvas where kids can scribble calculations, write down carries, or draw their own tally marks.
 
-### 5. Passwordless Email OTP & Persistent User Database
+### 5. Passwordless Email OTP & EmailJS Real Email Delivery
 * **Child-Friendly & Safe:** Passwordless authentication using parent/student email. A 6-digit numeric verification code is generated.
-* **Judge Fast-Pass:** Features a built-in demo evaluator code with an **"Auto-fill Code"** button so evaluators are never blocked by email spam filters.
+* **Hybrid Delivery Switch:**
+  - **`⚡ Demo Fast-Pass`** *(Default for judging & evaluators)*: Displays the generated code on screen with 1-click **"Auto-fill Code ⚡"** so evaluators never get delayed by external email spam filters.
+  - **`📧 Real Email Inbox`** *(Production & Live Email)*: Hides the on-screen code for an authentic video presentation and dispatches the code directly to the recipient's inbox.
+* **EmailJS Live Integration (Zero Backend Needed):**
+  - Integrated with the **`@emailjs/browser`** SDK to deliver real 6-digit OTP codes directly into Gmail inboxes.
+  - Configurable directly from the **Settings Modal ⚙️** (EmailJS Public Key, Service ID, Template ID) with a built-in **"Send Test Verification Code to Gmail"** diagnostic button.
+  - If testing without email credentials, the student or judge can click **"Reveal Code On-Screen ⚡"** at any moment for immediate access.
 * **Persistent User Database:** User profiles, avatar mascots, streaks, sessions, and question histories are persisted in the database (`localStorage['nerdy_users_db']`) and synced across devices.
 
 ### 6. Student Operation Choice Ribbon (Addition, Subtraction, Mixed)
