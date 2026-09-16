@@ -705,6 +705,10 @@
       const ans = op === '+' ? n1 + n2 : op === '-' ? n1 - n2 : n1 * n2;
       state.currentProblem = { n1, n2, op, ans, equationStr: `${n1} ${op} ${n2} = ?` };
 
+      // Clear the interactive manipulative and scratchpad on every new question
+      state.manipulativeState.tenFrameSlots = new Array(10).fill(null);
+      clearScratchpadCanvas();
+
       document.getElementById('equation-display').innerText = state.currentProblem.equationStr;
       document.getElementById('answer-input').value = '';
       document.getElementById('feedback-banner').innerHTML = '';
