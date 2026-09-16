@@ -156,6 +156,26 @@ Click **"Scratchpad"** in the top bar to pull up an on-screen drawing canvas whe
   - **Smart Spaced Review:** Difficult problems or previously missed concepts are reintroduced on subsequent days as **`🎯 Smart Spaced Review`**, reinforcing long-term memory.
   - **HUD Transparency:** The top-left problem tag dynamically displays **`✨ Fresh Question`** or **`🎯 Smart Spaced Review`** so teachers, parents, and students know exactly what is being presented.
 
+### 9. Printable / Downloadable Official Certificate of Math Mastery 🎓
+* Upon achieving a perfect **100 SmartScore** in the Gold Challenge Zone, students unlock the **Official Certificate of Math Mastery**.
+* **High-Resolution Diploma Frame:** Renders an elegant certificate framed in double gold borders, displaying the student's name, avatar mascot, mastered Common Core standard, completion date, and official Nerdy AI gold seal.
+* **One-Click Print / Save as PDF:** Built-in `@media print` CSS formats the certificate perfectly onto standard letter landscape paper without navigation bars, sidebars, or buttons.
+* Accessible anytime directly from the Profile Modal under **Mastery Medals**.
+
+### 10. Varsity Tutors Live Human Instruction Telemetry Hand-Off 👨‍🏫
+* **Bridging Autonomous AI Practice with Live Expert Tutoring:** Aligns with Nerdy's core business model (Varsity Tutors).
+* When a child gets stuck or desires 1-on-1 human guidance, clicking **"Live Varsity Tutor Help"** generates a live diagnostic dossier:
+  - 👤 **Student Learner Profile** (Name, grade tier, avatar)
+  - 🎯 **Current Arithmetic Goal & Active SmartScore**
+  - 🧠 **Diagnosed Cognitive Misconception** (e.g., operator confusion, regrouping slip)
+  - 📐 **Concrete CRA Readiness** (Ten-Frame tactile tokens modeled)
+  - 💡 **Recommended Live Tutor Pedagogical Action**
+* Features a simulated live connection demo that connects to a certified elementary math specialist.
+
+### 11. Kid-Friendly On-Screen Touch Keypad 📱
+* Designed specifically for young learners using tablets, Chromebooks, or touch screens who may not yet be comfortable with a physical keyboard.
+* Features large, high-contrast, tactile numeric keys (`0`–`9`) and an instant `⌫ Back` button that syncs directly with the answer input box.
+
 ---
 
 ## 🎥 2–3 Minute Demo Video Walkthrough Script
