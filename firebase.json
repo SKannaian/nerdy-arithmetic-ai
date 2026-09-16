@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "nerdy-arithmetic-ai",
     "public": ".",
     "ignore": [
       "firebase.json",
@@ -13,31 +14,9 @@
     ],
     "rewrites": [
       {
-        "source": "/api/chat",
-        "function": "chat",
-        "region": "us-central1"
-      },
-      {
-        "source": "/chat",
-        "function": "chat",
-        "region": "us-central1"
-      },
-      {
-        "source": "/health",
-        "function": "health",
-        "region": "us-central1"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
     ]
-  },
-  "functions": [
-    {
-      "source": "functions",
-      "codebase": "nerdy-arithmetic-ai",
-      "runtime": "python312"
-    }
-  ]
+  }
 }
