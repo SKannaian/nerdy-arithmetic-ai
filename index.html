@@ -545,8 +545,13 @@
 
   <!-- LEARNER ONBOARDING & EMAIL OTP AUTHENTICATION MODAL -->
   <div id="onboarding-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 bounce-in">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 bounce-in relative">
       
+      <!-- Top Close Button (Go back to active session) -->
+      <button type="button" id="onboard-close-btn" onclick="cancelOnboarding()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold p-1.5 rounded-full hover:bg-slate-100 transition z-10" title="Go back to active session">
+        ✕
+      </button>
+
       <!-- STEP 1: EMAIL ADDRESS -->
       <div id="onboard-step-email">
         <div class="text-center mb-5">
@@ -577,6 +582,12 @@
 
           <button type="submit" class="w-full ixl-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
             Send 6-Digit Code 📩
+          </button>
+
+          <!-- Cancel / Go Back Option -->
+          <button type="button" id="onboard-cancel-btn" onclick="cancelOnboarding()" class="w-full py-2.5 rounded-2xl text-slate-500 hover:text-slate-800 text-xs font-bold hover:bg-slate-50 border border-slate-200 transition flex items-center justify-center gap-1.5 mt-1">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+            <span id="onboard-cancel-label">Cancel & Go Back to Current Account</span>
           </button>
         </form>
       </div>
@@ -2212,7 +2223,27 @@
       document.getElementById('onboard-step-otp').classList.add('hidden');
       document.getElementById('onboard-step-email').classList.remove('hidden');
       document.getElementById('auth-email-input').value = '';
+      
+      const cancelLabel = document.getElementById('onboard-cancel-label');
+      if (cancelLabel) {
+        cancelLabel.innerText = `Cancel & Go Back to ${state.profile.name || 'Current Account'}`;
+      }
+
       document.getElementById('onboarding-modal').classList.remove('hidden');
+      document.getElementById('auth-email-input').focus();
+      lucide.createIcons();
+    }
+
+    function cancelOnboarding() {
+      document.getElementById('onboarding-modal').classList.add('hidden');
+      if (!state.profile.onboarded) {
+        state.profile = { ...DEFAULT_PROFILE, onboarded: true, name: 'Guest Explorer' };
+        saveLearnerProfile();
+        switchGradeTier(state.tier || 'k1');
+        addByteMessage("Welcome, **Guest Explorer**! You can sign in or sync an account anytime from your profile. Let's do some math! 🚀");
+      } else {
+        updateProfileUI();
+      }
     }
 
     // ── OPERATION CHOICE & SKILL SELECTOR ───────────────────────────────────
@@ -2669,6 +2700,8 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       updateProfileUI();
 
       if (!state.profile.onboarded) {
+        const cancelLabel = document.getElementById('onboard-cancel-label');
+        if (cancelLabel) cancelLabel.innerText = 'Continue as Guest Explorer 🦊';
         document.getElementById('onboarding-modal').classList.remove('hidden');
       } else {
         state.tier = state.profile.gradeTier || state.tier || 'k1';
