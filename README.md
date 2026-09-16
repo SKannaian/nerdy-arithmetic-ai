@@ -121,6 +121,20 @@ Open **`http://localhost:8765`** in your browser.
 ### 4. Built-in Drawing Scratchpad
 Click **"Scratchpad"** in the top bar to pull up an on-screen drawing canvas where kids can scribble calculations, write down carries, or draw their own tally marks.
 
+### 5. Personalized Onboarding & Daily Streak Retention
+* **Interactive Learner Setup:** Welcoming child-friendly modal allows young explorers to select their mascot avatar (`🦊 🚀 🐼 🦁 🦄 ⚡`), choose their grade level, and establish their learner identity.
+* **Daily Streak Retention (`Day X 🔥`):** Tracks consecutive active days, boosting long-term engagement and daily learning habits.
+* **Student Analytics Dashboard:** Click the learner avatar in the header at any time to view total problems solved, skill mastery trophies, active streak, and diagnosed trouble areas.
+
+### 6. Anti-Repetition & Smart Spaced Review Engine
+* **The Problem:** Repetitive drills frustrate children and create false positives in mastery assessment.
+* **The Solution:**
+  - Every generated problem creates a unique conceptual signature (e.g. `k1:add:3:5`).
+  - The engine indexes each problem in `state.profile.history` with `lastSeenDate`, `timesSeen`, and `wrongCount`.
+  - **Strict Anti-Repetition:** When generating new questions, candidates are filtered against recent history. Questions encountered today are discarded in favor of fresh permutations.
+  - **Smart Spaced Review:** Difficult problems or previously missed concepts are reintroduced on subsequent days as **`🎯 Smart Spaced Review`**, reinforcing long-term memory.
+  - **HUD Transparency:** The top-left problem tag dynamically displays **`✨ Fresh Question`** or **`🎯 Smart Spaced Review`** so teachers, parents, and students know exactly what is being presented.
+
 ---
 
 ## 🎥 2–3 Minute Demo Video Walkthrough Script
