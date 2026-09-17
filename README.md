@@ -97,10 +97,22 @@ Open **`http://localhost:8765`** in your browser.
 
 ## 🎮 Interactive Features Walkthrough
 
-### 1. Concrete–Representational–Abstract (CRA) Manipulatives
-* **Kindergarten & 1st Grade:** Touch or click slots in the **Ten-Frame** to place blue or amber tokens. Click **"Auto-Model Equation"** to watch the equation visually populate!
-* **Grades 2 & 3:** See the multi-digit numbers broken down into **Tens rods** and **Ones cubes**, helping students master regrouping without rote memorization.
-* **Grades 4 & 5:** Dynamic multiplication **Area Array** grid showing row $\times$ column distribution.
+### 1. Concrete–Representational–Abstract (CRA) Manipulatives (K through 5th Grade)
+* **Kindergarten (`ten_frame_single`):** Interactive 10-frame slots for blue (`●`) and amber (`▲`) counters, plus full minuend accounting for subtraction (`X started`, `Y crossed out ✕`, `? remaining`).
+* **1st Grade (`ten_frame_double`):** Dual 10-frames (up to 20) with complete accounting of all starting counters and interactive click-to-cross support.
+* **2nd Grade (`base10` & `equal_groups`):**
+  - **Base-10 Regrouping:** Side-by-side decomposition of both addends/terms with Tens rods and Ones cubes, complete with carrying and borrowing alerts.
+  - **Equal Groups Visualizer:** Visual cluster cards (`Group 1`, `Group 2`, etc.) with individual item dots for foundational multiplication.
+* **3rd Grade (`arrays` & `fractions`):**
+  - **Area Arrays:** Dynamic row $\times$ column multiplication grids and division sharing arrays.
+  - **Visual Unit Fractions:** Segmented unit fraction strips with shaded parts and hidden target numerators.
+* **4th Grade (`partial_products` & `division_remainders`):**
+  - **2x2 Partial Products Area Model:** Decomposes tens and ones into 4 quadrants with partial sum accounting.
+  - **Dual-Color Fraction Addition:** Visual strips combining blue (fraction 1) and amber (fraction 2) parts.
+  - **Equal Sharing Remainders:** Multi-bucket sharing model showing whole quotient and leftover remainder.
+* **5th Grade (`pemdas` & `decimals`):**
+  - **Order of Operations (PEMDAS Tree):** Step 1 evaluates inner parentheses, and Step 2 scaffolds the outer calculation with an open target (`= ?`), never giving away the final answer.
+  - **Decimal Place Value Grids:** Separate Ones and Tenths alignment grids with place value calculations.
 
 ### 2. The SmartScore Mastery Loop
 * Unlike simple quiz games, SmartScore reflects true conceptual mastery:
@@ -193,7 +205,26 @@ Click **"Scratchpad"** in the top bar to pull up an on-screen drawing canvas whe
   - **My Star Growth Journey:** Cheerful curve showing progression through Bronze Star (70), Silver Shield (80), and Gold Trophy (100) milestones.
   - **My Math Superpowers:** Colorful doughnut chart showing practice balance across Addition, Subtraction, and Ten-Frame modeling.
 * **Badges & Trophies Showcase:** Collectible achievement badges (Gold Master, Fire Streak, Speed Star, Ten-Frame Pro, Byte's Pal, Bullseye) that celebrate effort and mastery.
-* **Byte's Encouragement & Workouts:** Friendly high-five note from Byte, recent session history, and one-click **Print Award 🖨️** or **Email Mom & Dad ✉️**.
+### 13. Nerdy Admin & Teacher Command Center 🔐
+* **Executive Telemetry & Authentication:**
+  - Dedicated **"Admin Portal 🔐"** accessible directly from the top navigation bar.
+  - Secured with passcode authentication (`admin2026`) plus a 1-click **"⚡ Instant Demo Admin Login"** fast-pass for judges.
+* **Whole-Classroom KPI Cards:**
+  - **Enrolled Students:** Real-time count across Kindergarten to 5th Grade.
+  - **Active Today:** Today's active learners.
+  - **Class Average SmartScore:** Whole-class benchmark gauge.
+  - **Total Solved:** Classroom aggregate problems solved and first-try accuracy %.
+  - **Needs Socratic Support:** Automated alert count flagging students who need teacher intervention.
+* **K–5 Grade Cohort Filtering & Search:**
+  - Filter by `All`, `Kindergarten`, `1st`, `2nd`, `3rd`, `4th`, and `5th Grade`.
+  - Instant live search by student name, parent email, or CCSS skill.
+* **Student Pedagogical Inspector Dossier:**
+  - 1-click **Inspect 🔍** opens full student dossiers with cognitive radar, recent session history, and Byte's AI misconception diagnosis.
+  - **Practice As Student 🚀:** Allows teachers to jump directly into the student's exact practice arena.
+* **Classroom Operations:**
+  - **+ Enroll Student:** Interactive registration modal to enroll new learners.
+  - **📥 Export Roster CSV:** Downloads standards-compliant CSV rosters for school LMS/Google Classroom.
+  - **📢 Broadcast Reminder:** Simulated weekly engagement notifications to parents.
 
 ---
 

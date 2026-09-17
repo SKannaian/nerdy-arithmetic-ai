@@ -476,7 +476,8 @@
           <button type="button" onclick="keypadPress('8')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">8</button>
           <button type="button" onclick="keypadPress('9')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">9</button>
           <button type="button" onclick="keypadPress('0')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">0</button>
-          <button type="button" onclick="keypadPress('back')" class="col-span-2 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-bold text-xs shadow-xs transition">⌫ Back</button>
+          <button type="button" onclick="keypadPress('.')" class="py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 rounded-xl font-bold font-mono text-base shadow-xs transition" title="Decimal Point">.</button>
+          <button type="button" onclick="keypadPress('back')" class="py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-bold text-xs shadow-xs transition">⌫ Back</button>
         </div>
       </div>
 
@@ -2354,7 +2355,7 @@
         skills: [
           { id: 'g2_add_regroup', name: '2.1 2-Digit Addition with Regrouping (Carrying)', manipulative: 'base10' },
           { id: 'g2_sub_regroup', name: '2.2 2-Digit Subtraction with Regrouping (Borrowing)', manipulative: 'base10' },
-          { id: 'g2_skip_count', name: '2.3 Skip Counting & Foundations of Equal Groups', manipulative: 'arrays' }
+          { id: 'g2_skip_count', name: '2.3 Skip Counting & Foundations of Equal Groups', manipulative: 'equal_groups' }
         ]
       },
       '3': {
@@ -2501,7 +2502,7 @@
           const tens = Math.floor(Math.random() * 8) + 1;
           const ones = Math.floor(Math.random() * 9) + 1;
           const ans = tens * 10 + ones;
-          return { n1: tens * 10, n2: ones, op: '+', ans, equationStr: `${tens * 10} + ${ones} = ?`, manipulativeType: 'base10' };
+          return { n1: tens * 10, n2: ones, tensCount: tens, onesCount: ones, op: '+', ans, equationStr: `${tens * 10} + ${ones} = ?`, manipulativeType: 'base10' };
         } else {
           // g1_within_20
           let op = opChoice === 'add' ? '+' : opChoice === 'sub' ? '-' : (Math.random() > 0.5 ? '+' : '-');
@@ -2522,7 +2523,7 @@
           const groups = Math.floor(Math.random() * 6) + 3;
           const groupSize = [2, 5, 10][Math.floor(Math.random() * 3)];
           const ans = groups * groupSize;
-          return { n1: groups, n2: groupSize, op: '×', ans, equationStr: `${groups} groups of ${groupSize} = ?`, manipulativeType: 'arrays' };
+          return { n1: groups, n2: groupSize, op: '×', ans, equationStr: `${groups} groups of ${groupSize} = ?`, manipulativeType: 'equal_groups' };
         } else if (activeSkill === 'g2_sub_regroup') {
           // Subtraction with borrowing (ones of n1 < ones of n2)
           const tens1 = Math.floor(Math.random() * 5) + 4; // 4..8
@@ -2531,7 +2532,7 @@
           const ones2 = Math.floor(Math.random() * 4) + 6; // 6..9 (borrow required!)
           const n1 = tens1 * 10 + ones1;
           const n2 = tens2 * 10 + ones2;
-          return { n1, n2, op: '-', ans: n1 - n2, equationStr: `${n1} - ${n2} = ?`, manipulativeType: 'base10' };
+          return { n1, n2, tens1, ones1, tens2, ones2, op: '-', ans: n1 - n2, equationStr: `${n1} - ${n2} = ?`, manipulativeType: 'base10' };
         } else {
           // g2_add_regroup (Addition with carrying: ones1 + ones2 >= 10)
           const tens1 = Math.floor(Math.random() * 4) + 2;
@@ -2540,7 +2541,7 @@
           const ones2 = Math.floor(Math.random() * 4) + 5;
           const n1 = tens1 * 10 + ones1;
           const n2 = tens2 * 10 + ones2;
-          return { n1, n2, op: '+', ans: n1 + n2, equationStr: `${n1} + ${n2} = ?`, manipulativeType: 'base10' };
+          return { n1, n2, tens1, ones1, tens2, ones2, op: '+', ans: n1 + n2, equationStr: `${n1} + ${n2} = ?`, manipulativeType: 'base10' };
         }
       } else if (tier === '3') {
         if (activeSkill === 'g3_division') {
@@ -2567,9 +2568,9 @@
           return { n1, n2, op: '÷', ans: quot, remainder: rem, equationStr: `${n1} ÷ ${n2} = ? (Whole Quotient)`, manipulativeType: 'division_remainders' };
         } else if (activeSkill === 'g4_add_fractions') {
           const denom = [4, 5, 6, 8, 10][Math.floor(Math.random() * 5)];
-          const p1 = Math.floor(Math.random() * 3) + 1;
+          const p1 = Math.floor(Math.random() * (denom - 2)) + 1;
           const p2 = Math.floor(Math.random() * (denom - p1 - 1)) + 1;
-          return { n1: p1, n2: p2, denom, op: '+', ans: p1 + p2, equationStr: `${p1}/${denom} + ${p2}/${denom} = ? / ${denom}`, manipulativeType: 'fractions' };
+          return { n1: p1, n2: p2, p1, p2, denom, op: '+', ans: p1 + p2, equationStr: `${p1}/${denom} + ${p2}/${denom} = ? / ${denom}`, manipulativeType: 'fractions' };
         } else {
           // g4_mult_2digit (e.g. 15 x 14 or 24 x 12)
           const n1 = Math.floor(Math.random() * 12) + 12; // 12..23
@@ -2679,8 +2680,13 @@
       const mType = prob.manipulativeType || 'ten_frame_single';
 
       if (mType === 'ten_frame_single') {
-        document.getElementById('manipulative-title').innerText = 'Single Ten-Frame Manipulative';
-        document.getElementById('problem-subtext').innerText = 'Touch slots to add/remove counters or click Auto-Model!';
+        const isSub = prob.op === '-';
+        document.getElementById('manipulative-title').innerText = isSub 
+          ? `Ten-Frame Subtraction (${prob.n1} − ${prob.n2})` 
+          : `Single Ten-Frame Addition (${prob.n1} + ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = isSub 
+          ? `Start with ${prob.n1} tokens and cross out ${prob.n2} (✕) to find what's left!` 
+          : 'Touch slots to add blue/amber counters or click Auto-Model!';
 
         const frame = document.createElement('div');
         frame.className = 'grid grid-cols-5 gap-1.5 sm:gap-2 bg-white/90 border-3 sm:border-4 border-sky-300/80 p-2 sm:p-2.5 rounded-2xl shadow-inner';
@@ -2696,7 +2702,7 @@
           } else if (slotVal === 'amber') {
             slot.innerHTML = `<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 border-2 border-amber-600 shadow-sm flex items-center justify-center text-slate-900 text-sm font-black transform scale-95 transition">▲</div>`;
           } else if (slotVal === 'crossed') {
-            slot.innerHTML = `<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-rose-50 border-2 border-rose-300 shadow-inner flex items-center justify-center relative transform scale-95 transition"><span class="text-rose-600 font-black text-xl drop-shadow-sm z-10 leading-none">✕</span></div>`;
+            slot.innerHTML = `<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-sky-200 border-2 border-rose-400 flex items-center justify-center relative shadow-inner transform scale-95 transition"><div class="w-4 h-4 rounded-full bg-sky-400 opacity-60"></div><span class="absolute inset-0 flex items-center justify-center text-rose-600 font-black text-sm drop-shadow-xs leading-none">✕</span></div>`;
           } else {
             slot.innerHTML = `<div class="w-3 h-3 rounded-full bg-sky-100/80 border border-sky-200"></div>`;
           }
@@ -2716,80 +2722,230 @@
         }
         container.appendChild(frame);
 
+        const legend = document.createElement('div');
+        legend.className = 'flex flex-wrap items-center justify-center gap-2 text-xs font-bold mt-2.5';
+        if (isSub) {
+          legend.innerHTML = `
+            <span class="text-sky-800 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">Total Started: <strong>${prob.n1}</strong></span>
+            <span class="text-rose-700 bg-rose-50 px-3 py-1 rounded-xl border border-rose-200">Crossed Out: <strong>${prob.n2}</strong> (✕)</span>
+            <span class="text-emerald-800 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 font-mono">Remaining: <strong>?</strong></span>
+          `;
+        } else {
+          legend.innerHTML = `
+            <span class="text-sky-800 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">First Addend: <strong>${prob.n1}</strong> (●)</span>
+            <span class="text-amber-800 bg-amber-50 px-3 py-1 rounded-xl border border-amber-200">Second Addend: <strong>${prob.n2}</strong> (▲)</span>
+            <span class="text-emerald-800 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 font-mono">Total Sum: <strong>?</strong></span>
+          `;
+        }
+        container.appendChild(legend);
+
       } else if (mType === 'ten_frame_double') {
-        document.getElementById('manipulative-title').innerText = 'Double Ten-Frame (Up to 20)';
-        document.getElementById('problem-subtext').innerText = 'Build sums beyond 10 across both frames!';
+        const isSub = prob.op === '-';
+        document.getElementById('manipulative-title').innerText = isSub 
+          ? `Double Ten-Frame Subtraction (${prob.n1} − ${prob.n2})` 
+          : `Double Ten-Frame Addition (${prob.n1} + ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = isSub 
+          ? `Start with all ${prob.n1} tokens across both frames, then cross out ${prob.n2} (✕) to find what's left!` 
+          : 'Build sums beyond 10 across both ten-frames!';
 
         const wrap = document.createElement('div');
         wrap.className = 'flex flex-col sm:flex-row gap-3 items-center justify-center';
 
-        [0, 10].forEach(offset => {
+        [0, 10].forEach((offset, frameIdx) => {
+          const frameWrap = document.createElement('div');
+          frameWrap.className = 'flex flex-col items-center gap-1';
+          
+          const label = document.createElement('span');
+          label.className = 'text-[10px] font-black uppercase text-sky-700 tracking-wider';
+          label.innerText = frameIdx === 0 ? 'Frame 1 (Slots 1–10)' : 'Frame 2 (Slots 11–20)';
+          frameWrap.appendChild(label);
+
           const frame = document.createElement('div');
           frame.className = 'grid grid-cols-5 gap-1.5 bg-white/90 border-3 border-sky-300/80 p-2 rounded-2xl shadow-inner';
           for (let i = offset; i < offset + 10; i++) {
             const slot = document.createElement('button');
             slot.type = 'button';
-            slot.className = 'w-9 h-9 sm:w-11 sm:h-11 rounded-xl border-2 border-slate-200 bg-white flex items-center justify-center p-0.5 relative';
+            slot.className = 'w-9 h-9 sm:w-11 sm:h-11 rounded-xl border-2 border-slate-200 bg-white flex items-center justify-center p-0.5 relative hover:border-sky-400 transition';
             const sVal = state.manipulativeState.tenFrameSlots[i];
             if (sVal === 'blue') {
               slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-sky-500 text-white font-bold text-xs flex items-center justify-center shadow-xs">●</div>`;
             } else if (sVal === 'amber') {
               slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-400 text-slate-900 font-bold text-xs flex items-center justify-center shadow-xs">▲</div>`;
             } else if (sVal === 'crossed') {
-              slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-100 text-rose-600 font-bold text-xs flex items-center justify-center border border-rose-300">✕</div>`;
+              slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-sky-200 border-2 border-rose-400 flex items-center justify-center relative shadow-inner"><div class="w-3.5 h-3.5 rounded-full bg-sky-400 opacity-60"></div><span class="absolute inset-0 flex items-center justify-center text-rose-600 font-black text-xs drop-shadow-xs leading-none">✕</span></div>`;
             } else {
               slot.innerHTML = `<div class="w-2.5 h-2.5 rounded-full bg-sky-100 border border-sky-200"></div>`;
             }
             slot.onclick = () => {
               playSoundEffect('tap');
               const cur = state.manipulativeState.tenFrameSlots[i];
-              state.manipulativeState.tenFrameSlots[i] = cur === null ? 'blue' : cur === 'blue' ? 'amber' : null;
+              if (prob.op === '-') {
+                state.manipulativeState.tenFrameSlots[i] = cur === null ? 'blue' : cur === 'blue' ? 'crossed' : null;
+              } else {
+                state.manipulativeState.tenFrameSlots[i] = cur === null ? 'blue' : cur === 'blue' ? 'amber' : null;
+              }
               renderManipulative();
             };
             frame.appendChild(slot);
           }
-          wrap.appendChild(frame);
+          frameWrap.appendChild(frame);
+          wrap.appendChild(frameWrap);
         });
         container.appendChild(wrap);
 
+        const legend = document.createElement('div');
+        legend.className = 'flex flex-wrap items-center justify-center gap-2.5 text-xs font-bold mt-2.5';
+        if (isSub) {
+          legend.innerHTML = `
+            <span class="text-sky-800 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">Total Started: <strong>${prob.n1}</strong></span>
+            <span class="text-rose-700 bg-rose-50 px-3 py-1 rounded-xl border border-rose-200">Crossed Out: <strong>${prob.n2}</strong> (✕)</span>
+            <span class="text-emerald-800 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 font-mono">Remaining: <strong>?</strong></span>
+          `;
+        } else {
+          legend.innerHTML = `
+            <span class="text-sky-800 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">First Addend: <strong>${prob.n1}</strong> (●)</span>
+            <span class="text-amber-800 bg-amber-50 px-3 py-1 rounded-xl border border-amber-200">Second Addend: <strong>${prob.n2}</strong> (▲)</span>
+            <span class="text-emerald-800 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200 font-mono">Total Sum: <strong>?</strong></span>
+          `;
+        }
+        container.appendChild(legend);
+
       } else if (mType === 'base10') {
-        document.getElementById('manipulative-title').innerText = 'Base-10 Blocks (Tens & Ones)';
-        document.getElementById('problem-subtext').innerText = 'Watch the carrying tens and regrouping ones!';
+        const is2Digit = prob.tens2 !== undefined;
+        if (is2Digit) {
+          const isAdd = prob.op === '+';
+          document.getElementById('manipulative-title').innerText = isAdd 
+            ? `Base-10 Addition with Carrying (${prob.n1} + ${prob.n2})` 
+            : `Base-10 Subtraction with Regrouping (${prob.n1} − ${prob.n2})`;
+          document.getElementById('problem-subtext').innerText = isAdd 
+            ? 'Count tens rods and ones cubes, bundling 10 ones into an extra ten when needed!' 
+            : 'Unbundle 1 ten rod into 10 ones cubes to borrow enough ones to subtract!';
+
+          const wrap = document.createElement('div');
+          wrap.className = 'flex flex-col items-center gap-3 p-2 w-full max-w-lg';
+
+          wrap.innerHTML = `
+            <div class="flex flex-wrap items-center justify-center gap-4 w-full">
+              <!-- Term 1 -->
+              <div class="flex flex-col items-center p-3 bg-white border-2 border-sky-200 rounded-2xl shadow-xs flex-1 min-w-[140px]">
+                <span class="text-[11px] font-black text-sky-800 uppercase mb-2">${prob.n1} (${prob.tens1} Tens, ${prob.ones1} Ones)</span>
+                <div class="flex gap-3 items-end">
+                  <div class="flex gap-1 items-end">
+                    ${Array(Math.min(9, prob.tens1)).fill(0).map(() => `
+                      <div class="w-3.5 h-14 bg-gradient-to-t from-sky-600 to-sky-400 border border-sky-700 rounded-sm flex flex-col justify-between py-0.5 shadow-2xs" title="10"></div>
+                    `).join('')}
+                  </div>
+                  <div class="flex flex-wrap gap-1 max-w-[60px] justify-center">
+                    ${Array(Math.min(9, prob.ones1)).fill(0).map(() => `
+                      <div class="w-4 h-4 bg-amber-400 border border-amber-600 rounded-sm shadow-2xs" title="1"></div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Operator -->
+              <div class="text-3xl font-black text-slate-400">${prob.op}</div>
+
+              <!-- Term 2 -->
+              <div class="flex flex-col items-center p-3 bg-white border-2 border-amber-200 rounded-2xl shadow-xs flex-1 min-w-[140px]">
+                <span class="text-[11px] font-black text-amber-800 uppercase mb-2">${prob.n2} (${prob.tens2} Tens, ${prob.ones2} Ones)</span>
+                <div class="flex gap-3 items-end">
+                  <div class="flex gap-1 items-end">
+                    ${Array(Math.min(9, prob.tens2)).fill(0).map(() => `
+                      <div class="w-3.5 h-14 bg-gradient-to-t from-amber-600 to-amber-400 border border-amber-700 rounded-sm flex flex-col justify-between py-0.5 shadow-2xs" title="10"></div>
+                    `).join('')}
+                  </div>
+                  <div class="flex flex-wrap gap-1 max-w-[60px] justify-center">
+                    ${Array(Math.min(9, prob.ones2)).fill(0).map(() => `
+                      <div class="w-4 h-4 bg-amber-400 border border-amber-600 rounded-sm shadow-2xs" title="1"></div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs font-bold text-sky-900 bg-sky-50 px-3.5 py-1.5 rounded-xl border border-sky-200 text-center w-full">
+              ${isAdd 
+                ? (prob.ones1 + prob.ones2 >= 10 ? `💡 <strong>Regrouping Alert:</strong> ${prob.ones1} + ${prob.ones2} = ${prob.ones1 + prob.ones2} ones. Bundle 10 ones cubes into 1 ten rod!` : `Add the tens rods together and ones cubes together!`) 
+                : (prob.ones1 < prob.ones2 ? `💡 <strong>Borrowing Alert:</strong> ${prob.ones1} < ${prob.ones2}. Unbundle 1 ten rod into 10 ones cubes before subtracting!` : `Subtract tens from tens, and ones from ones!`)}
+            </div>
+          `;
+          container.appendChild(wrap);
+        } else {
+          document.getElementById('manipulative-title').innerText = `Base-10 Decomposition (${prob.n1} + ${prob.n2})`;
+          document.getElementById('problem-subtext').innerText = 'Combine the tens rods and ones cubes!';
+
+          const tensCount = prob.tensCount || Math.floor(prob.n1 / 10);
+          const onesCount = prob.onesCount !== undefined ? prob.onesCount : (prob.n2 !== undefined ? prob.n2 : prob.n1 % 10);
+
+          const wrap = document.createElement('div');
+          wrap.className = 'flex flex-wrap items-center justify-center gap-6 p-2';
+
+          wrap.innerHTML = `
+            <div class="flex flex-col items-center p-3 bg-white border-2 border-sky-200 rounded-2xl shadow-sm">
+              <span class="text-[11px] font-bold text-sky-700 uppercase mb-1">Tens Rods (${tensCount * 10})</span>
+              <div class="flex gap-1.5 h-16 items-end">
+                ${Array(Math.min(9, tensCount)).fill(0).map(() => `
+                  <div class="w-4 h-16 bg-gradient-to-t from-sky-600 to-sky-400 border border-sky-700 rounded-md flex flex-col justify-between py-0.5 shadow-xs">
+                    ${Array(5).fill(0).map(() => `<div class="h-0.5 bg-sky-300/60 w-full"></div>`).join('')}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="text-2xl font-black text-slate-400">+</div>
+
+            <div class="flex flex-col items-center p-3 bg-white border-2 border-amber-200 rounded-2xl shadow-sm">
+              <span class="text-[11px] font-bold text-amber-700 uppercase mb-1">Ones Cubes (${onesCount})</span>
+              <div class="flex flex-wrap gap-1 max-w-[120px] justify-center">
+                ${Array(Math.min(9, onesCount)).fill(0).map(() => `
+                  <div class="w-5 h-5 bg-amber-400 border border-amber-600 rounded-md shadow-xs"></div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+          container.appendChild(wrap);
+        }
+
+      } else if (mType === 'equal_groups') {
+        document.getElementById('manipulative-title').innerText = `Equal Groups Visualizer (${prob.n1} groups of ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = `Count the items across all ${prob.n1} equal groups!`;
 
         const wrap = document.createElement('div');
-        wrap.className = 'flex flex-wrap items-center justify-center gap-6 p-2';
+        wrap.className = 'flex flex-wrap items-center justify-center gap-2.5 p-2 max-w-lg';
 
-        const tensCount = Math.floor(prob.n1 / 10);
-        const onesCount = prob.n1 % 10;
-
-        wrap.innerHTML = `
-          <div class="flex flex-col items-center p-3 bg-white border-2 border-sky-200 rounded-2xl shadow-sm">
-            <span class="text-[11px] font-bold text-sky-700 uppercase mb-1">Tens Rods (${tensCount * 10})</span>
-            <div class="flex gap-1.5 h-16 items-end">
-              ${Array(Math.min(9, tensCount)).fill(0).map(() => `
-                <div class="w-4 h-16 bg-gradient-to-t from-sky-600 to-sky-400 border border-sky-700 rounded-md flex flex-col justify-between py-0.5 shadow-xs">
-                  ${Array(5).fill(0).map(() => `<div class="h-0.5 bg-sky-300/60 w-full"></div>`).join('')}
-                </div>
+        for (let g = 0; g < prob.n1; g++) {
+          const groupCard = document.createElement('div');
+          groupCard.className = 'p-2.5 bg-purple-50 border-2 border-purple-200 rounded-2xl flex flex-col items-center gap-1 shadow-xs min-w-[70px]';
+          groupCard.innerHTML = `
+            <span class="text-[9px] font-black uppercase text-purple-700 tracking-wider">Group ${g + 1}</span>
+            <div class="flex flex-wrap gap-1 max-w-[65px] justify-center py-1">
+              ${Array(Math.min(10, prob.n2)).fill(0).map(() => `
+                <div class="w-3.5 h-3.5 rounded-full bg-purple-500 border border-purple-600 shadow-2xs"></div>
               `).join('')}
             </div>
-          </div>
-
-          <div class="text-2xl font-black text-slate-400">${prob.op}</div>
-
-          <div class="flex flex-col items-center p-3 bg-white border-2 border-amber-200 rounded-2xl shadow-sm">
-            <span class="text-[11px] font-bold text-amber-700 uppercase mb-1">Ones Cubes (${onesCount})</span>
-            <div class="flex flex-wrap gap-1 max-w-[120px] justify-center">
-              ${Array(Math.min(9, onesCount)).fill(0).map(() => `
-                <div class="w-5 h-5 bg-amber-400 border border-amber-600 rounded-md shadow-xs"></div>
-              `).join('')}
-            </div>
-          </div>
-        `;
+            <span class="text-[10px] font-bold text-purple-900 font-mono">${prob.n2}</span>
+          `;
+          wrap.appendChild(groupCard);
+        }
         container.appendChild(wrap);
 
+        const legend = document.createElement('div');
+        legend.className = 'text-xs font-bold text-purple-800 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200 text-center mt-2';
+        legend.innerHTML = `Total: <strong>${prob.n1}</strong> groups × <strong>${prob.n2}</strong> items each = <strong>?</strong>`;
+        container.appendChild(legend);
+
       } else if (mType === 'arrays') {
-        document.getElementById('manipulative-title').innerText = `Multiplication Area Array (${prob.n1} × ${prob.n2})`;
-        document.getElementById('problem-subtext').innerText = `Count the total unit blocks in this grid!`;
+        const isDiv = prob.op === '÷';
+        document.getElementById('manipulative-title').innerText = isDiv 
+          ? `Division Array / Equal Sharing (${prob.n1} ÷ ${prob.n2})` 
+          : `Multiplication Area Array (${prob.n1} × ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = isDiv 
+          ? `Count how many equal rows of ${prob.n2} make the total ${prob.n1}!` 
+          : `Count the total unit blocks across ${prob.n1} rows of ${prob.n2}!`;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-col items-center gap-2';
 
         const grid = document.createElement('div');
         grid.className = 'bg-white border-2 border-purple-200 p-2.5 rounded-2xl shadow-sm inline-block';
@@ -2804,35 +2960,83 @@
             grid.appendChild(cell);
           }
         }
-        container.appendChild(grid);
+        wrap.appendChild(grid);
+
+        const legend = document.createElement('div');
+        legend.className = 'text-xs font-bold text-purple-800 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200 text-center mt-1';
+        legend.innerHTML = isDiv 
+          ? `Total: <strong>${prob.n1}</strong> blocks ÷ <strong>${prob.n2}</strong> per column = Rows: <strong>?</strong>` 
+          : `Total: <strong>${prob.n1}</strong> rows × <strong>${prob.n2}</strong> columns = <strong>?</strong>`;
+        wrap.appendChild(legend);
+
+        container.appendChild(wrap);
 
       } else if (mType === 'fractions') {
-        document.getElementById('manipulative-title').innerText = 'Interactive Visual Fraction Strip';
-        document.getElementById('problem-subtext').innerText = 'Count the shaded fractional pieces!';
-
+        const isAdd = prob.p2 !== undefined;
         const denom = prob.denom || prob.n2 || 4;
-        const shaded = prob.n1 || 1;
 
-        const wrap = document.createElement('div');
-        wrap.className = 'flex flex-col items-center space-y-2.5 w-full max-w-md p-2';
+        if (isAdd) {
+          document.getElementById('manipulative-title').innerText = `Fraction Addition Strip (${prob.p1}/${denom} + ${prob.p2}/${denom})`;
+          document.getElementById('problem-subtext').innerText = `Combine the ${prob.p1} blue parts and ${prob.p2} amber parts!`;
 
-        const bar = document.createElement('div');
-        bar.className = 'w-full h-12 bg-slate-100 border-3 border-sky-400 rounded-2xl flex overflow-hidden shadow-inner';
+          const wrap = document.createElement('div');
+          wrap.className = 'flex flex-col items-center space-y-2.5 w-full max-w-md p-2';
 
-        for (let i = 0; i < denom; i++) {
-          const seg = document.createElement('div');
-          seg.className = `flex-1 border-r border-sky-300 last:border-r-0 flex items-center justify-center font-bold text-xs ${i < shaded ? 'bg-sky-500 text-white font-mono' : 'bg-white text-slate-400 font-mono'}`;
-          seg.innerText = `1/${denom}`;
-          bar.appendChild(seg);
+          const bar = document.createElement('div');
+          bar.className = 'w-full h-12 bg-slate-100 border-3 border-sky-400 rounded-2xl flex overflow-hidden shadow-inner';
+
+          for (let i = 0; i < denom; i++) {
+            const seg = document.createElement('div');
+            if (i < prob.p1) {
+              seg.className = 'flex-1 border-r border-sky-300 last:border-r-0 flex items-center justify-center font-bold text-xs bg-sky-500 text-white font-mono';
+            } else if (i < prob.p1 + prob.p2) {
+              seg.className = 'flex-1 border-r border-amber-300 last:border-r-0 flex items-center justify-center font-bold text-xs bg-amber-400 text-slate-900 font-mono';
+            } else {
+              seg.className = 'flex-1 border-r border-slate-200 last:border-r-0 flex items-center justify-center font-bold text-xs bg-white text-slate-400 font-mono';
+            }
+            seg.innerText = `1/${denom}`;
+            bar.appendChild(seg);
+          }
+          wrap.appendChild(bar);
+
+          wrap.innerHTML += `
+            <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-bold">
+              <span class="text-sky-800 bg-sky-50 px-2.5 py-1 rounded-xl border border-sky-200">First: <strong>${prob.p1}/${denom}</strong> (Blue)</span>
+              <span class="text-amber-600 font-bold">+</span>
+              <span class="text-amber-800 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-200">Second: <strong>${prob.p2}/${denom}</strong> (Amber)</span>
+              <span class="text-slate-400 font-bold">=</span>
+              <span class="text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 font-mono">Total: <strong>? / ${denom}</strong></span>
+            </div>
+          `;
+          container.appendChild(wrap);
+
+        } else {
+          document.getElementById('manipulative-title').innerText = 'Interactive Visual Fraction Strip';
+          document.getElementById('problem-subtext').innerText = 'Count the shaded fractional pieces!';
+
+          const shaded = prob.n1 || 1;
+
+          const wrap = document.createElement('div');
+          wrap.className = 'flex flex-col items-center space-y-2.5 w-full max-w-md p-2';
+
+          const bar = document.createElement('div');
+          bar.className = 'w-full h-12 bg-slate-100 border-3 border-sky-400 rounded-2xl flex overflow-hidden shadow-inner';
+
+          for (let i = 0; i < denom; i++) {
+            const seg = document.createElement('div');
+            seg.className = `flex-1 border-r border-sky-300 last:border-r-0 flex items-center justify-center font-bold text-xs ${i < shaded ? 'bg-sky-500 text-white font-mono' : 'bg-white text-slate-400 font-mono'}`;
+            seg.innerText = `1/${denom}`;
+            bar.appendChild(seg);
+          }
+
+          wrap.appendChild(bar);
+          wrap.innerHTML += `
+            <div class="text-xs font-bold text-sky-800 bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-200 text-center">
+              Bar divided into <strong class="text-sky-900">${denom}</strong> equal parts. Count how many parts are shaded blue!
+            </div>
+          `;
+          container.appendChild(wrap);
         }
-
-        wrap.appendChild(bar);
-        wrap.innerHTML += `
-          <div class="text-xs font-bold text-sky-800 bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-200 text-center">
-            Bar divided into <strong class="text-sky-900">${denom}</strong> equal parts. Count how many parts are shaded blue!
-          </div>
-        `;
-        container.appendChild(wrap);
 
       } else if (mType === 'partial_products') {
         document.getElementById('manipulative-title').innerText = `2x2 Area Model (${prob.n1} × ${prob.n2})`;
@@ -2844,8 +3048,11 @@
         const o2 = prob.n2 % 10;
 
         const wrap = document.createElement('div');
-        wrap.className = 'grid grid-cols-2 gap-2 max-w-xs text-xs font-bold p-2 bg-white rounded-2xl border-2 border-indigo-200 shadow-sm text-center';
-        wrap.innerHTML = `
+        wrap.className = 'flex flex-col items-center gap-2';
+
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-2 gap-2 max-w-xs text-xs font-bold p-2 bg-white rounded-2xl border-2 border-indigo-200 shadow-sm text-center';
+        grid.innerHTML = `
           <div class="bg-indigo-50 p-2.5 rounded-xl border border-indigo-200 text-indigo-900">
             <span class="text-[10px] text-indigo-500 font-semibold block">${t1} × ${t2}</span>
             <div class="font-mono text-sm font-black text-indigo-700">${t1 * t2}</div>
@@ -2863,6 +3070,13 @@
             <div class="font-mono text-sm font-black text-emerald-700">${o1 * o2}</div>
           </div>
         `;
+        wrap.appendChild(grid);
+
+        const legend = document.createElement('div');
+        legend.className = 'text-xs font-bold text-indigo-900 bg-indigo-50 px-3.5 py-1.5 rounded-xl border border-indigo-200 text-center mt-1';
+        legend.innerHTML = `Add: <strong>${t1 * t2}</strong> + <strong>${o1 * t2}</strong> + <strong>${t1 * o2}</strong> + <strong>${o1 * o2}</strong> = Total Product: <strong>?</strong>`;
+        wrap.appendChild(legend);
+
         container.appendChild(wrap);
 
       } else if (mType === 'pemdas') {
@@ -2885,12 +3099,20 @@
         container.appendChild(wrap);
 
       } else if (mType === 'decimals') {
-        document.getElementById('manipulative-title').innerText = 'Decimal Place Value Grid';
-        document.getElementById('problem-subtext').innerText = 'Align the decimal points carefully!';
+        const isMult = prob.op === '×';
+        document.getElementById('manipulative-title').innerText = isMult 
+          ? `Decimal Multiplication (${prob.n1} × ${prob.n2})` 
+          : `Decimal Place Value Grid (${prob.n1} ${prob.op} ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = isMult 
+          ? `Multiply ${prob.n1} across ${prob.n2} equal groups!` 
+          : 'Align decimal points carefully to add or subtract place values!';
 
         const wrap = document.createElement('div');
-        wrap.className = 'flex items-center justify-center gap-2 p-2 bg-white rounded-2xl border-2 border-sky-200 shadow-sm text-center text-xs font-bold';
-        wrap.innerHTML = `
+        wrap.className = 'flex flex-col items-center gap-2';
+
+        const grid = document.createElement('div');
+        grid.className = 'flex items-center justify-center gap-2 p-2 bg-white rounded-2xl border-2 border-sky-200 shadow-sm text-center text-xs font-bold';
+        grid.innerHTML = `
           <div class="p-2 bg-sky-50 rounded-xl border border-sky-200">
             <span class="text-[10px] uppercase text-sky-600 block">Ones</span>
             <span class="font-mono text-lg font-black text-sky-950">${Math.floor(prob.n1)}</span>
@@ -2911,12 +3133,19 @@
             <span class="font-mono text-lg font-black text-amber-950">${Math.round((prob.n2 % 1) * 10)}</span>
           </div>
         `;
+        wrap.appendChild(grid);
+
+        const legend = document.createElement('div');
+        legend.className = 'text-xs font-bold text-sky-900 bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-200 text-center';
+        legend.innerHTML = `Value: <strong>${prob.n1}</strong> ${prob.op} <strong>${prob.n2}</strong> = <strong>?</strong>`;
+        wrap.appendChild(legend);
+
         container.appendChild(wrap);
 
       } else {
         // Division with remainders
-        document.getElementById('manipulative-title').innerText = 'Equal Sharing Groups Model';
-        document.getElementById('problem-subtext').innerText = `Share ${prob.n1} items equally into ${prob.n2} groups!`;
+        document.getElementById('manipulative-title').innerText = `Equal Sharing Groups Model (${prob.n1} ÷ ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = `Share ${prob.n1} items equally into ${prob.n2} group buckets!`;
 
         const wrap = document.createElement('div');
         wrap.className = 'p-3 bg-white rounded-2xl border-2 border-amber-200 text-center text-xs font-bold shadow-xs';
@@ -2948,7 +3177,7 @@
           const remaining = Math.max(0, n1 - n2);
           for (let i = 0; i < remaining && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
           for (let i = remaining; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'crossed';
-          addByteMessage(`We started with **${n1}** tokens and crossed out **${n2}**. Remaining tokens: **${remaining}**!`);
+          addByteMessage(`We modeled all **${n1}** starting tokens, then crossed out **${n2}** (✕). Count the uncrossed blue tokens left: **${remaining}**!`);
         }
         renderManipulative();
         playSoundEffect('tap');
@@ -2962,9 +3191,22 @@
           const remaining = Math.max(0, n1 - n2);
           for (let i = 0; i < remaining && i < 20; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
           for (let i = remaining; i < n1 && i < 20; i++) state.manipulativeState.tenFrameSlots[i] = 'crossed';
-          addByteMessage(`Took away **${n2}** from **${n1}**. Count the blue tokens left: **${remaining}**!`);
+          addByteMessage(`We modeled all **${n1}** starting tokens, then crossed out **${n2}** (✕). Count the uncrossed blue tokens left: **${remaining}**!`);
         }
         renderManipulative();
+        playSoundEffect('tap');
+      } else if (mType === 'equal_groups') {
+        addByteMessage(`Equal Groups Model: We have **${prob.n1}** groups with **${prob.n2}** items each. Total: **${prob.ans}**!`);
+        playSoundEffect('tap');
+      } else if (mType === 'base10') {
+        addByteMessage(`Base-10 Model: Adding/subtracting tens and ones. Result: **${prob.ans}**!`);
+        playSoundEffect('tap');
+      } else if (mType === 'fractions') {
+        if (prob.p2 !== undefined) {
+          addByteMessage(`Fraction Addition: **${prob.p1}/${prob.denom}** (blue) + **${prob.p2}/${prob.denom}** (amber) = **${prob.ans}/${prob.denom}**!`);
+        } else {
+          addByteMessage(`Fraction Model: **${prob.n1}** out of **${prob.denom}** parts shaded!`);
+        }
         playSoundEffect('tap');
       } else if (mType === 'pemdas') {
         const container = document.getElementById('manipulative-viewport');
@@ -3402,6 +3644,10 @@
       const input = document.getElementById('answer-input');
       if (val === 'back') {
         input.value = input.value.slice(0, -1);
+      } else if (val === '.') {
+        if (!input.value.includes('.')) {
+          input.value = (input.value === '' ? '0' : input.value) + '.';
+        }
       } else {
         input.value += val;
       }
