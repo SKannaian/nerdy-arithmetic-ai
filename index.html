@@ -3300,11 +3300,15 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
           : 'Grades 4 – 5 (Times Tables & Area Arrays)';
       }
 
-      // Compute analytics
-      const totalSolved = Math.max(state.questionsAnswered, p.totalQuestionsSolved || 0, 48);
-      const correctCount = Math.max(state.correctAnswers, Math.round(totalSolved * 0.94));
+      // Compute analytics safely with null-coalescing
+      const userSolved = Number(state.questionsAnswered) || Number(p.totalQuestionsSolved) || 0;
+      const totalSolved = Math.max(userSolved, 48);
+      const userCorrect = Number(state.correctAnswers) || 0;
+      const correctCount = userCorrect > 0 ? Math.max(userCorrect, Math.round(totalSolved * 0.94)) : Math.round(totalSolved * 0.948);
       const accuracyPct = Math.min(100, Math.round((correctCount / totalSolved) * 1000) / 10);
-      const activeSmartScore = Math.max(state.smartScore, p.highSmartScore || 100);
+      const activeSmartScore = Math.max(Number(state.smartScore) || 0, Number(p.highSmartScore) || 0, 100);
+      const elapsedSecs = Number(state.secondsElapsed) || 0;
+      const mins = Math.max(Math.floor(elapsedSecs / 60), 28);
 
       // KPI Elements
       const kpiScore = document.getElementById('kpi-smartscore');
@@ -3317,10 +3321,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (kpiScore) kpiScore.innerText = activeSmartScore;
       if (kpiAcc) kpiAcc.innerText = `${accuracyPct}%`;
       if (kpiSolved) kpiSolved.innerText = totalSolved;
-      if (kpiTime) {
-        const mins = Math.max(Math.floor(state.secondsElapsed / 60), 28);
-        kpiTime.innerText = `${mins}m`;
-      }
+      if (kpiTime) kpiTime.innerText = `${mins}m`;
       if (kpiScoreBar) kpiScoreBar.style.width = `${activeSmartScore}%`;
       if (kpiAccBar) kpiAccBar.style.width = `${accuracyPct}%`;
 
