@@ -4,7 +4,7 @@ color 0B
 
 echo ======================================================================
 echo           NERDY ARITHMETIC AI — K-5 SOCRATIC MATH GAME
-echo              IXL-Inspired Cognitive Math Platform
+echo              Gamified Cognitive Math Platform
 echo ======================================================================
 echo.
 

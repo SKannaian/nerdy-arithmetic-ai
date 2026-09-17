@@ -1,6 +1,6 @@
 # Nerdy Arithmetic AI 🚀
 
-> **An IXL-inspired, AI-native Socratic math learning platform for elementary students (Grades K–5).**  
+> **A gamified, AI-native Socratic math learning platform for elementary students (Grades K–5).**  
 > Built for the **[Nerdy AI Hackathon Challenge](https://hackathon.nerdy.com)** (Prompt 01: K–5 Math Game).
 
 [![Hackathon Status](https://img.shields.io/badge/Nerdy%20Hackathon-Prompt%2001%20(K--5%20Math)-0284c7?style=for-the-badge&logo=target)](https://hackathon.nerdy.com)
@@ -15,7 +15,7 @@
 
 ### Why Nerdy Arithmetic AI Wins:
 1. **Picks One Prompt & Perfects It:** Tailored specifically for **Prompt 01: K–5 Math Game**. Instead of a surface-level demo, it is a deep, production-ready educational product.
-2. **IXL-Inspired Mastery UI:** Built with a bright, welcoming, child-friendly design system inspired by **[IXL Learning](https://www.ixl.com)**:
+2. **Gamified Mastery UI:** Built with a bright, welcoming, child-friendly design system:
    - Dynamic **SmartScore (0–100)** algorithm that rewards mastery and unlocks Bronze, Silver, and Gold Challenge Zones.
    - Live **Questions Answered** and **Time Elapsed** HUD.
    - Grade-level ribbons: Kindergarten (Sums to 10), Grades 2–3 (Regrouping), and Grades 4–5 (Times tables).
@@ -35,9 +35,9 @@
 
 ```mermaid
 graph TB
-    subgraph Client["Client Tier (IXL-Inspired Web Application)"]
+    subgraph Client["Client Tier (Web Application)"]
         UI["Bright Educational UI (TailwindCSS + Lucide + Confetti)"]
-        HUD["IXL HUD: SmartScore (0-100) · Questions · Stopwatch"]
+        HUD["Mastery HUD: SmartScore (0-100) · Questions · Stopwatch"]
         CRA["CRA Virtual Manipulatives:<br>• Ten-Frames (K-1)<br>• Base-10 Blocks (2-3)<br>• Area Arrays (4-5)"]
         AudioEngine["Web Audio Chimes + Web Speech Synthesizer"]
         Scratchpad["Virtual Drawing Scratchpad Canvas"]
@@ -102,7 +102,7 @@ Open **`http://localhost:8765`** in your browser.
 * **Grades 2 & 3:** See the multi-digit numbers broken down into **Tens rods** and **Ones cubes**, helping students master regrouping without rote memorization.
 * **Grades 4 & 5:** Dynamic multiplication **Area Array** grid showing row $\times$ column distribution.
 
-### 2. The IXL SmartScore Mastery Loop
+### 2. The SmartScore Mastery Loop
 * Unlike simple quiz games, SmartScore reflects true conceptual mastery:
   - **0–69 (Practice Zone):** Rapid progression (+12 pts per correct answer).
   - **70–79 (Bronze Ribbon):** Intermediate mastery unlocked.
@@ -182,20 +182,18 @@ Click **"Scratchpad"** in the top bar to pull up an on-screen drawing canvas whe
 * Designed specifically for young learners using tablets, Chromebooks, or touch screens who may not yet be comfortable with a physical keyboard.
 * Features large, high-contrast, tactile numeric keys (`0`–`9`) and an instant `⌫ Back` button that syncs directly with the answer input box.
 
-### 12. Longitudinal Progress Status Report & Analytics Dashboard 📊
+### 12. Kid-Friendly Progress Status Report & Analytics Dashboard 📊
 * **Dedicated App Navigation Tabs:** Switch seamlessly between the **`🎮 Practice Arena`** and the **`📊 Progress Report`** tab directly from the header.
-* **Hero KPI Summary Metrics:**
-  - **SmartScore Mastery:** Tracks progression toward the 100 Gold Challenge Zone.
-  - **Cumulative Accuracy:** Benchmarked against IXL standard (>85%).
-  - **Questions Mastered:** Total unique problems solved with zero same-day repetition.
-  - **Active Practice Engagement:** Total minutes engaged and average pace per problem.
-* **Dynamic Interactive Charts (Chart.js):**
-  - **SmartScore Growth Curve:** Smooth spline line chart tracking mastery acceleration through Bronze (70), Silver (80), and Gold (100) milestones.
-  - **Operations & Skills Distribution:** Interactive doughnut chart visualizing practice balance across Addition, Subtraction, and Ten-Frame modeling.
-  - **7-Day Problem Volume & Accuracy Trend:** Bar chart with overlay accuracy line showing day-by-day practice consistency.
-  - **Socratic AI Byte Misconception Resolution:** Horizontal comparative bar chart highlighting diagnosed cognitive slips vs 100% Socratic resolutions.
-* **Common Core State Standards (CCSS) Matrix:** Maps real-time performance against standardized K–5 standards (K.OA.A.1, 1.OA.C.6, 2.NBT.B.5, 3.OA.C.7) with proficiency status bars.
-* **Audit Trail & Export Options:** Detailed practice session history table with one-click **Print / Export PDF 🖨️**, **Email Digest ✉️**, and **Live Tutor Handoff Dossier 👨‍🏫**.
+* **Child-Friendly Metric Cards:**
+  - **My Math Score:** Big, cheerful progress bar climbing to the 100 Gold Challenge Zone.
+  - **Star Accuracy:** Super Star badge celebrating high accuracy (>90%).
+  - **Challenges Solved:** Total unique math problems solved.
+  - **Daily Streak:** Highlighting consecutive practice days with fiery animation.
+* **Dynamic Visual Charts (Chart.js):**
+  - **My Star Growth Journey:** Cheerful curve showing progression through Bronze Star (70), Silver Shield (80), and Gold Trophy (100) milestones.
+  - **My Math Superpowers:** Colorful doughnut chart showing practice balance across Addition, Subtraction, and Ten-Frame modeling.
+* **Badges & Trophies Showcase:** Collectible achievement badges (Gold Master, Fire Streak, Speed Star, Ten-Frame Pro, Byte's Pal, Bullseye) that celebrate effort and mastery.
+* **Byte's Encouragement & Workouts:** Friendly high-five note from Byte, recent session history, and one-click **Print Award 🖨️** or **Email Mom & Dad ✉️**.
 
 ---
 
@@ -204,10 +202,10 @@ Click **"Scratchpad"** in the top bar to pull up an on-screen drawing canvas whe
 Use this script for your Hackathon submission video:
 
 * **[0:00 – 0:30] The Hook & Mission:**  
-  *"Hi! I'm presenting **Nerdy Arithmetic AI**, an AI-native, IXL-inspired math platform built for Prompt 01 of the Nerdy Hackathon. Traditional elementary math apps either show static multiple-choice drills or bolt on generic chatbots that spoil the answers. We designed Nerdy Arithmetic AI around cognitive learning science, Jerome Bruner's CRA framework, and daily retention loops."*
+  *"Hi! I'm presenting **Nerdy Arithmetic AI**, an AI-native, gamified math platform built for Prompt 01 of the Nerdy Hackathon. Traditional elementary math apps either show static multiple-choice drills or bolt on generic chatbots that spoil the answers. We designed Nerdy Arithmetic AI around cognitive learning science, Jerome Bruner's CRA framework, and daily retention loops."*
 
-* **[0:30 – 1:10] IXL Mastery & CRA Manipulatives:**  
-  *"Let's see the app in action. Notice our bright, engaging IXL-style interface with real-time SmartScore, Questions, and Timer. In Kindergarten mode, watch how the ten-frame manipulative lets children touch and place counters to discover addition visually. In subtraction mode, watch how counters are crossed out with red ✕ marks with dynamic counter legends."*
+* **[0:30 – 1:10] SmartScore Mastery & CRA Manipulatives:**  
+  *"Let's see the app in action. Notice our bright, engaging kid-friendly interface with real-time SmartScore, Questions, and Timer. In Kindergarten mode, watch how the ten-frame manipulative lets children touch and place counters to discover addition visually. In subtraction mode, watch how counters are crossed out with red ✕ marks with dynamic counter legends."*
 
 * **[1:10 – 1:45] Operation Choice & The AI Socratic Superpower:**  
   *"Students can explicitly choose Addition, Subtraction, or Mixed mode. Watch what happens when a student makes a mistake: instead of a buzzer, our cognitive classifier identifies the mistake. Byte, our Gemini 2.5 Flash Socratic companion, steps in with a targeted conceptual hint without spoiling the number, and can read hints aloud to non-readers."*
@@ -226,7 +224,7 @@ Use this script for your Hackathon submission video:
 | :--- | :---: | :--- |
 | **Pedagogical Rigor** | 25% | Jerome Bruner's CRA framework, Common Core standards, and Bloom's cognitive scaffolding. |
 | **AI-Native Product Design** | 25% | Cognitive misconception classification, non-spoiling Socratic hint ladders, and natural voice read-aloud. |
-| **UX Craftsmanship & Polish** | 20% | Bright IXL-inspired design system, SmartScore progress rings, confetti celebrations, and tactile touch keypad. |
+| **UX Craftsmanship & Polish** | 20% | Bright child-friendly design system, SmartScore progress rings, confetti celebrations, and tactile touch keypad. |
 | **Technical Architecture** | 15% | Decoupled FastAPI server, secure zero-leak proxy, Web Audio synthesis, and offline heuristic fallback. |
 | **Demo Clarity** | 15% | Clear 180-second video roadmap, live runnable testbed, and comprehensive documentation. |
 

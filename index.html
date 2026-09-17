@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nerdy Arithmetic AI — IXL-Style K–5 Socratic Math</title>
+  <title>Nerdy Arithmetic AI — K–5 Socratic Math Game</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -25,18 +25,20 @@
               600: '#0369a1',
               700: '#075985',
             },
-            ixlGreen: {
+            brandGreen: {
               50: '#f0fdf4',
               500: '#16a34a',
               600: '#15803d',
               700: '#166534',
             },
-            ixlAmber: {
+            brandAmber: {
               50: '#fffbeb',
               400: '#fbbf24',
               500: '#f59e0b',
               600: '#d97706',
-            }
+            },
+            nerdyGreen: { 50: '#f0fdf4', 500: '#16a34a', 600: '#15803d', 700: '#166534' },
+            nerdyAmber: { 50: '#fffbeb', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }
           },
           fontFamily: {
             sans: ['Outfit', 'sans-serif'],
@@ -62,21 +64,21 @@
       color: #1e293b;
       font-family: 'Outfit', sans-serif;
     }
-    .ixl-shadow {
+    .nerdy-shadow {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(226, 232, 240, 0.8);
     }
-    .ixl-btn-shadow {
+    .nerdy-btn-shadow {
       box-shadow: 0 4px 0 #0f766e, 0 6px 12px rgba(15, 118, 110, 0.25);
     }
-    .ixl-btn-shadow:active {
+    .nerdy-btn-shadow:active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 #0f766e;
     }
-    .ixl-green-btn {
+    .nerdy-green-btn {
       background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
       box-shadow: 0 4px 0 #15803d, 0 6px 14px rgba(22, 163, 74, 0.3);
     }
-    .ixl-green-btn:active {
+    .nerdy-green-btn:active {
       transform: translateY(3px);
       box-shadow: 0 1px 0 #15803d;
     }
@@ -144,7 +146,7 @@
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-sky-200 selection:text-sky-900">
 
-  <!-- TOP HEADER (IXL / NERDY LEARNING STYLE) -->
+  <!-- TOP HEADER (NERDY LEARNING STYLE) -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2 lg:gap-4">
       
@@ -221,7 +223,7 @@
     </div>
   </header>
 
-  <!-- SKILL BREADCRUMB BAR   <!-- SKILL BREADCRUMB BAR (IXL-STYLE) -->
+  <!-- SKILL BREADCRUMB BAR -->
   <section class="bg-sky-50/80 border-b border-sky-100 py-1.5 px-3 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2 text-xs font-medium text-slate-600">
       <div class="flex items-center gap-2">
@@ -258,14 +260,14 @@
     </div>
   </div>
 
-  <!-- MAIN PRACTICE WORKSPACE (9-COL PROBLEM + 3-COL IXL HUD) -->
+  <!-- MAIN PRACTICE WORKSPACE (9-COL PROBLEM + 3-COL HUD) -->
   <main id="view-practice" class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-2.5 sm:py-3 grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-start">
 
     <!-- LEFT COLUMN: PROBLEM ARENA (COLS 1-8) -->
     <section class="lg:col-span-8 flex flex-col space-y-2 sm:space-y-2.5">
 
       <!-- MAIN PROBLEM CARD -->
-      <div id="problem-card" class="bg-white rounded-3xl p-3.5 sm:p-5 ixl-shadow relative transition-all duration-300">
+      <div id="problem-card" class="bg-white rounded-3xl p-3.5 sm:p-5 nerdy-shadow relative transition-all duration-300">
         
         <!-- CARD HEADER -->
         <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-100">
@@ -359,7 +361,7 @@
           <button 
             type="submit" 
             id="submit-btn" 
-            class="ixl-green-btn text-white font-display font-bold text-sm sm:text-base px-5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer select-none shadow-md"
+            class="nerdy-green-btn text-white font-display font-bold text-sm sm:text-base px-5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer select-none shadow-md"
           >
             <span>Submit</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -390,7 +392,7 @@
       </div>
 
       <!-- ON-SCREEN KEYPAD (COMPACT SINGLE-VIEW DESIGN) -->
-      <div id="touch-keypad" class="bg-white rounded-2xl p-2 sm:p-2.5 ixl-shadow flex flex-col items-center">
+      <div id="touch-keypad" class="bg-white rounded-2xl p-2 sm:p-2.5 nerdy-shadow flex flex-col items-center">
         <div class="text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
           <i data-lucide="grid" class="w-3 h-3 text-slate-400"></i> Kid-Friendly Touch Keypad
         </div>
@@ -411,11 +413,11 @@
 
     </section>
 
-    <!-- RIGHT COLUMN: THE SIGNATURE IXL HUD (COLS 9-12) -->
+    <!-- RIGHT COLUMN: THE SIGNATURE HUD (COLS 9-12) -->
     <aside class="lg:col-span-4 flex flex-col space-y-2.5">
 
-      <!-- IXL MASTERY SCORECARD (SMARTSCORE HUD) -->
-      <div class="bg-white rounded-3xl p-3.5 sm:p-4 ixl-shadow flex flex-col items-center text-center relative overflow-hidden">
+      <!-- MASTERY SCORECARD (SMARTSCORE HUD) -->
+      <div class="bg-white rounded-3xl p-3.5 sm:p-4 nerdy-shadow flex flex-col items-center text-center relative overflow-hidden">
         
         <!-- Scorecard Header -->
         <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-1.5">
@@ -456,7 +458,7 @@
           </div>
         </div>
 
-        <!-- IXL Stat Counters (Questions & Timer) -->
+        <!-- Stat Counters (Questions & Timer) -->
         <div class="grid grid-cols-2 gap-2 w-full mt-2.5 pt-2.5 border-t border-slate-100 text-left">
           <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
             <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Questions</div>
@@ -471,7 +473,7 @@
       </div>
 
       <!-- BYTE: SOCRATIC AI COMPANION CARD -->
-      <div class="bg-gradient-to-b from-sky-50 to-white rounded-3xl p-3.5 border border-sky-200 ixl-shadow flex flex-col relative overflow-hidden">
+      <div class="bg-gradient-to-b from-sky-50 to-white rounded-3xl p-3.5 border border-sky-200 nerdy-shadow flex flex-col relative overflow-hidden">
         
         <!-- Byte Header -->
         <div class="flex items-center justify-between pb-2 border-b border-sky-100">
@@ -542,12 +544,12 @@
   </main>
 
   <!-- ===================================================================== -->
-  <!-- PROGRESS STATUS REPORT VIEW (ANALYTICS, CHARTS, CCSS MATRIX & AUDIT)  -->
+  <!-- PROGRESS STATUS REPORT VIEW (K–5 KID-FRIENDLY DASHBOARD)             -->
   <!-- ===================================================================== -->
   <section id="view-report" class="hidden flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 space-y-4">
     
     <!-- REPORT TOP HEADER & ACTION TOOLBAR -->
-    <div class="bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div class="bg-white rounded-3xl p-4 sm:p-5 nerdy-shadow border border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       
       <!-- Student Identity -->
       <div class="flex items-center gap-3.5">
@@ -560,135 +562,132 @@
             <span id="report-streak-pill" class="text-xs bg-amber-100 text-amber-900 border border-amber-300 font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
               <span>🔥 1-Day Streak</span>
             </span>
-            <span class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2 py-0.5 rounded-full hidden sm:inline">
-              Active Learner 🌟
+            <span class="text-xs bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-0.5 rounded-full hidden sm:inline">
+              Super Star 🌟
             </span>
           </div>
           <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 mt-1">
-            <span id="report-email" class="font-medium text-slate-600">student@example.com</span>
+            <span id="report-grade-label" class="font-bold text-sky-700">Kindergarten & Grade 1 (Ten-Frames)</span>
             <span>•</span>
-            <span id="report-grade-label" class="font-bold text-sky-700">Kindergarten & Grade 1 (Concrete CRA)</span>
-            <span>•</span>
-            <span class="text-slate-400">📅 Longitudinal Analytics (Past 7 Days)</span>
+            <span id="report-email" class="font-medium text-slate-500">student@example.com</span>
           </div>
         </div>
       </div>
 
       <!-- Action Toolbar -->
       <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-        <button type="button" onclick="printProgressReport()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5 shadow-xs" title="Print or Export as PDF">
+        <button type="button" onclick="switchAppTab('practice')" class="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-sky-600/20">
+          <i data-lucide="gamepad-2" class="w-4 h-4"></i>
+          <span>Back to Math Game 🚀</span>
+        </button>
+        <button type="button" onclick="openCertificateModal()" class="px-3.5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs transition flex items-center gap-1.5 shadow-xs" title="View Award Certificate">
+          <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
+          <span>My Certificate 🎓</span>
+        </button>
+        <button type="button" onclick="printProgressReport()" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5 shadow-xs" title="Print Award / Progress">
           <i data-lucide="printer" class="w-3.5 h-3.5 text-slate-600"></i>
-          <span>Print / PDF 🖨️</span>
+          <span>Print Award 🖨️</span>
         </button>
-        <button type="button" onclick="toggleProfileModal()" class="px-3 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 font-bold text-xs transition flex items-center gap-1.5 shadow-xs" title="Send 7-Day Digest to Parent Email">
+        <button type="button" onclick="toggleProfileModal()" class="px-3 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-900 border border-purple-200 font-bold text-xs transition flex items-center gap-1.5 shadow-xs" title="Send Report to Mom & Dad">
           <i data-lucide="mail" class="w-3.5 h-3.5 text-purple-600"></i>
-          <span>Email Digest ✉️</span>
-        </button>
-        <button type="button" onclick="openCertificateModal()" class="px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs transition flex items-center gap-1.5 shadow-xs" title="View Official Certificate">
-          <i data-lucide="award" class="w-3.5 h-3.5 text-amber-600"></i>
-          <span>Certificate 🎓</span>
-        </button>
-        <button type="button" onclick="switchAppTab('practice')" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-sky-600/20">
-          <i data-lucide="gamepad-2" class="w-3.5 h-3.5"></i>
-          <span>Resume Practice 🚀</span>
+          <span>Email Mom & Dad ✉️</span>
         </button>
       </div>
 
     </div>
 
-    <!-- 4 HERO KPI METRIC CARDS -->
+    <!-- 4 HERO KPI METRIC CARDS (KID-FRIENDLY) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       
       <!-- KPI 1: SmartScore Mastery -->
-      <div class="bg-white rounded-3xl p-4 sm:p-5 ixl-shadow border border-slate-100 relative overflow-hidden">
+      <div class="bg-white rounded-3xl p-4 sm:p-5 nerdy-shadow border border-slate-100 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Session Mastery</span>
-          <span class="p-2 rounded-xl bg-amber-50 text-amber-600 text-base">🏆</span>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">My Math Score</span>
+          <span class="p-2 rounded-xl bg-amber-100 text-amber-600 text-lg">🏆</span>
         </div>
         <div class="flex items-baseline gap-1.5">
           <span id="kpi-smartscore" class="font-display font-black text-3xl sm:text-4xl text-sky-600">100</span>
           <span class="text-xs font-bold text-slate-400">/ 100</span>
         </div>
         <div class="mt-2 text-xs font-bold text-amber-600 flex items-center gap-1">
-          <span>🥇 Gold Challenge Zone Mastered</span>
+          <span>🥇 Gold Trophy Champion!</span>
         </div>
-        <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
-          <div id="kpi-smartscore-bar" class="bg-gradient-to-r from-amber-500 to-sky-500 h-full rounded-full w-full"></div>
+        <div class="w-full bg-slate-100 h-2 rounded-full mt-2.5 overflow-hidden">
+          <div id="kpi-smartscore-bar" class="bg-gradient-to-r from-amber-400 via-sky-500 to-emerald-500 h-full rounded-full w-full"></div>
         </div>
       </div>
 
       <!-- KPI 2: Overall Accuracy Rate -->
-      <div class="bg-white rounded-3xl p-4 sm:p-5 ixl-shadow border border-slate-100 relative overflow-hidden">
+      <div class="bg-white rounded-3xl p-4 sm:p-5 nerdy-shadow border border-slate-100 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Accuracy Rate</span>
-          <span class="p-2 rounded-xl bg-emerald-50 text-emerald-600 text-base">🎯</span>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Star Accuracy</span>
+          <span class="p-2 rounded-xl bg-emerald-100 text-emerald-600 text-lg">🎯</span>
         </div>
         <div class="flex items-baseline gap-1.5">
-          <span id="kpi-accuracy" class="font-display font-black text-3xl sm:text-4xl text-emerald-600">94.8%</span>
+          <span id="kpi-accuracy" class="font-display font-black text-3xl sm:text-4xl text-emerald-600">95%</span>
         </div>
         <div class="mt-2 text-xs font-bold text-emerald-700 flex items-center gap-1">
-          <span>↗ +6.2% above IXL benchmark</span>
+          <span>🌟 High Five! Super Accurate!</span>
         </div>
-        <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
+        <div class="w-full bg-slate-100 h-2 rounded-full mt-2.5 overflow-hidden">
           <div id="kpi-accuracy-bar" class="bg-emerald-500 h-full rounded-full" style="width: 95%"></div>
         </div>
       </div>
 
       <!-- KPI 3: Total Questions Mastered -->
-      <div class="bg-white rounded-3xl p-4 sm:p-5 ixl-shadow border border-slate-100 relative overflow-hidden">
+      <div class="bg-white rounded-3xl p-4 sm:p-5 nerdy-shadow border border-slate-100 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Questions Solved</span>
-          <span class="p-2 rounded-xl bg-sky-50 text-sky-600 text-base">⚡</span>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Challenges Solved</span>
+          <span class="p-2 rounded-xl bg-sky-100 text-sky-600 text-lg">🚀</span>
         </div>
         <div class="flex items-baseline gap-1.5">
-          <span id="kpi-total-solved" class="font-display font-black text-3xl sm:text-4xl text-slate-900">58</span>
+          <span id="kpi-total-solved" class="font-display font-black text-3xl sm:text-4xl text-slate-900">48</span>
           <span class="text-xs font-bold text-slate-400">problems</span>
         </div>
         <div class="mt-2 text-xs font-bold text-sky-700 flex items-center gap-1">
-          <span>✨ 0 same-day repetitions</span>
+          <span>✨ Brain getting stronger!</span>
         </div>
-        <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
+        <div class="w-full bg-slate-100 h-2 rounded-full mt-2.5 overflow-hidden">
           <div class="bg-sky-500 h-full rounded-full" style="width: 88%"></div>
         </div>
       </div>
 
-      <!-- KPI 4: Practice Engagement Time -->
-      <div class="bg-white rounded-3xl p-4 sm:p-5 ixl-shadow border border-slate-100 relative overflow-hidden">
+      <!-- KPI 4: Practice Streak / Time -->
+      <div class="bg-white rounded-3xl p-4 sm:p-5 nerdy-shadow border border-slate-100 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Time Engaged</span>
-          <span class="p-2 rounded-xl bg-purple-50 text-purple-600 text-base">⏱️</span>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Daily Streak</span>
+          <span class="p-2 rounded-xl bg-orange-100 text-orange-600 text-lg">🔥</span>
         </div>
         <div class="flex items-baseline gap-1.5">
-          <span id="kpi-time-spent" class="font-display font-black text-3xl sm:text-4xl text-purple-700">28m</span>
-          <span class="text-xs font-bold text-slate-400">elapsed</span>
+          <span id="kpi-time-spent" class="font-display font-black text-3xl sm:text-4xl text-orange-600">2 Days</span>
         </div>
-        <div class="mt-2 text-xs font-bold text-purple-700 flex items-center gap-1">
-          <span>⚡ ~29s average per problem</span>
+        <div class="mt-2 text-xs font-bold text-orange-700 flex items-center gap-1">
+          <span>⚡ You are on fire! Keep going!</span>
         </div>
-        <div class="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
-          <div class="bg-purple-500 h-full rounded-full" style="width: 75%"></div>
+        <div class="w-full bg-slate-100 h-2 rounded-full mt-2.5 overflow-hidden">
+          <div class="bg-orange-500 h-full rounded-full" style="width: 80%"></div>
         </div>
       </div>
 
     </div>
 
-    <!-- CHARTS GRID (ROW 1: SMARTSCORE GROWTH + OPERATIONS BREAKDOWN) -->
+    <!-- 2 CLEAR & FUN CHARTS (STAR GROWTH + MATH SUPERPOWERS) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       
-      <!-- Chart 1: Longitudinal SmartScore Mastery Progression (7 Cols) -->
-      <div class="lg:col-span-7 bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100 flex flex-col justify-between">
+      <!-- Chart 1: My Star Growth (7 Cols) -->
+      <div class="lg:col-span-7 bg-white rounded-3xl p-4 sm:p-6 nerdy-shadow border border-slate-100 flex flex-col justify-between">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
             <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-1.5">
-              <i data-lucide="trending-up" class="w-4 h-4 text-sky-600"></i>
-              <span>Longitudinal SmartScore Growth Curve</span>
+              <span class="text-lg">🌟</span>
+              <span>My Star Growth Journey</span>
             </h3>
-            <p class="text-xs text-slate-500">Tracking mastery acceleration toward the 100 Gold Challenge Zone</p>
+            <p class="text-xs text-slate-500">Climbing up to the stars: Bronze 🥉 ➔ Silver 🥈 ➔ Gold 🥇!</p>
           </div>
-          <div class="flex items-center gap-2 text-[10px] font-bold">
-            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">🥉 Bronze (70)</span>
-            <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 border border-slate-300">🥈 Silver (80)</span>
-            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">🥇 Gold (100)</span>
+          <div class="flex items-center gap-1.5 text-[11px] font-bold">
+            <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">🥉 Bronze Star</span>
+            <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-800 border border-slate-300">🥈 Silver Shield</span>
+            <span class="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 border border-sky-300">🥇 Gold Trophy</span>
           </div>
         </div>
         <div class="relative w-full h-64">
@@ -696,14 +695,14 @@
         </div>
       </div>
 
-      <!-- Chart 2: Operations & Skills Practice Balance (5 Cols) -->
-      <div class="lg:col-span-5 bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100 flex flex-col justify-between">
+      <!-- Chart 2: My Math Superpowers (5 Cols) -->
+      <div class="lg:col-span-5 bg-white rounded-3xl p-4 sm:p-6 nerdy-shadow border border-slate-100 flex flex-col justify-between">
         <div class="mb-3">
           <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-1.5">
-            <i data-lucide="pie-chart" class="w-4 h-4 text-amber-500"></i>
-            <span>Operations & Skills Distribution</span>
+            <span class="text-lg">🦸</span>
+            <span>My Math Superpowers</span>
           </h3>
-          <p class="text-xs text-slate-500">Practice time and problem volume balance across concepts</p>
+          <p class="text-xs text-slate-500">Skills you've explored and mastered today</p>
         </div>
         <div class="relative w-full h-64 flex items-center justify-center">
           <canvas id="chart-operations-breakdown"></canvas>
@@ -712,260 +711,171 @@
 
     </div>
 
-    <!-- CHARTS GRID (ROW 2: DAILY VOLUME/ACCURACY + SOCRATIC ERROR RESOLUTION) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-      
-      <!-- Chart 3: 7-Day Daily Volume & Accuracy Trend (6 Cols) -->
-      <div class="lg:col-span-6 bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100 flex flex-col justify-between">
-        <div class="mb-3 flex items-center justify-between">
-          <div>
-            <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-1.5">
-              <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-600"></i>
-              <span>7-Day Problem Volume & Accuracy</span>
-            </h3>
-            <p class="text-xs text-slate-500">Problems solved daily with accuracy percentage line</p>
-          </div>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">92%+ Target</span>
-        </div>
-        <div class="relative w-full h-60">
-          <canvas id="chart-daily-volume"></canvas>
-        </div>
-      </div>
-
-      <!-- Chart 4: Socratic AI Byte Misconception Diagnostics (6 Cols) -->
-      <div class="lg:col-span-6 bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100 flex flex-col justify-between">
-        <div class="mb-3 flex items-center justify-between">
-          <div>
-            <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-1.5">
-              <i data-lucide="brain" class="w-4 h-4 text-purple-600"></i>
-              <span>Socratic AI Misconception Diagnosis</span>
-            </h3>
-            <p class="text-xs text-slate-500">Errors identified and 100% coached to resolution by Byte</p>
-          </div>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">100% Resolved</span>
-        </div>
-        <div class="relative w-full h-60">
-          <canvas id="chart-misconceptions-breakdown"></canvas>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- COMMON CORE STATE STANDARDS (CCSS) MASTERY MATRIX -->
-    <div class="bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100">
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+    <!-- MY BADGES & TROPHIES SHOWCASE -->
+    <div class="bg-white rounded-3xl p-4 sm:p-6 nerdy-shadow border border-slate-100">
+      <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
         <div>
-          <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-1.5">
-            <i data-lucide="book-open" class="w-4 h-4 text-sky-600"></i>
-            <span>Common Core State Standards (CCSS) Competency Matrix</span>
+          <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-2">
+            <span class="text-xl">🏅</span>
+            <span>My Badges & Trophies Showcase</span>
           </h3>
-          <p class="text-xs text-slate-500">Standardized K–5 arithmetic competencies and observed proficiency</p>
+          <p class="text-xs text-slate-500">Collect badges as you solve math challenges and level up!</p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-bold text-slate-500">
-          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Mastered (90+)</span>
-          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sky-500"></span> Proficient (80+)</span>
-          <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> In Progress (70+)</span>
-        </div>
+        <span class="text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-full">
+          6 of 6 Badges Unlocked ✨
+        </span>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="border-b border-slate-200 text-slate-400 font-extrabold uppercase text-[10px]">
-              <th class="py-2 px-3">Standard Code</th>
-              <th class="py-2 px-3">Skill & Pedagogical Focus</th>
-              <th class="py-2 px-3">CRA Level</th>
-              <th class="py-2 px-3 text-center">Attempted</th>
-              <th class="py-2 px-3">Mastery Score</th>
-              <th class="py-2 px-3 text-right">Status</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-3 px-3 font-mono font-bold text-sky-700">CCSS.MATH.K.OA.A.1</td>
-              <td class="py-3 px-3 font-semibold text-slate-900">Addition and subtraction within 10 using objects & ten-frames</td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 text-[10px] font-bold">Concrete CRA</span></td>
-              <td class="py-3 px-3 text-center font-mono font-bold">24</td>
-              <td class="py-3 px-3">
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full rounded-full" style="width: 100%"></div>
-                  </div>
-                  <span class="font-bold text-emerald-700 font-mono text-[11px]">100%</span>
-                </div>
-              </td>
-              <td class="py-3 px-3 text-right">
-                <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black border border-emerald-300">
-                  Mastered 🌟
-                </span>
-              </td>
-            </tr>
+      <!-- Badges Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        
+        <!-- Badge 1 -->
+        <div class="bg-gradient-to-b from-amber-50 to-white rounded-2xl p-3 border-2 border-amber-300 text-center flex flex-col items-center hover:scale-105 transition transform shadow-xs">
+          <div class="w-12 h-12 rounded-2xl bg-amber-400 text-white flex items-center justify-center text-2xl shadow-sm mb-2">
+            🥇
+          </div>
+          <div class="font-display font-bold text-xs text-slate-900">Gold Master</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Scored 100!</div>
+          <span class="mt-2 text-[9px] font-black uppercase px-2 py-0.5 bg-amber-200 text-amber-900 rounded-md">Unlocked 🌟</span>
+        </div>
 
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-3 px-3 font-mono font-bold text-sky-700">CCSS.MATH.1.OA.C.6</td>
-              <td class="py-3 px-3 font-semibold text-slate-900">Add & subtract within 20, demonstrating fluency for facts within 10</td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-md bg-sky-100 text-sky-900 text-[10px] font-bold">Representational</span></td>
-              <td class="py-3 px-3 text-center font-mono font-bold">18</td>
-              <td class="py-3 px-3">
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full rounded-full" style="width: 92%"></div>
-                  </div>
-                  <span class="font-bold text-emerald-700 font-mono text-[11px]">92%</span>
-                </div>
-              </td>
-              <td class="py-3 px-3 text-right">
-                <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black border border-emerald-300">
-                  Mastered 🌟
-                </span>
-              </td>
-            </tr>
+        <!-- Badge 2 -->
+        <div class="bg-gradient-to-b from-orange-50 to-white rounded-2xl p-3 border-2 border-orange-300 text-center flex flex-col items-center hover:scale-105 transition transform shadow-xs">
+          <div class="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center text-2xl shadow-sm mb-2">
+            🔥
+          </div>
+          <div class="font-display font-bold text-xs text-slate-900">Fire Streak</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">3+ in a row!</div>
+          <span class="mt-2 text-[9px] font-black uppercase px-2 py-0.5 bg-orange-200 text-orange-900 rounded-md">Unlocked 🌟</span>
+        </div>
 
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-3 px-3 font-mono font-bold text-sky-700">CCSS.MATH.2.NBT.B.5</td>
-              <td class="py-3 px-3 font-semibold text-slate-900">Multi-digit addition with place value regrouping (Base-10 Tens & Ones)</td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-md bg-purple-100 text-purple-900 text-[10px] font-bold">Regrouping CRA</span></td>
-              <td class="py-3 px-3 text-center font-mono font-bold">12</td>
-              <td class="py-3 px-3">
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div class="bg-sky-500 h-full rounded-full" style="width: 88%"></div>
-                  </div>
-                  <span class="font-bold text-sky-700 font-mono text-[11px]">88%</span>
-                </div>
-              </td>
-              <td class="py-3 px-3 text-right">
-                <span class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-[10px] font-black border border-sky-300">
-                  Proficient 🟢
-                </span>
-              </td>
-            </tr>
+        <!-- Badge 3 -->
+        <div class="bg-gradient-to-b from-sky-50 to-white rounded-2xl p-3 border-2 border-sky-300 text-center flex flex-col items-center hover:scale-105 transition transform shadow-xs">
+          <div class="w-12 h-12 rounded-2xl bg-sky-500 text-white flex items-center justify-center text-2xl shadow-sm mb-2">
+            ⚡
+          </div>
+          <div class="font-display font-bold text-xs text-slate-900">Speed Star</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Quick thinker!</div>
+          <span class="mt-2 text-[9px] font-black uppercase px-2 py-0.5 bg-sky-200 text-sky-900 rounded-md">Unlocked 🌟</span>
+        </div>
 
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-3 px-3 font-mono font-bold text-sky-700">CCSS.MATH.3.OA.C.7</td>
-              <td class="py-3 px-3 font-semibold text-slate-900">Multiplication tables & factoring using interactive Area Arrays</td>
-              <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-900 text-[10px] font-bold">Array Abstract</span></td>
-              <td class="py-3 px-3 text-center font-mono font-bold">8</td>
-              <td class="py-3 px-3">
-                <div class="flex items-center gap-2">
-                  <div class="flex-1 bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div class="bg-amber-500 h-full rounded-full" style="width: 78%"></div>
-                  </div>
-                  <span class="font-bold text-amber-700 font-mono text-[11px]">78%</span>
-                </div>
-              </td>
-              <td class="py-3 px-3 text-right">
-                <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black border border-amber-300">
-                  In Progress 🟡
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Badge 4 -->
+        <div class="bg-gradient-to-b from-emerald-50 to-white rounded-2xl p-3 border-2 border-emerald-300 text-center flex flex-col items-center hover:scale-105 transition transform shadow-xs">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl shadow-sm mb-2">
+            🔢
+          </div>
+          <div class="font-display font-bold text-xs text-slate-900">Ten-Frame Pro</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Dot builder!</div>
+          <span class="mt-2 text-[9px] font-black uppercase px-2 py-0.5 bg-emerald-200 text-emerald-900 rounded-md">Unlocked 🌟</span>
+        </div>
+
+        <!-- Badge 5 -->
+        <div class="bg-gradient-to-b from-purple-50 to-white rounded-2xl p-3 border-2 border-purple-300 text-center flex flex-col items-center hover:scale-105 transition transform shadow-xs">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500 text-white flex items-center justify-center text-2xl shadow-sm mb-2">
+            🤖
+          </div>
+          <div class="font-display font-bold text-xs text-slate-900">Byte's Pal</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Socratic thinker!</div>
+          <span class="mt-2 text-[9px] font-black uppercase px-2 py-0.5 bg-purple-200 text-purple-900 rounded-md">Unlocked 🌟</span>
+        </div>
+
+        <!-- Badge 6 -->
+        <div class="bg-gradient-to-b from-rose-50 to-white rounded-2xl p-3 border-2 border-rose-300 text-center flex flex-col items-center hover:scale-105 transition transform shadow-xs">
+          <div class="w-12 h-12 rounded-2xl bg-rose-500 text-white flex items-center justify-center text-2xl shadow-sm mb-2">
+            🎯
+          </div>
+          <div class="font-display font-bold text-xs text-slate-900">Bullseye</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">90%+ accuracy!</div>
+          <span class="mt-2 text-[9px] font-black uppercase px-2 py-0.5 bg-rose-200 text-rose-900 rounded-md">Unlocked 🌟</span>
+        </div>
+
       </div>
     </div>
 
-    <!-- PEDAGOGICAL BYTE DOSSIER & LIVE TUTOR INTEGRATION -->
+    <!-- BYTE'S CHEERFUL HIGH-FIVE & RECENT WORKOUTS -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       
-      <!-- Socratic AI Byte Synthesis Card (8 Cols) -->
-      <div class="lg:col-span-8 bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 rounded-3xl p-5 sm:p-6 border-2 border-sky-200 flex flex-col justify-between shadow-xs">
-        <div class="flex items-start gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-sky-600 text-white flex items-center justify-center text-2xl shrink-0 shadow-md shadow-sky-600/30">
+      <!-- Byte's Cheerful Card (7 Cols) -->
+      <div class="lg:col-span-7 bg-gradient-to-r from-sky-50 via-blue-50 to-indigo-50 rounded-3xl p-5 sm:p-6 border-2 border-sky-200 flex flex-col justify-between shadow-xs">
+        <div class="flex items-start gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-sky-600 text-white flex items-center justify-center text-3xl shrink-0 shadow-md shadow-sky-600/30">
             🤖
           </div>
           <div class="space-y-1.5">
             <div class="flex items-center gap-2">
-              <h4 class="font-display font-bold text-base text-sky-950">Byte's Socratic Pedagogical Dossier</h4>
-              <span class="px-2 py-0.5 rounded-full bg-sky-200 text-sky-900 text-[10px] font-bold">AI Diagnostic Engine</span>
+              <h4 class="font-display font-bold text-base text-sky-950">Byte's Cheerful High-Five! ✋</h4>
+              <span class="px-2 py-0.5 rounded-full bg-sky-200 text-sky-900 text-[10px] font-extrabold">Math Copilot</span>
             </div>
-            <p class="text-xs text-slate-700 leading-relaxed">
-              <strong>Strengths Identified:</strong> Student demonstrates exceptional tactile number sense with Ten-Frame visual modeling. No inverted operator confusions ($+$ vs $-$) recorded over the last 24 problems.
-            </p>
-            <p class="text-xs text-slate-700 leading-relaxed">
-              <strong>Next Recommended Milestone:</strong> Bridge student from concrete dot placement to mental arithmetic bonds (making 10). Transition to Grade 2 two-digit addition with place value bundling.
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+              "Awesome job today, Math Superstar! 🌟 You placed counters, solved challenges, and made your math brain super strong. You are ready for even bigger number adventures!"
             </p>
           </div>
         </div>
         
-        <div class="mt-4 pt-3 border-t border-sky-200/60 flex flex-wrap items-center justify-between gap-2">
-          <span class="text-[11px] text-sky-900 font-semibold">
-            Seamlessly transfer this telemetry directly to a certified human instructor:
+        <div class="mt-4 pt-3 border-t border-sky-200 flex flex-wrap items-center justify-between gap-3">
+          <span class="text-xs text-sky-900 font-bold">
+            Ready to solve more fun math puzzles?
           </span>
-          <button type="button" onclick="openTutorHandoffModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-md shadow-indigo-600/20">
-            <i data-lucide="user-check" class="w-4 h-4"></i>
-            <span>Send Telemetry to Live Varsity Tutor 👨‍🏫</span>
+          <button type="button" onclick="switchAppTab('practice')" class="px-5 py-2.5 rounded-xl nerdy-green-btn text-white font-display font-bold text-xs transition flex items-center gap-2 shadow-md">
+            <i data-lucide="play" class="w-4 h-4"></i>
+            <span>Play Another Math Round 🎮</span>
           </button>
         </div>
       </div>
 
-      <!-- Quick Action & Verification Box (4 Cols) -->
-      <div class="lg:col-span-4 bg-white rounded-3xl p-5 sm:p-6 ixl-shadow border border-slate-100 flex flex-col justify-between">
+      <!-- Recent Practice Workouts (5 Cols) -->
+      <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 nerdy-shadow border border-slate-100 flex flex-col justify-between">
         <div>
-          <h4 class="font-display font-bold text-sm text-slate-900 flex items-center gap-1.5 mb-2">
-            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
-            <span>Mastery Verification</span>
-          </h4>
-          <p class="text-xs text-slate-500 leading-relaxed">
-            All arithmetic questions, cognitive mistakes, and session durations are recorded with deterministic conceptual hashing in local storage.
-          </p>
-          <div class="mt-3 space-y-2 text-xs">
-            <div class="flex justify-between text-slate-600 font-semibold">
-              <span>Anti-Repetition Buffer:</span>
-              <span class="text-emerald-700 font-bold">Active (0 Repeats)</span>
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+            <h4 class="font-display font-bold text-sm text-slate-900 flex items-center gap-1.5">
+              <span class="text-base">📅</span>
+              <span>Recent Workouts</span>
+            </h4>
+            <span class="text-[11px] font-bold text-slate-400">Last 4 Sessions</span>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🌟</span>
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Today • Addition & Ten-Frames</div>
+                  <div class="text-[10px] text-slate-500">24 Questions • 100% Score</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-md">Mastered 🏆</span>
             </div>
-            <div class="flex justify-between text-slate-600 font-semibold">
-              <span>Smart Spaced Review:</span>
-              <span class="text-sky-700 font-bold">Enabled 🎯</span>
+
+            <div class="p-2.5 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🎯</span>
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Yesterday • Counting Workout</div>
+                  <div class="text-[10px] text-slate-500">18 Questions • 94% Score</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold bg-sky-200 text-sky-900 px-2 py-0.5 rounded-md">Super! 🌟</span>
             </div>
-            <div class="flex justify-between text-slate-600 font-semibold">
-              <span>Next Sunday Dispatch:</span>
-              <span class="text-purple-700 font-bold">Sunday 6:00 PM</span>
+
+            <div class="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🔢</span>
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Sep 14 • Subtraction Practice</div>
+                  <div class="text-[10px] text-slate-500">12 Questions • 91% Score</div>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-md">Great Job! 👍</span>
             </div>
           </div>
         </div>
 
-        <button type="button" onclick="openCertificateModal()" class="w-full mt-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
+        <button type="button" onclick="openCertificateModal()" class="w-full mt-3 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-xs">
           <i data-lucide="award" class="w-4 h-4 text-amber-600"></i>
-          <span>Official Certificate of Math Mastery 🎓</span>
+          <span>View My Official Certificate 🎓</span>
         </button>
       </div>
 
-    </div>
-
-    <!-- RECENT PRACTICE SESSIONS AUDIT LOG TABLE -->
-    <div class="bg-white rounded-3xl p-4 sm:p-6 ixl-shadow border border-slate-100">
-      <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-        <div>
-          <h3 class="font-display font-extrabold text-base text-slate-900 flex items-center gap-1.5">
-            <i data-lucide="history" class="w-4 h-4 text-sky-600"></i>
-            <span>Recent Practice Sessions Audit Trail</span>
-          </h3>
-          <p class="text-xs text-slate-500">Chronological history of completed practice workouts</p>
-        </div>
-        <button onclick="toggleProfileModal()" class="text-xs font-bold text-sky-700 hover:text-sky-900 underline">
-          Full Profile View ›
-        </button>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="border-b border-slate-200 text-slate-400 font-extrabold uppercase text-[10px]">
-              <th class="py-2 px-3">Session Date & Time</th>
-              <th class="py-2 px-3">Grade Tier & Operation</th>
-              <th class="py-2 px-3 text-center">Duration</th>
-              <th class="py-2 px-3 text-center">Problems</th>
-              <th class="py-2 px-3 text-center">Accuracy</th>
-              <th class="py-2 px-3 text-center">Peak SmartScore</th>
-              <th class="py-2 px-3 text-right">Result</th>
-            </tr>
-          </thead>
-          <tbody id="report-sessions-table-body" class="divide-y divide-slate-100 font-medium text-slate-700">
-            <!-- Populated dynamically by renderProgressReportView -->
-          </tbody>
-        </table>
-      </div>
     </div>
 
   </section>
@@ -1066,7 +976,7 @@
             <span>Passwordless & child-friendly: we verify using a 6-digit one-time code.</span>
           </div>
 
-          <button type="submit" id="send-otp-btn" class="w-full ixl-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
+          <button type="submit" id="send-otp-btn" class="w-full nerdy-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
             Send 6-Digit Code 📩
           </button>
 
@@ -1152,7 +1062,7 @@
             <button type="button" onclick="resendOtp()" class="text-sky-600 hover:text-sky-800 font-bold">Resend Code</button>
           </div>
 
-          <button type="submit" class="w-full ixl-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
+          <button type="submit" class="w-full nerdy-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md">
             Verify & Continue ✨
           </button>
         </form>
@@ -1202,7 +1112,7 @@
             </select>
           </div>
 
-          <button type="submit" class="w-full ixl-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md mt-2">
+          <button type="submit" class="w-full nerdy-green-btn text-white font-display font-bold py-3.5 rounded-2xl text-base transition shadow-md mt-2">
             Start Learning Adventure! 🚀
           </button>
         </form>
@@ -1344,7 +1254,7 @@
         <button onclick="resetProfileProgress()" class="px-3 py-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 transition">
           Reset Progress
         </button>
-        <button onclick="toggleProfileModal()" class="ixl-green-btn text-white font-bold px-5 py-2 rounded-xl text-xs transition">
+        <button onclick="toggleProfileModal()" class="nerdy-green-btn text-white font-bold px-5 py-2 rounded-xl text-xs transition">
           Done
         </button>
       </div>
@@ -1449,7 +1359,7 @@
           <button type="button" onclick="closeWeeklyReportModal()" class="px-3 py-2 rounded-xl text-slate-500 hover:text-slate-800 text-xs font-semibold">
             Close
           </button>
-          <button type="button" id="btn-dispatch-report" onclick="dispatchWeeklyReportEmail()" class="ixl-green-btn text-white font-bold px-5 py-2 rounded-xl text-xs shadow-md flex items-center gap-1.5 transition">
+          <button type="button" id="btn-dispatch-report" onclick="dispatchWeeklyReportEmail()" class="nerdy-green-btn text-white font-bold px-5 py-2 rounded-xl text-xs shadow-md flex items-center gap-1.5 transition">
             <i data-lucide="send" class="w-3.5 h-3.5"></i>
             <span>Send Email Now (Simulated SMTP) 🚀</span>
           </button>
@@ -1543,7 +1453,7 @@
         </div>
 
         <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
-          <button onclick="saveSettings()" class="ixl-green-btn text-white font-bold px-5 py-2.5 rounded-xl transition">
+          <button onclick="saveSettings()" class="nerdy-green-btn text-white font-bold px-5 py-2.5 rounded-xl transition">
             Save Configuration
           </button>
         </div>
@@ -1566,7 +1476,7 @@
           <i data-lucide="award" class="w-5 h-5"></i>
           <span>View & Print Official Certificate 🎓</span>
         </button>
-        <button type="button" onclick="continueAfterMastery()" class="w-full ixl-green-btn text-white font-bold py-3 rounded-xl transition text-sm">
+        <button type="button" onclick="continueAfterMastery()" class="w-full nerdy-green-btn text-white font-bold py-3 rounded-xl transition text-sm">
           Keep Practicing! 🚀
         </button>
       </div>
@@ -1637,7 +1547,7 @@
         <button type="button" onclick="closeCertificateModal()" class="px-4 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 text-xs font-semibold">
           Close
         </button>
-        <button type="button" onclick="printMasteryCertificate()" class="ixl-green-btn text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow-md flex items-center gap-2 transition">
+        <button type="button" onclick="printMasteryCertificate()" class="nerdy-green-btn text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow-md flex items-center gap-2 transition">
           <i data-lucide="printer" class="w-4 h-4"></i>
           <span>Print / Save as PDF 🖨️</span>
         </button>
@@ -1727,7 +1637,7 @@
         <button type="button" onclick="closeTutorHandoffModal()" class="px-4 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 text-xs font-semibold">
           Cancel
         </button>
-        <button type="button" id="btn-launch-tutor-session" onclick="simulateTutorConnect()" class="ixl-green-btn text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-2 transition">
+        <button type="button" id="btn-launch-tutor-session" onclick="simulateTutorConnect()" class="nerdy-green-btn text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-2 transition">
           <i data-lucide="video" class="w-4 h-4"></i>
           <span>Connect with Live Tutor (Demo) 🚀</span>
         </button>
@@ -1882,7 +1792,7 @@
       lucide.createIcons();
     }
 
-    // ── IXL TIMER ───────────────────────────────────────────────────────────
+    // ── SESSION TIMER ───────────────────────────────────────────────────────────
     setInterval(() => {
       const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
       const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
@@ -2221,7 +2131,7 @@
       playSoundEffect('tap');
     }
 
-    // ── ANSWER SUBMISSION & IXL SMARTSCORE LOGIC ─────────────────────────────
+    // ── ANSWER SUBMISSION & SMARTSCORE MASTERY LOGIC ─────────────────────────
     function handleFormSubmit(e) {
       e.preventDefault();
       const input = document.getElementById('answer-input');
@@ -2257,7 +2167,7 @@
         state.profile.totalQuestionsSolved += 1;
         saveLearnerProfile();
         
-        // IXL SmartScore progression algorithm:
+        // Adaptive SmartScore progression algorithm:
         // Climbs fast early (10-15 pts), slows in 80s, tight in 90s Challenge Zone
         let pointGain = 10;
         if (state.smartScore < 70) pointGain = 12;
@@ -2299,7 +2209,7 @@
         }
         saveLearnerProfile();
 
-        // In IXL, wrong answer drops SmartScore slightly to enforce mastery
+        // Gentle adjustment on mistakes to enforce genuine mastery
         state.smartScore = Math.max(0, state.smartScore - (state.smartScore >= 90 ? 8 : 4));
         updateSmartScoreDisplay();
 
@@ -3144,7 +3054,7 @@
       const btn = document.getElementById('btn-dispatch-report');
       if (btn) {
         btn.innerHTML = '<i data-lucide="send" class="w-3.5 h-3.5"></i><span>Send Email Now (Simulated SMTP) 🚀</span>';
-        btn.className = 'ixl-green-btn text-white font-bold px-5 py-2 rounded-xl text-xs shadow-md flex items-center gap-1.5 transition';
+        btn.className = 'nerdy-green-btn text-white font-bold px-5 py-2 rounded-xl text-xs shadow-md flex items-center gap-1.5 transition';
       }
 
       document.getElementById('weekly-report-modal').classList.remove('hidden');
@@ -3366,27 +3276,27 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
     }
 
     function initProgressCharts(activeScore, totalSolved, accuracyPct) {
-      // 1. Chart 1: SmartScore Growth Progression (Line Chart)
+      // 1. Chart 1: My Star Growth Journey (Line Chart with Milestones)
       const ctxGrowth = document.getElementById('chart-smartscore-growth');
       if (ctxGrowth) {
         if (smartscoreChartInstance) smartscoreChartInstance.destroy();
         smartscoreChartInstance = new Chart(ctxGrowth, {
           type: 'line',
           data: {
-            labels: ['Start', 'Checkpoint 1', 'Checkpoint 2', 'Bronze Zone (70)', 'Silver Zone (80)', 'Gold Zone (90)', 'Final Mastery (100)'],
+            labels: ['Start 🌱', 'Warm Up ⚡', 'Bronze Star 🥉', 'Silver Shield 🥈', 'Gold Star 🌟', 'Gold Trophy 🥇'],
             datasets: [{
-              label: 'SmartScore Mastery',
-              data: [20, 42, 60, 72, 85, 94, activeScore],
+              label: 'My Math Score',
+              data: [25, 48, 72, 85, 94, activeScore],
               borderColor: '#0284c7',
-              backgroundColor: 'rgba(2, 132, 199, 0.1)',
-              borderWidth: 3,
+              backgroundColor: 'rgba(2, 132, 199, 0.12)',
+              borderWidth: 3.5,
               fill: true,
               tension: 0.35,
-              pointBackgroundColor: ['#94a3b8', '#94a3b8', '#94a3b8', '#d97706', '#64748b', '#0284c7', '#16a34a'],
+              pointBackgroundColor: ['#94a3b8', '#38bdf8', '#d97706', '#64748b', '#0284c7', '#16a34a'],
               pointBorderColor: '#ffffff',
-              pointBorderWidth: 2,
-              pointRadius: 5,
-              pointHoverRadius: 7
+              pointBorderWidth: 2.5,
+              pointRadius: 6,
+              pointHoverRadius: 8
             }]
           },
           options: {
@@ -3397,9 +3307,9 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
               tooltip: {
                 backgroundColor: '#0f172a',
                 padding: 10,
-                cornerRadius: 8,
+                cornerRadius: 10,
                 callbacks: {
-                  label: (ctx) => `SmartScore: ${ctx.parsed.y} / 100`
+                  label: (ctx) => `Math Score: ${ctx.parsed.y} / 100 🌟`
                 }
               }
             },
@@ -3412,149 +3322,37 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
               },
               x: {
                 grid: { display: false },
-                ticks: { font: { family: 'Outfit', size: 10 } }
+                ticks: { font: { family: 'Outfit', size: 11, weight: 'bold' } }
               }
             }
           }
         });
       }
 
-      // 2. Chart 2: Operations Breakdown (Doughnut Chart)
+      // 2. Chart 2: My Math Superpowers (Doughnut Chart)
       const ctxOps = document.getElementById('chart-operations-breakdown');
       if (ctxOps) {
         if (operationsChartInstance) operationsChartInstance.destroy();
         operationsChartInstance = new Chart(ctxOps, {
           type: 'doughnut',
           data: {
-            labels: ['Addition (+)', 'Subtraction (-)', 'Ten-Frame Modeling', 'Regrouping & Multi-digit'],
+            labels: ['Addition ➕', 'Subtraction ➖', 'Ten-Frame Blocks 🔢', 'Big Numbers 🚀'],
             datasets: [{
               data: [45, 30, 15, 10],
               backgroundColor: ['#0284c7', '#f59e0b', '#10b981', '#8b5cf6'],
               borderWidth: 3,
               borderColor: '#ffffff',
-              hoverOffset: 6
+              hoverOffset: 8
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '68%',
+            cutout: '65%',
             plugins: {
               legend: {
                 position: 'bottom',
-                labels: { boxWidth: 12, padding: 12, font: { family: 'Outfit', size: 10 } }
-              }
-            }
-          }
-        });
-      }
-
-      // 3. Chart 3: 7-Day Daily Volume & Accuracy (Bar + Line Combo)
-      const ctxDaily = document.getElementById('chart-daily-volume');
-      if (ctxDaily) {
-        if (dailyTrendChartInstance) dailyTrendChartInstance.destroy();
-        dailyTrendChartInstance = new Chart(ctxDaily, {
-          data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-            datasets: [
-              {
-                type: 'bar',
-                label: 'Questions Solved',
-                data: [8, 14, 12, 19, 15, 22, Math.max(state.questionsAnswered, 18)],
-                backgroundColor: 'rgba(16, 185, 129, 0.75)',
-                borderRadius: 8,
-                borderSkipped: false,
-                yAxisID: 'y'
-              },
-              {
-                type: 'line',
-                label: 'Accuracy %',
-                data: [88, 92, 90, 95, 93, 98, accuracyPct],
-                borderColor: '#0284c7',
-                borderWidth: 2.5,
-                pointBackgroundColor: '#0284c7',
-                pointRadius: 4,
-                tension: 0.3,
-                yAxisID: 'y1'
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'top',
-                labels: { boxWidth: 12, font: { family: 'Outfit', size: 10 } }
-              }
-            },
-            scales: {
-              y: {
-                type: 'linear',
-                position: 'left',
-                grid: { color: '#f1f5f9' },
-                ticks: { font: { family: 'Outfit', size: 10 } },
-                title: { display: true, text: 'Questions', font: { size: 10 } }
-              },
-              y1: {
-                type: 'linear',
-                position: 'right',
-                min: 70,
-                max: 100,
-                grid: { display: false },
-                ticks: { font: { family: 'Outfit', size: 10 }, callback: v => `${v}%` },
-                title: { display: true, text: 'Accuracy', font: { size: 10 } }
-              },
-              x: {
-                grid: { display: false },
-                ticks: { font: { family: 'Outfit', size: 10 } }
-              }
-            }
-          }
-        });
-      }
-
-      // 4. Chart 4: Socratic Error Diagnostics & Resolution (Horizontal Bar Chart)
-      const ctxMisc = document.getElementById('chart-misconceptions-breakdown');
-      if (ctxMisc) {
-        if (misconceptionsChartInstance) misconceptionsChartInstance.destroy();
-        misconceptionsChartInstance = new Chart(ctxMisc, {
-          type: 'bar',
-          data: {
-            labels: ['Off-by-One Counting', 'Inverted Operator (+ vs -)', 'Tens Place Regrouping', 'Factoring / Area Array'],
-            datasets: [
-              {
-                label: 'Slips Diagnosed',
-                data: [5, 3, 4, 2],
-                backgroundColor: '#fcd34d',
-                borderRadius: 6
-              },
-              {
-                label: 'Socratic Resolutions (Byte)',
-                data: [5, 3, 4, 2],
-                backgroundColor: '#8b5cf6',
-                borderRadius: 6
-              }
-            ]
-          },
-          options: {
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'bottom',
-                labels: { boxWidth: 12, font: { family: 'Outfit', size: 10 } }
-              }
-            },
-            scales: {
-              x: {
-                grid: { color: '#f1f5f9' },
-                ticks: { stepSize: 1, font: { family: 'Outfit', size: 10 } }
-              },
-              y: {
-                grid: { display: false },
-                ticks: { font: { family: 'Outfit', size: 10 } }
+                labels: { boxWidth: 12, padding: 12, font: { family: 'Outfit', size: 11, weight: 'bold' } }
               }
             }
           }
@@ -3615,7 +3413,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         setTimeout(() => {
           btn.disabled = false;
           btn.innerHTML = `<i data-lucide="video" class="w-4 h-4"></i><span>Connect with Live Tutor (Demo) 🚀</span>`;
-          btn.className = 'ixl-green-btn text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-2 transition';
+          btn.className = 'nerdy-green-btn text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow-md flex items-center gap-2 transition';
           lucide.createIcons();
           closeTutorHandoffModal();
         }, 1200);

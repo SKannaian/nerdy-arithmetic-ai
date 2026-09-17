@@ -1,6 +1,6 @@
 # 🏛️ Nerdy Arithmetic AI — Comprehensive System Architecture
 
-> **An IXL-Inspired, AI-Native Socratic Mathematics Learning Platform (Grades K–5)**  
+> **An AI-Native Socratic Mathematics Learning Platform (Grades K–5)**  
 > Engineered for the **[Nerdy AI Hackathon Challenge](https://hackathon.nerdy.com)** (Prompt 01: K–5 Math Game)  
 > Live Deployment: **[https://nerdy-arithmetic-ai.web.app](https://nerdy-arithmetic-ai.web.app)** | Repository: **[GitHub](https://github.com/SKannaian/nerdy-arithmetic-ai)**
 
@@ -13,7 +13,7 @@
 3. [Anti-Repetition & Spaced Repetition Engine](#3-anti-repetition--spaced-repetition-engine)
 4. [Jerome Bruner's CRA Manipulatives Architecture](#4-jerome-bruners-cra-manipulatives-architecture)
 5. [The Socratic AI Feedback & Cognitive Misconception Loop ("Byte")](#5-the-socratic-ai-feedback--cognitive-misconception-loop-byte)
-6. [IXL SmartScore Progression & Mastery State Machine](#6-ixl-smartscore-progression--mastery-state-machine)
+6. [SmartScore Mastery Progression & State Machine](#6-smartscore-mastery-progression--state-machine)
 7. [Varsity Tutors Live Human Tutoring Telemetry Hand-Off](#7-varsity-tutors-live-human-tutoring-telemetry-hand-off)
 8. [Automated Sunday Evening Parent Summary Pipeline](#8-automated-sunday-evening-parent-summary-pipeline)
 9. [Component & Data Model Specifications](#9-component--data-model-specifications)
@@ -27,8 +27,8 @@ Nerdy Arithmetic AI is built on a **modern, decoupled, edge-capable architecture
 ```mermaid
 graph TB
     subgraph ClientTier["Client Tier (Browser / iPad / Chromebook)"]
-        UI["IXL-Inspired UI (TailwindCSS / Outfit / Fredoka)"]
-        HUD["IXL HUD (SmartScore 0-100 · Questions · Stopwatch)"]
+        UI["Gamified Kid-Friendly UI (TailwindCSS / Outfit / Fredoka)"]
+        HUD["Mastery HUD (SmartScore 0-100 · Questions · Stopwatch)"]
         
         subgraph Manipulatives["CRA Virtual Manipulatives"]
             TenFrame["Ten-Frames Engine (K–1 Addition & Subtraction ✕)"]
@@ -99,7 +99,7 @@ sequenceDiagram
     participant UI as Onboarding Modal
     participant Engine as Client State Machine
     participant DB as User DB (localStorage)
-    participant HUD as IXL Header & HUD
+    participant HUD as Mastery Header & HUD
 
     Learner->>UI: Enter Email Address (e.g., alex.parent@gmail.com)
     UI->>Engine: requestActivationCode(email)
@@ -249,9 +249,9 @@ sequenceDiagram
 
 ---
 
-## 6. IXL SmartScore Progression & Mastery State Machine
+## 6. SmartScore Mastery Progression & State Machine
 
-The SmartScore algorithm replicates IXL's research-backed scoring model: rapid initial progression, challenging intermediate ribbons, and a high-stakes Gold Challenge Zone enforcing genuine mastery.
+The SmartScore algorithm provides a research-backed scoring model: rapid initial progression, encouraging intermediate ribbons, and a celebratory Gold Challenge Zone enforcing genuine mastery.
 
 ```mermaid
 stateDiagram-v2

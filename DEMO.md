@@ -26,7 +26,7 @@
 
 **[0:00 – 0:15] The Hook & Mission:**  
 *(Camera on speaker, then screen transitions to [https://nerdy-arithmetic-ai.web.app](https://nerdy-arithmetic-ai.web.app))*  
-> *"Hello! I’m excited to present **Nerdy Arithmetic AI**, an IXL-inspired, AI-native Socratic math platform built for **Prompt 01: K–5 Math Game** in the Nerdy Hackathon. Most elementary math games are either boring flashcard drills or generic chatbots that spoil the answer. We designed an experience grounded in Jerome Bruner’s **Concrete–Representational–Abstract (CRA)** learning science, pairing gamified tactile manipulatives with intelligent Socratic scaffolding."*
+> *"Hello! I’m excited to present **Nerdy Arithmetic AI**, a gamified, AI-native Socratic math platform built for **Prompt 01: K–5 Math Game** in the Nerdy Hackathon. Most elementary math games are either boring flashcard drills or generic chatbots that spoil the answer. We designed an experience grounded in Jerome Bruner’s **Concrete–Representational–Abstract (CRA)** learning science, pairing gamified tactile manipulatives with intelligent Socratic scaffolding."*
 
 **[0:15 – 0:35] Concrete CRA Manipulatives & Operation Choice:**  
 *(Screen: Click "➖ Subtraction", then click "Auto-Model Equation" on a subtraction problem like 9 − 9 = 0)*  
@@ -36,7 +36,7 @@
 *(Screen: Type a wrong answer like 4 + 3 = 1 using the on-screen kid keypad, and submit)*  
 > *"When a child makes a mistake, our AI companion, **Byte**, doesn’t just buzz them wrong. Its cognitive classifier identifies the misconception—here, an inverted operator—and gives a gentle Socratic hint without spoiling the number. Non-readers can click the audio button to hear Byte read the hint aloud with natural speech synthesis."*
 
-**[0:50 – 1:00] IXL SmartScore Progression:**  
+**[0:50 – 1:00] SmartScore Mastery Progression:**  
 *(Screen: Point to circular SVG SmartScore ring progressing into Gold Challenge Zone)*  
 > *"Our dynamic **SmartScore (0–100)** algorithm rewards mastery, progressing through Practice, Bronze, Silver, and the high-stakes Gold Challenge Zone."*
 

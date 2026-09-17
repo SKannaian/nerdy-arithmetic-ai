@@ -4,7 +4,7 @@ Pedagogy-First Math Copilot for Elementary Learners (K–5)
 
 Features:
 - FastAPI local / production server
-- Serves the IXL-style interactive frontend
+- Serves the gamified interactive frontend
 - Secure Google Gemini 2.5 Flash / 1.5 Flash integration (zero client-side key leaks)
 - Cognitive misconception diagnosis (off-by-one, inverted operator, regrouping slip)
 - Age-appropriate Socratic hint ladder (guarantees NO answer spoiling)
@@ -280,5 +280,5 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8765))
     host = os.environ.get("HOST", "127.0.0.1")
     print(f"\n🚀 Nerdy Arithmetic AI running at: http://{host}:{port}")
-    print(f"🌟 IXL-style K–5 Socratic Math Experience Ready!\n")
+    print(f"🌟 Gamified K–5 Socratic Math Experience Ready!\n")
     uvicorn.run(app, host=host, port=port)
