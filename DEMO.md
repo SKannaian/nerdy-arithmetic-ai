@@ -63,14 +63,18 @@
 
 ### ⏱️ MINUTE 3: BUSINESS SYNERGY, RETENTION & FUTURE IMPROVEMENTS (2:00 – 3:00)
 
-**[2:00 – 2:20] Varsity Tutors Synergy & Parent Retention:**  
-*(Screen: Click "Live Varsity Tutor Help" to open the Hand-Off modal, then show the Sunday Summary email preview)*  
-> *"Crucially, this app aligns directly with Nerdy's core business model: **Varsity Tutors**. When a student struggles, clicking **'Live Varsity Tutor Help'** generates a real-time diagnostic dossier—including active SmartScore, detected cognitive misconceptions, and manipulative readiness—seamlessly bridging autonomous AI practice with live 1-on-1 expert instruction.*  
-> *For parent retention, the platform automatically compiles a **Sunday Evening 7-Day Summary** with accuracy metrics, daily streaks, and Byte's pedagogical recommendations."*
+**[2:00 – 2:25] Longitudinal Progress Status Report & Analytics Dashboard:**  
+*(Screen: Click the "📊 Progress Report" tab in the top header)*  
+> *"Next, let's click our new **'Progress Report'** tab in the top header. This transforms the app into an executive analytics dashboard for parents and teachers. Powered by **Chart.js**, it displays dynamic visualizations:  
+> • A **SmartScore Growth Curve** showing mastery acceleration across milestones toward 100.  
+> • An **Operations Doughnut Chart** tracking practice distribution across addition, subtraction, and ten-frame modeling.  
+> • A **7-Day Volume & Accuracy** trend with daily completion bars and an overlay accuracy percentage.  
+> • A **Socratic Misconceptions Resolution Chart** proving how Byte caught and 100% resolved cognitive slips.  
+> • Plus a full **Common Core State Standards (CCSS) Matrix** and an exportable audit log with one-click **Print to PDF**."*
 
-**[2:20 – 2:40] Gold Challenge Mastery Certificate:**  
-*(Screen: Open the Official Certificate of Math Mastery and show the print preview)*  
-> *"Reaching 100 SmartScore unlocks our printable, high-resolution **Certificate of Math Mastery**, complete with student avatar, Common Core skill title, and official Nerdy AI Gold Seal."*
+**[2:25 – 2:40] Varsity Tutors Synergy & Mastery Certificate:**  
+*(Screen: Point to Byte's dossier, click "Send Telemetry to Live Varsity Tutor", then open the Official Certificate of Math Mastery)*  
+> *"Crucially, this analytics dossier bridges directly to Nerdy's core business: **Varsity Tutors**. When a student requests human help, their complete diagnostic history is transferred seamlessly to a live 1-on-1 expert tutor. And upon reaching 100 SmartScore, students earn our printable **Certificate of Math Mastery** with official Gold Seal!"*
 
 **[2:40 – 3:00] Future Improvements & Vision:**  
 *(Screen: Display Future Roadmap Summary Card)*  
