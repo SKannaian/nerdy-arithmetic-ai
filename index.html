@@ -181,19 +181,25 @@
         </button>
       </nav>
 
-      <!-- GRADE RIBBON SELECTOR -->
-      <nav id="tier-nav-bar" class="hidden xl:flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0">
-        <button onclick="switchGradeTier('k1')" id="tier-nav-k1" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 bg-amber-400 text-slate-900 shadow-sm">
-          <span>K – 1st</span>
-          <span class="text-[10px] opacity-75 hidden xl:inline">(Ten-Frames)</span>
+      <!-- GRADE RIBBON SELECTOR (ALL 6 GRADES K THROUGH 5TH) -->
+      <nav id="tier-nav-bar" class="hidden md:flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0">
+        <button onclick="switchGradeTier('k')" id="tier-nav-k" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 bg-amber-400 text-slate-900 shadow-sm" title="Kindergarten">
+          <span>K</span>
         </button>
-        <button onclick="switchGradeTier('23')" id="tier-nav-23" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900">
-          <span>Grades 2 – 3</span>
-          <span class="text-[10px] opacity-75 hidden xl:inline">(Regrouping)</span>
+        <button onclick="switchGradeTier('1')" id="tier-nav-1" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="1st Grade">
+          <span>1st</span>
         </button>
-        <button onclick="switchGradeTier('45')" id="tier-nav-45" class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900">
-          <span>Grades 4 – 5</span>
-          <span class="text-[10px] opacity-75 hidden xl:inline">(Times Tables)</span>
+        <button onclick="switchGradeTier('2')" id="tier-nav-2" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="2nd Grade">
+          <span>2nd</span>
+        </button>
+        <button onclick="switchGradeTier('3')" id="tier-nav-3" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="3rd Grade">
+          <span>3rd</span>
+        </button>
+        <button onclick="switchGradeTier('4')" id="tier-nav-4" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="4th Grade">
+          <span>4th</span>
+        </button>
+        <button onclick="switchGradeTier('5')" id="tier-nav-5" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="5th Grade">
+          <span>5th</span>
         </button>
       </nav>
 
@@ -228,17 +234,31 @@
     </div>
   </header>
 
-  <!-- SKILL BREADCRUMB BAR -->
-  <section class="bg-sky-50/80 border-b border-sky-100 py-1.5 px-3 sm:px-6">
+  <!-- SKILL BREADCRUMB BAR (WITH DYNAMIC SKILL SELECTOR) -->
+  <section class="bg-white/80 border-b border-sky-100 py-1.5 px-3 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2 text-xs font-medium text-slate-600">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <span class="bg-sky-600 text-white font-black px-2 py-0.5 rounded text-[11px] font-mono">MATH</span>
         <span class="text-slate-400">›</span>
-        <span id="breadcrumb-tier" class="font-bold text-sky-900">Kindergarten & Grade 1</span>
+        <!-- MOBILE GRADE DROPDOWN (VISIBLE ON SMALL SCREENS) -->
+        <select id="grade-dropdown-mobile" onchange="switchGradeTier(this.value)" class="md:hidden bg-amber-100 border border-amber-300 text-amber-900 font-extrabold rounded-lg px-2 py-0.5 text-xs outline-none">
+          <option value="k">Kindergarten</option>
+          <option value="1">1st Grade</option>
+          <option value="2">2nd Grade</option>
+          <option value="3">3rd Grade</option>
+          <option value="4">4th Grade</option>
+          <option value="5">5th Grade</option>
+        </select>
+        <span id="breadcrumb-tier" class="font-bold text-sky-900 hidden md:inline">Kindergarten</span>
         <span class="text-slate-400">›</span>
-        <span id="breadcrumb-skill" class="text-slate-700">A.1 Add numbers using interactive Ten-Frames (Sums up to 10)</span>
+        <!-- DYNAMIC SKILL SELECTOR DROPDOWN -->
+        <div class="flex items-center gap-1">
+          <select id="skill-selector" onchange="changeSkill(this.value)" class="bg-sky-50 border border-sky-300 text-sky-950 font-bold rounded-xl px-2.5 py-1 text-xs outline-none focus:ring-2 focus:ring-sky-200 cursor-pointer shadow-xs max-w-[280px] sm:max-w-md truncate">
+            <!-- Dynamically populated per grade -->
+          </select>
+        </div>
       </div>
-      <button onclick="toggleExampleDrawer()" class="text-sky-700 hover:text-sky-900 font-bold flex items-center gap-1 underline underline-offset-2">
+      <button onclick="toggleExampleDrawer()" class="text-sky-700 hover:text-sky-900 font-bold flex items-center gap-1 underline underline-offset-2 shrink-0">
         <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
         <span>Learn with an example</span>
       </button>
@@ -402,6 +422,7 @@
             type="number" 
             id="answer-input" 
             placeholder="?" 
+            step="any"
             class="w-full text-center text-3xl font-mono font-black py-1.5 px-3 rounded-xl bg-white border-2 border-sky-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-100 outline-none transition text-slate-900 shadow-sm"
             required 
             autocomplete="off"
@@ -1128,9 +1149,12 @@
           <div>
             <label class="block font-bold text-slate-700 mb-1">Starting Grade Level:</label>
             <select id="onboard-grade" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 font-bold focus:border-sky-500 outline-none">
-              <option value="k1">Kindergarten – 1st Grade (Ten-Frames, Sums to 10)</option>
-              <option value="23">Grades 2 – 3 (Base-10 Regrouping & Multi-digit)</option>
-              <option value="45">Grades 4 – 5 (Times Tables & Area Arrays)</option>
+              <option value="k">Kindergarten (Ten-Frames, Sums to 10, Making 10)</option>
+              <option value="1">1st Grade (Double Ten-Frames, Sums to 20, Missing Addends)</option>
+              <option value="2">2nd Grade (Base-10 Blocks, Regrouping & Multi-digit)</option>
+              <option value="3">3rd Grade (Multiplication Times Tables & Division)</option>
+              <option value="4">4th Grade (Multi-Digit Area Models & Fraction Equivalence)</option>
+              <option value="5">5th Grade (Decimals & Order of Operations PEMDAS)</option>
             </select>
           </div>
 
@@ -1686,13 +1710,13 @@
       email: '',
       name: 'Explorer',
       avatar: '🦊',
-      gradeTier: 'k1',
+      gradeTier: 'k',
       onboarded: false,
       dailyStreak: 1,
       lastActiveDate: new Date().toISOString().slice(0, 10),
       totalQuestionsSolved: 0,
       skillsMastered: 0,
-      history: {}, // Key: "k1_+_4_3" -> { lastSeenDate, timesSeen, correctCount, wrongCount }
+      history: {}, // Key: "k_+_4_3" -> { lastSeenDate, timesSeen, correctCount, wrongCount }
       troubleSpots: [],
       sessions: [], // Array of { date, time, tier, op, questionsSolved, smartScore }
       dailyReminder: true
@@ -1723,10 +1747,10 @@
 
     const state = {
       profile: loadLearnerProfile(),
-      tier: 'k1',                      // k1 | 23 | 45
+      tier: 'k',                       // k | 1 | 2 | 3 | 4 | 5
       selectedOperation: 'mixed',      // mixed | add | sub
       currentProblem: { n1: 4, n2: 3, op: '+', ans: 7, equationStr: '4 + 3 = ?' },
-      currentProblemKey: 'k1_+_4_3',
+      currentProblemKey: 'k_+_4_3',
       smartScore: 0,
       questionsAnswered: 0,
       streak: 0,
@@ -1822,91 +1846,298 @@
       document.getElementById('time-counter').innerText = `${mins}:${secs}`;
     }, 1000);
 
-    // ── GRADE TIER SWITCHING ────────────────────────────────────────────────
+    // ── COMPLETE 6-GRADE CURRICULUM DEFINITIONS (COMMON CORE K THROUGH 5TH) ───
+    const CURRICULUM = {
+      k: {
+        title: 'Kindergarten',
+        badge: 'Kindergarten · Foundational CRA',
+        skills: [
+          { id: 'k_ten_frame', name: 'K.1 Addition & Subtraction within 10 (Ten-Frames)', manipulative: 'ten_frame_single' },
+          { id: 'k_make_10', name: 'K.2 Making 10 Friends (Missing Addends to 10)', manipulative: 'ten_frame_single' },
+          { id: 'k_decompose', name: 'K.3 Decompose Numbers 5 to 10 into Pairs', manipulative: 'ten_frame_single' }
+        ]
+      },
+      '1': {
+        title: '1st Grade',
+        badge: '1st Grade · Double Ten-Frames & Place Value',
+        skills: [
+          { id: 'g1_within_20', name: '1.1 Addition & Subtraction within 20', manipulative: 'ten_frame_double' },
+          { id: 'g1_missing_addend', name: '1.2 Missing Addends & Equations (Sums to 20)', manipulative: 'ten_frame_double' },
+          { id: 'g1_tens_ones', name: '1.3 Tens & Ones Place Value (Numbers to 100)', manipulative: 'base10' }
+        ]
+      },
+      '2': {
+        title: '2nd Grade',
+        badge: '2nd Grade · Regrouping & Multi-Digit',
+        skills: [
+          { id: 'g2_add_regroup', name: '2.1 2-Digit Addition with Regrouping (Carrying)', manipulative: 'base10' },
+          { id: 'g2_sub_regroup', name: '2.2 2-Digit Subtraction with Regrouping (Borrowing)', manipulative: 'base10' },
+          { id: 'g2_skip_count', name: '2.3 Skip Counting & Foundations of Equal Groups', manipulative: 'arrays' }
+        ]
+      },
+      '3': {
+        title: '3rd Grade',
+        badge: '3rd Grade · Multiplication & Division',
+        skills: [
+          { id: 'g3_times_tables', name: '3.1 Multiplication Times Tables (1×1 to 10×10)', manipulative: 'arrays' },
+          { id: 'g3_division', name: '3.2 Division as Equal Sharing & Groups', manipulative: 'arrays' },
+          { id: 'g3_fractions', name: '3.3 Visual Unit Fractions (1/2, 1/3, 1/4, 1/6, 1/8)', manipulative: 'fractions' }
+        ]
+      },
+      '4': {
+        title: '4th Grade',
+        badge: '4th Grade · Multi-Digit & Fractions',
+        skills: [
+          { id: 'g4_mult_2digit', name: '4.1 Multi-Digit Multiplication Area Model (2-Digit)', manipulative: 'partial_products' },
+          { id: 'g4_div_remainders', name: '4.2 Division with Remainders (Whole Quotient)', manipulative: 'division_remainders' },
+          { id: 'g4_add_fractions', name: '4.3 Adding Like Denominator Fractions', manipulative: 'fractions' }
+        ]
+      },
+      '5': {
+        title: '5th Grade',
+        badge: '5th Grade · Decimals & PEMDAS',
+        skills: [
+          { id: 'g5_pemdas', name: '5.1 Order of Operations (PEMDAS with Parentheses)', manipulative: 'pemdas' },
+          { id: 'g5_decimal_add_sub', name: '5.2 Decimals Addition & Subtraction (Tenths & Hundredths)', manipulative: 'decimals' },
+          { id: 'g5_decimal_mult', name: '5.3 Decimal Multiplication (Tenths by Whole Numbers)', manipulative: 'decimals' }
+        ]
+      }
+    };
+
+    function normalizeTier(t) {
+      if (!t) return 'k';
+      if (t === 'k1') return 'k';
+      if (t === '23') return '2';
+      if (t === '45') return '4';
+      return String(t).toLowerCase();
+    }
+
+    // ── GRADE TIER & SKILL SWITCHING ─────────────────────────────────────────
     function switchGradeTier(tier) {
-      state.tier = tier;
-      ['k1', '23', '45'].forEach(t => {
+      const normalized = normalizeTier(tier);
+      state.tier = normalized;
+      state.profile.gradeTier = normalized;
+
+      // Update Desktop Grade Ribbon
+      ['k', '1', '2', '3', '4', '5'].forEach(t => {
         const btn = document.getElementById(`tier-nav-${t}`);
-        if (t === tier) {
-          btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 bg-amber-400 text-slate-900 shadow-sm';
-        } else {
-          btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900';
+        if (btn) {
+          if (t === normalized) {
+            btn.className = 'px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 bg-amber-400 text-slate-900 shadow-sm scale-105';
+          } else {
+            btn.className = 'px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900';
+          }
         }
       });
 
+      // Update Mobile Dropdown if present
+      const mobSelect = document.getElementById('grade-dropdown-mobile');
+      if (mobSelect) mobSelect.value = normalized;
+
+      const gradeInfo = CURRICULUM[normalized] || CURRICULUM.k;
+
+      // Update Header Badge and Breadcrumb
       const badge = document.getElementById('tier-badge');
       const breadTier = document.getElementById('breadcrumb-tier');
-      const breadSkill = document.getElementById('breadcrumb-skill');
+      if (badge) badge.innerText = gradeInfo.badge;
+      if (breadTier) breadTier.innerText = gradeInfo.title;
 
-      if (tier === 'k1') {
-        badge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-800 border border-amber-300';
-        badge.innerText = 'Kindergarten · Concrete CRA';
-        breadTier.innerText = 'Kindergarten & Grade 1';
-        breadSkill.innerText = 'A.1 Add numbers using interactive Ten-Frames (Sums up to 10)';
-        addByteMessage('Welcome to **Kindergarten – 1st Grade**! Let\'s count with the ten-frame blocks together.');
-      } else if (tier === '23') {
-        badge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-sky-100 text-sky-800 border border-sky-300';
-        badge.innerText = 'Grades 2–3 · Regrouping';
-        breadTier.innerText = 'Grades 2 & 3';
-        breadSkill.innerText = 'B.4 Multi-digit addition and subtraction with Base-10 blocks';
-        addByteMessage('Switched to **Grades 2 – 3**! Watch for carrying tens and regrouping ones!');
+      // Populate Dynamic Skill Selector
+      const skillSelect = document.getElementById('skill-selector');
+      if (skillSelect) {
+        skillSelect.innerHTML = '';
+        gradeInfo.skills.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.innerText = s.name;
+          skillSelect.appendChild(opt);
+        });
+        state.selectedSkill = gradeInfo.skills[0].id;
+        skillSelect.value = state.selectedSkill;
       } else {
-        badge.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-purple-100 text-purple-800 border border-purple-300';
-        badge.innerText = 'Grades 4–5 · Multiplication';
-        breadTier.innerText = 'Grades 4 & 5';
-        breadSkill.innerText = 'C.2 Model multiplication arrays and mental math strategies';
-        addByteMessage('Switched to **Grades 4 – 5**! Let\'s master times tables and area models!');
+        state.selectedSkill = gradeInfo.skills[0].id;
       }
 
       state.hintLadderLevel = 1;
+      addByteMessage(`Welcome to **${gradeInfo.title}**! Let's explore **${gradeInfo.skills[0].name}** together! 🚀`);
       generateProblem();
     }
 
-    // ── ANTI-REPETITION COMMON CORE PROBLEM GENERATOR ───────────────────────
-    function getCandidateProblem(tier) {
-      let n1, n2, op;
+    function changeSkill(skillId) {
+      state.selectedSkill = skillId;
+      state.hintLadderLevel = 1;
+      const gradeInfo = CURRICULUM[state.tier] || CURRICULUM.k;
+      const skill = gradeInfo.skills.find(s => s.id === skillId);
+      if (skill) {
+        addByteMessage(`Selected skill: **${skill.name}**! Let's practice!`);
+      }
+      generateProblem();
+    }
+
+    // ── 6-GRADE CCSS PROBLEM GENERATOR ──────────────────────────────────────
+    function getCandidateProblem(tier, skillId) {
+      tier = normalizeTier(tier);
+      const gradeData = CURRICULUM[tier] || CURRICULUM.k;
+      const activeSkill = skillId || state.selectedSkill || gradeData.skills[0].id;
       const opChoice = state.selectedOperation || 'mixed';
+      
+      const skillDef = gradeData.skills.find(s => s.id === activeSkill) || gradeData.skills[0];
+      const manipulativeType = skillDef.manipulative;
 
-      if (tier === 'k1') {
-        if (opChoice === 'add') op = '+';
-        else if (opChoice === 'sub') op = '-';
-        else op = Math.random() > 0.5 ? '+' : '-';
-
-        if (op === '+') {
-          n1 = Math.floor(Math.random() * 6) + 1; // 1..6
-          n2 = Math.floor(Math.random() * (10 - n1)) + 1; // n1+n2 <= 10
+      if (tier === 'k') {
+        if (activeSkill === 'k_make_10') {
+          const n1 = Math.floor(Math.random() * 8) + 1; // 1..8
+          const n2 = 10 - n1;
+          return { n1, n2, op: '+', ans: n2, equationStr: `${n1} + ? = 10`, manipulativeType: 'ten_frame_single', target: 10 };
+        } else if (activeSkill === 'k_decompose') {
+          const total = Math.floor(Math.random() * 6) + 5; // 5..10
+          const n1 = Math.floor(Math.random() * (total - 2)) + 1;
+          const n2 = total - n1;
+          return { n1, n2, op: '+', ans: n2, equationStr: `${total} = ${n1} + ?`, manipulativeType: 'ten_frame_single', total };
         } else {
-          n1 = Math.floor(Math.random() * 7) + 3; // 3..10
-          n2 = Math.floor(Math.random() * n1) + 1; // n2 <= n1
+          // k_ten_frame (Sums & differences within 10)
+          let op = opChoice === 'add' ? '+' : opChoice === 'sub' ? '-' : (Math.random() > 0.5 ? '+' : '-');
+          let n1, n2, ans;
+          if (op === '+') {
+            n1 = Math.floor(Math.random() * 5) + 1;
+            n2 = Math.floor(Math.random() * (10 - n1)) + 1;
+            ans = n1 + n2;
+          } else {
+            n1 = Math.floor(Math.random() * 6) + 4;
+            n2 = Math.floor(Math.random() * (n1 - 1)) + 1;
+            ans = n1 - n2;
+          }
+          return { n1, n2, op, ans, equationStr: `${n1} ${op} ${n2} = ?`, manipulativeType: 'ten_frame_single' };
         }
-      } else if (tier === '23') {
-        if (opChoice === 'add') op = '+';
-        else if (opChoice === 'sub') op = '-';
-        else op = Math.random() > 0.5 ? '+' : '-';
-
-        if (op === '+') {
-          n1 = Math.floor(Math.random() * 35) + 12;
-          n2 = Math.floor(Math.random() * 25) + 8;
+      } else if (tier === '1') {
+        if (activeSkill === 'g1_missing_addend') {
+          const total = Math.floor(Math.random() * 9) + 11; // 11..19
+          const n1 = Math.floor(Math.random() * 7) + 4;
+          const n2 = total - n1;
+          return { n1, n2, op: '+', ans: n2, equationStr: `${n1} + ? = ${total}`, manipulativeType: 'ten_frame_double', total };
+        } else if (activeSkill === 'g1_tens_ones') {
+          const tens = Math.floor(Math.random() * 8) + 1;
+          const ones = Math.floor(Math.random() * 9) + 1;
+          const ans = tens * 10 + ones;
+          return { n1: tens * 10, n2: ones, op: '+', ans, equationStr: `${tens * 10} + ${ones} = ?`, manipulativeType: 'base10' };
         } else {
-          n1 = Math.floor(Math.random() * 40) + 20;
-          n2 = Math.floor(Math.random() * (n1 - 10)) + 5;
+          // g1_within_20
+          let op = opChoice === 'add' ? '+' : opChoice === 'sub' ? '-' : (Math.random() > 0.5 ? '+' : '-');
+          let n1, n2, ans;
+          if (op === '+') {
+            n1 = Math.floor(Math.random() * 8) + 5;
+            n2 = Math.floor(Math.random() * (20 - n1)) + 2;
+            ans = n1 + n2;
+          } else {
+            n1 = Math.floor(Math.random() * 8) + 12; // 12..19
+            n2 = Math.floor(Math.random() * 8) + 3;
+            ans = n1 - n2;
+          }
+          return { n1, n2, op, ans, equationStr: `${n1} ${op} ${n2} = ?`, manipulativeType: 'ten_frame_double' };
+        }
+      } else if (tier === '2') {
+        if (activeSkill === 'g2_skip_count') {
+          const groups = Math.floor(Math.random() * 6) + 3;
+          const groupSize = [2, 5, 10][Math.floor(Math.random() * 3)];
+          const ans = groups * groupSize;
+          return { n1: groups, n2: groupSize, op: '×', ans, equationStr: `${groups} groups of ${groupSize} = ?`, manipulativeType: 'arrays' };
+        } else if (activeSkill === 'g2_sub_regroup') {
+          // Subtraction with borrowing (ones of n1 < ones of n2)
+          const tens1 = Math.floor(Math.random() * 5) + 4; // 4..8
+          const ones1 = Math.floor(Math.random() * 5);     // 0..4
+          const tens2 = Math.floor(Math.random() * (tens1 - 2)) + 1;
+          const ones2 = Math.floor(Math.random() * 4) + 6; // 6..9 (borrow required!)
+          const n1 = tens1 * 10 + ones1;
+          const n2 = tens2 * 10 + ones2;
+          return { n1, n2, op: '-', ans: n1 - n2, equationStr: `${n1} - ${n2} = ?`, manipulativeType: 'base10' };
+        } else {
+          // g2_add_regroup (Addition with carrying: ones1 + ones2 >= 10)
+          const tens1 = Math.floor(Math.random() * 4) + 2;
+          const ones1 = Math.floor(Math.random() * 4) + 6;
+          const tens2 = Math.floor(Math.random() * 3) + 1;
+          const ones2 = Math.floor(Math.random() * 4) + 5;
+          const n1 = tens1 * 10 + ones1;
+          const n2 = tens2 * 10 + ones2;
+          return { n1, n2, op: '+', ans: n1 + n2, equationStr: `${n1} + ${n2} = ?`, manipulativeType: 'base10' };
+        }
+      } else if (tier === '3') {
+        if (activeSkill === 'g3_division') {
+          const n2 = Math.floor(Math.random() * 8) + 2; // 2..9
+          const quot = Math.floor(Math.random() * 8) + 2; // 2..9
+          const n1 = n2 * quot;
+          return { n1, n2, op: '÷', ans: quot, equationStr: `${n1} ÷ ${n2} = ?`, manipulativeType: 'arrays' };
+        } else if (activeSkill === 'g3_fractions') {
+          const denom = [2, 3, 4, 6, 8][Math.floor(Math.random() * 5)];
+          const shaded = Math.floor(Math.random() * (denom - 1)) + 1;
+          return { n1: shaded, n2: denom, denom, op: '/', ans: shaded, equationStr: `Shaded parts of bar: ? / ${denom}`, manipulativeType: 'fractions' };
+        } else {
+          // g3_times_tables
+          const n1 = Math.floor(Math.random() * 8) + 2; // 2..9
+          const n2 = Math.floor(Math.random() * 8) + 2; // 2..9
+          return { n1, n2, op: '×', ans: n1 * n2, equationStr: `${n1} × ${n2} = ?`, manipulativeType: 'arrays' };
+        }
+      } else if (tier === '4') {
+        if (activeSkill === 'g4_div_remainders') {
+          const n2 = Math.floor(Math.random() * 5) + 4; // 4..8
+          const quot = Math.floor(Math.random() * 6) + 4; // 4..9
+          const rem = Math.floor(Math.random() * (n2 - 1)) + 1;
+          const n1 = n2 * quot + rem;
+          return { n1, n2, op: '÷', ans: quot, remainder: rem, equationStr: `${n1} ÷ ${n2} = ? (Whole Quotient)`, manipulativeType: 'division_remainders' };
+        } else if (activeSkill === 'g4_add_fractions') {
+          const denom = [4, 5, 6, 8, 10][Math.floor(Math.random() * 5)];
+          const p1 = Math.floor(Math.random() * 3) + 1;
+          const p2 = Math.floor(Math.random() * (denom - p1 - 1)) + 1;
+          return { n1: p1, n2: p2, denom, op: '+', ans: p1 + p2, equationStr: `${p1}/${denom} + ${p2}/${denom} = ? / ${denom}`, manipulativeType: 'fractions' };
+        } else {
+          // g4_mult_2digit (e.g. 15 x 14 or 24 x 12)
+          const n1 = Math.floor(Math.random() * 12) + 12; // 12..23
+          const n2 = Math.floor(Math.random() * 10) + 11; // 11..20
+          return { n1, n2, op: '×', ans: n1 * n2, equationStr: `${n1} × ${n2} = ?`, manipulativeType: 'partial_products' };
         }
       } else {
-        if (opChoice === 'add') op = '×';
-        else if (opChoice === 'sub') op = '÷';
-        else op = Math.random() > 0.35 ? '×' : '÷';
-
-        if (op === '×') {
-          n1 = Math.floor(Math.random() * 10) + 3;
-          n2 = Math.floor(Math.random() * 10) + 2;
+        // 5th Grade
+        if (activeSkill === 'g5_decimal_add_sub') {
+          const isSub = Math.random() > 0.5;
+          if (isSub) {
+            const a = (Math.floor(Math.random() * 40) + 40) / 10;
+            const b = (Math.floor(Math.random() * 25) + 10) / 10;
+            const n1 = parseFloat(a.toFixed(1));
+            const n2 = parseFloat(b.toFixed(1));
+            const ans = parseFloat((n1 - n2).toFixed(1));
+            return { n1, n2, op: '-', ans, equationStr: `${n1} - ${n2} = ?`, manipulativeType: 'decimals' };
+          } else {
+            const a = (Math.floor(Math.random() * 30) + 15) / 10;
+            const b = (Math.floor(Math.random() * 25) + 10) / 10;
+            const n1 = parseFloat(a.toFixed(1));
+            const n2 = parseFloat(b.toFixed(1));
+            const ans = parseFloat((n1 + n2).toFixed(1));
+            return { n1, n2, op: '+', ans, equationStr: `${n1} + ${n2} = ?`, manipulativeType: 'decimals' };
+          }
+        } else if (activeSkill === 'g5_decimal_mult') {
+          const dec = [1.2, 1.5, 2.5, 3.5, 0.5, 0.8][Math.floor(Math.random() * 6)];
+          const whole = Math.floor(Math.random() * 5) + 2; // 2..6
+          const ans = parseFloat((dec * whole).toFixed(1));
+          return { n1: dec, n2: whole, op: '×', ans, equationStr: `${dec} × ${whole} = ?`, manipulativeType: 'decimals' };
         } else {
-          n2 = Math.floor(Math.random() * 8) + 2;
-          const quotient = Math.floor(Math.random() * 9) + 2;
-          n1 = n2 * quotient;
+          // g5_pemdas: Order of Operations with Parentheses
+          const a = Math.floor(Math.random() * 5) + 2;
+          const b = Math.floor(Math.random() * 5) + 2;
+          const c = Math.floor(Math.random() * 4) + 2;
+          const variant = Math.floor(Math.random() * 3);
+          if (variant === 0) {
+            const ans = (a + b) * c;
+            return { n1: a, n2: b, n3: c, ans, equationStr: `(${a} + ${b}) × ${c} = ?`, manipulativeType: 'pemdas', step1: `(${a} + ${b}) = ${a + b}`, step2: `${a + b} × ${c} = ${ans}` };
+          } else if (variant === 1) {
+            const ans = (a * b) + c;
+            return { n1: a, n2: b, n3: c, ans, equationStr: `(${a} × ${b}) + ${c} = ?`, manipulativeType: 'pemdas', step1: `(${a} × ${b}) = ${a * b}`, step2: `${a * b} + ${c} = ${ans}` };
+          } else {
+            const prod = a * b;
+            const total = prod + Math.floor(Math.random() * 8) + 5;
+            const ans = total - prod;
+            return { n1: total, n2: a, n3: b, ans, equationStr: `${total} - (${a} × ${b}) = ?`, manipulativeType: 'pemdas', step1: `(${a} × ${b}) = ${prod}`, step2: `${total} - ${prod} = ${ans}` };
+          }
         }
       }
-      const ans = op === '+' ? n1 + n2 : op === '-' ? n1 - n2 : op === '×' ? n1 * n2 : Math.floor(n1 / n2);
-      return { n1, n2, op, ans, equationStr: `${n1} ${op} ${n2} = ?` };
     }
 
     function generateProblem() {
@@ -1916,28 +2147,24 @@
       let attempts = 0;
       let isReview = false;
 
-      // Smart Anti-Repetition Loop (checks past 48h to prevent repeated questions)
       do {
-        candidate = getCandidateProblem(state.tier);
-        key = `${state.tier}_${candidate.op}_${candidate.n1}_${candidate.n2}`;
+        candidate = getCandidateProblem(state.tier, state.selectedSkill);
+        key = `${state.tier}_${candidate.op}_${candidate.n1}_${candidate.n2}_${candidate.ans}`;
         attempts++;
 
         const historyRecord = state.profile.history[key];
         if (!historyRecord) {
-          // Brand new question never practiced before!
           break;
         }
-        // If seen, but not practiced today, allow as spaced review after attempts
         if (historyRecord.lastSeenDate !== todayStr && attempts > 10) {
           isReview = true;
           break;
         }
-      } while (attempts < 30);
+      } while (attempts < 25);
 
       state.currentProblem = candidate;
       state.currentProblemKey = key;
 
-      // Update Fresh / Review Badge in UI
       const freshBadge = document.getElementById('fresh-badge');
       const freshText = document.getElementById('fresh-badge-text');
       if (freshBadge && freshText) {
@@ -1950,8 +2177,7 @@
         }
       }
 
-      // Clear the interactive manipulative and scratchpad on every new question
-      state.manipulativeState.tenFrameSlots = new Array(10).fill(null);
+      state.manipulativeState.tenFrameSlots = new Array(20).fill(null);
       clearScratchpadCanvas();
 
       document.getElementById('equation-display').innerText = state.currentProblem.equationStr;
@@ -1962,17 +2188,18 @@
       renderManipulative();
     }
 
-    // ── CRA VIRTUAL MANIPULATIVES ───────────────────────────────────────────
+    // ── CRA DYNAMIC VIRTUAL MANIPULATIVES ────────────────────────────────────
     function renderManipulative() {
       const container = document.getElementById('manipulative-viewport');
+      if (!container) return;
       container.innerHTML = '';
-      const { n1, n2, op } = state.currentProblem;
+      const prob = state.currentProblem;
+      const mType = prob.manipulativeType || 'ten_frame_single';
 
-      if (state.tier === 'k1') {
-        document.getElementById('manipulative-title').innerText = 'Interactive Ten-Frame Manipulative';
-        document.getElementById('problem-subtext').innerText = 'Touch the slots to count or click "Auto-Model"!';
+      if (mType === 'ten_frame_single') {
+        document.getElementById('manipulative-title').innerText = 'Single Ten-Frame Manipulative';
+        document.getElementById('problem-subtext').innerText = 'Touch slots to add/remove counters or click Auto-Model!';
 
-        // Render 2x5 Ten-Frame grid
         const frame = document.createElement('div');
         frame.className = 'grid grid-cols-5 gap-1.5 sm:gap-2 bg-white/90 border-3 sm:border-4 border-sky-300/80 p-2 sm:p-2.5 rounded-2xl shadow-inner';
         
@@ -1983,34 +2210,19 @@
           
           const slotVal = state.manipulativeState.tenFrameSlots[i];
           if (slotVal === 'blue') {
-            slot.innerHTML = `
-              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-sky-600 to-sky-400 border-2 border-sky-500 shadow-sm flex items-center justify-center text-white text-sm font-black transform scale-95 transition">
-                ●
-              </div>
-            `;
+            slot.innerHTML = `<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-sky-600 to-sky-400 border-2 border-sky-500 shadow-sm flex items-center justify-center text-white text-sm font-black transform scale-95 transition">●</div>`;
           } else if (slotVal === 'amber') {
-            slot.innerHTML = `
-              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 border-2 border-amber-600 shadow-sm flex items-center justify-center text-slate-900 text-sm font-black transform scale-95 transition">
-                ▲
-              </div>
-            `;
+            slot.innerHTML = `<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-tr from-amber-500 to-amber-400 border-2 border-amber-600 shadow-sm flex items-center justify-center text-slate-900 text-sm font-black transform scale-95 transition">▲</div>`;
           } else if (slotVal === 'crossed') {
-            slot.innerHTML = `
-              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-rose-50 border-2 border-rose-300 shadow-inner flex items-center justify-center relative transform scale-95 transition">
-                <span class="w-5 h-5 rounded-full bg-sky-200/40 absolute"></span>
-                <span class="text-rose-600 font-black text-xl drop-shadow-sm z-10 leading-none">✕</span>
-              </div>
-            `;
+            slot.innerHTML = `<div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-rose-50 border-2 border-rose-300 shadow-inner flex items-center justify-center relative transform scale-95 transition"><span class="text-rose-600 font-black text-xl drop-shadow-sm z-10 leading-none">✕</span></div>`;
           } else {
-            slot.innerHTML = `
-              <div class="w-3 h-3 rounded-full bg-sky-100/80 border border-sky-200"></div>
-            `;
+            slot.innerHTML = `<div class="w-3 h-3 rounded-full bg-sky-100/80 border border-sky-200"></div>`;
           }
 
           slot.onclick = () => {
             playSoundEffect('tap');
             const current = state.manipulativeState.tenFrameSlots[i];
-            if (op === '-') {
+            if (prob.op === '-') {
               state.manipulativeState.tenFrameSlots[i] = current === null ? 'blue' : current === 'blue' ? 'crossed' : null;
             } else {
               state.manipulativeState.tenFrameSlots[i] = current === null ? 'blue' : current === 'blue' ? 'amber' : null;
@@ -2022,133 +2234,262 @@
         }
         container.appendChild(frame);
 
-        // Child-friendly pedagogical counter legend
-        const legend = document.createElement('div');
-        legend.className = 'mt-2.5 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-slate-600';
-        
-        let blueCount = 0, amberCount = 0, crossedCount = 0;
-        state.manipulativeState.tenFrameSlots.forEach(s => {
-          if (s === 'blue') blueCount++;
-          if (s === 'amber') amberCount++;
-          if (s === 'crossed') crossedCount++;
+      } else if (mType === 'ten_frame_double') {
+        document.getElementById('manipulative-title').innerText = 'Double Ten-Frame (Up to 20)';
+        document.getElementById('problem-subtext').innerText = 'Build sums beyond 10 across both frames!';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-col sm:flex-row gap-3 items-center justify-center';
+
+        [0, 10].forEach(offset => {
+          const frame = document.createElement('div');
+          frame.className = 'grid grid-cols-5 gap-1.5 bg-white/90 border-3 border-sky-300/80 p-2 rounded-2xl shadow-inner';
+          for (let i = offset; i < offset + 10; i++) {
+            const slot = document.createElement('button');
+            slot.type = 'button';
+            slot.className = 'w-9 h-9 sm:w-11 sm:h-11 rounded-xl border-2 border-slate-200 bg-white flex items-center justify-center p-0.5 relative';
+            const sVal = state.manipulativeState.tenFrameSlots[i];
+            if (sVal === 'blue') {
+              slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-sky-500 text-white font-bold text-xs flex items-center justify-center shadow-xs">●</div>`;
+            } else if (sVal === 'amber') {
+              slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-400 text-slate-900 font-bold text-xs flex items-center justify-center shadow-xs">▲</div>`;
+            } else if (sVal === 'crossed') {
+              slot.innerHTML = `<div class="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-100 text-rose-600 font-bold text-xs flex items-center justify-center border border-rose-300">✕</div>`;
+            } else {
+              slot.innerHTML = `<div class="w-2.5 h-2.5 rounded-full bg-sky-100 border border-sky-200"></div>`;
+            }
+            slot.onclick = () => {
+              playSoundEffect('tap');
+              const cur = state.manipulativeState.tenFrameSlots[i];
+              state.manipulativeState.tenFrameSlots[i] = cur === null ? 'blue' : cur === 'blue' ? 'amber' : null;
+              renderManipulative();
+            };
+            frame.appendChild(slot);
+          }
+          wrap.appendChild(frame);
         });
+        container.appendChild(wrap);
 
-        if (op === '-') {
-          legend.innerHTML = `
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-700 shadow-xs">
-              <span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span>
-              Remaining: <strong>${blueCount}</strong>
-            </span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 shadow-xs">
-              <span class="w-3.5 h-3.5 rounded bg-rose-100 border border-rose-300 text-rose-600 font-black inline-flex items-center justify-center text-[10px] leading-none">✕</span>
-              Taken away: <strong>${crossedCount}</strong>
-            </span>
-            <span class="text-slate-400 font-semibold">Started with: ${n1}</span>
-          `;
-        } else {
-          legend.innerHTML = `
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-sky-50 border border-sky-200 text-sky-700 shadow-xs">
-              <span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span>
-              Group 1: <strong>${blueCount}</strong>
-            </span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 shadow-xs">
-              <span class="w-3 h-3 rounded-sm bg-amber-400 inline-block shadow-sm"></span>
-              Group 2: <strong>${amberCount}</strong>
-            </span>
-            <span class="text-slate-400 font-semibold">Total: ${blueCount + amberCount}</span>
-          `;
-        }
-        container.appendChild(legend);
-
-      } else if (state.tier === '23') {
-        document.getElementById('manipulative-title').innerText = 'Base-10 Regrouping Blocks (Tens & Ones)';
-        document.getElementById('problem-subtext').innerText = 'Visualize the tens rods and ones unit cubes!';
+      } else if (mType === 'base10') {
+        document.getElementById('manipulative-title').innerText = 'Base-10 Blocks (Tens & Ones)';
+        document.getElementById('problem-subtext').innerText = 'Watch the carrying tens and regrouping ones!';
 
         const wrap = document.createElement('div');
         wrap.className = 'flex flex-wrap items-center justify-center gap-6 p-2';
 
-        const tensCount = Math.floor(n1 / 10);
-        const onesCount = n1 % 10;
+        const tensCount = Math.floor(prob.n1 / 10);
+        const onesCount = prob.n1 % 10;
 
         wrap.innerHTML = `
           <div class="flex flex-col items-center p-3 bg-white border-2 border-sky-200 rounded-2xl shadow-sm">
             <span class="text-[11px] font-bold text-sky-700 uppercase mb-1">Tens Rods (${tensCount * 10})</span>
             <div class="flex gap-1.5 h-16 items-end">
-              ${Array(tensCount).fill(0).map(() => `
-                <div class="w-4 h-16 bg-gradient-to-t from-sky-600 to-sky-400 border border-sky-700 rounded-md flex flex-col justify-between py-0.5">
+              ${Array(Math.min(9, tensCount)).fill(0).map(() => `
+                <div class="w-4 h-16 bg-gradient-to-t from-sky-600 to-sky-400 border border-sky-700 rounded-md flex flex-col justify-between py-0.5 shadow-xs">
                   ${Array(5).fill(0).map(() => `<div class="h-0.5 bg-sky-300/60 w-full"></div>`).join('')}
                 </div>
               `).join('')}
             </div>
           </div>
 
-          <div class="text-2xl font-black text-slate-400">${op}</div>
+          <div class="text-2xl font-black text-slate-400">${prob.op}</div>
 
           <div class="flex flex-col items-center p-3 bg-white border-2 border-amber-200 rounded-2xl shadow-sm">
             <span class="text-[11px] font-bold text-amber-700 uppercase mb-1">Ones Cubes (${onesCount})</span>
             <div class="flex flex-wrap gap-1 max-w-[120px] justify-center">
-              ${Array(onesCount).fill(0).map(() => `
-                <div class="w-5 h-5 bg-amber-400 border border-amber-600 rounded-md shadow-sm"></div>
+              ${Array(Math.min(9, onesCount)).fill(0).map(() => `
+                <div class="w-5 h-5 bg-amber-400 border border-amber-600 rounded-md shadow-xs"></div>
               `).join('')}
             </div>
           </div>
         `;
         container.appendChild(wrap);
 
-      } else {
-        document.getElementById('manipulative-title').innerText = `Multiplication Area Array (${n1} rows × ${n2} columns)`;
-        document.getElementById('problem-subtext').innerText = `Count the total units in this ${n1} by ${n2} grid!`;
+      } else if (mType === 'arrays') {
+        document.getElementById('manipulative-title').innerText = `Multiplication Area Array (${prob.n1} × ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = `Count the total unit blocks in this grid!`;
 
         const grid = document.createElement('div');
-        grid.className = 'bg-white border-2 border-purple-200 p-3 rounded-2xl shadow-sm inline-block';
+        grid.className = 'bg-white border-2 border-purple-200 p-2.5 rounded-2xl shadow-sm inline-block';
         grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = `repeat(${n2}, minmax(0, 1fr))`;
-        grid.style.gap = '4px';
+        grid.style.gridTemplateColumns = `repeat(${Math.min(10, prob.n2)}, minmax(0, 1fr))`;
+        grid.style.gap = '3px';
 
-        for (let r = 0; r < n1; r++) {
-          for (let c = 0; c < n2; c++) {
+        for (let r = 0; r < Math.min(10, prob.n1); r++) {
+          for (let c = 0; c < Math.min(10, prob.n2); c++) {
             const cell = document.createElement('div');
-            cell.className = 'w-4 h-4 sm:w-5 sm:h-5 rounded bg-purple-500 hover:bg-purple-600 border border-purple-600 transition';
+            cell.className = 'w-4 h-4 sm:w-5 sm:h-5 rounded bg-purple-500 hover:bg-purple-600 border border-purple-600 transition shadow-2xs';
             grid.appendChild(cell);
           }
         }
         container.appendChild(grid);
+
+      } else if (mType === 'fractions') {
+        document.getElementById('manipulative-title').innerText = 'Interactive Visual Fraction Strip';
+        document.getElementById('problem-subtext').innerText = 'Count the shaded fractional pieces!';
+
+        const denom = prob.denom || prob.n2 || 4;
+        const shaded = prob.n1 || 1;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-col items-center space-y-2.5 w-full max-w-md p-2';
+
+        const bar = document.createElement('div');
+        bar.className = 'w-full h-12 bg-slate-100 border-3 border-sky-400 rounded-2xl flex overflow-hidden shadow-inner';
+
+        for (let i = 0; i < denom; i++) {
+          const seg = document.createElement('div');
+          seg.className = `flex-1 border-r border-sky-300 last:border-r-0 flex items-center justify-center font-bold text-xs ${i < shaded ? 'bg-sky-500 text-white font-mono' : 'bg-white text-slate-400 font-mono'}`;
+          seg.innerText = `1/${denom}`;
+          bar.appendChild(seg);
+        }
+
+        wrap.appendChild(bar);
+        wrap.innerHTML += `
+          <div class="text-xs font-bold text-sky-800 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">
+            Shaded Parts: <strong class="text-sky-900">${shaded}</strong> out of <strong class="text-sky-900">${denom}</strong> (${shaded}/${denom})
+          </div>
+        `;
+        container.appendChild(wrap);
+
+      } else if (mType === 'partial_products') {
+        document.getElementById('manipulative-title').innerText = `2x2 Area Model (${prob.n1} × ${prob.n2})`;
+        document.getElementById('problem-subtext').innerText = 'Decompose tens and ones to multiply!';
+
+        const t1 = Math.floor(prob.n1 / 10) * 10;
+        const o1 = prob.n1 % 10;
+        const t2 = Math.floor(prob.n2 / 10) * 10;
+        const o2 = prob.n2 % 10;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'grid grid-cols-2 gap-2 max-w-xs text-xs font-bold p-2 bg-white rounded-2xl border-2 border-indigo-200 shadow-sm text-center';
+        wrap.innerHTML = `
+          <div class="bg-indigo-50 p-2.5 rounded-xl border border-indigo-200 text-indigo-900">
+            <span>${t1} × ${t2}</span>
+            <div class="font-mono text-sm font-black text-indigo-700">${t1 * t2}</div>
+          </div>
+          <div class="bg-sky-50 p-2.5 rounded-xl border border-sky-200 text-sky-900">
+            <span>${o1} × ${t2}</span>
+            <div class="font-mono text-sm font-black text-sky-700">${o1 * t2}</div>
+          </div>
+          <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-amber-900">
+            <span>${t1} × ${o2}</span>
+            <div class="font-mono text-sm font-black text-amber-700">${t1 * o2}</div>
+          </div>
+          <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-emerald-900">
+            <span>${o1} × ${o2}</span>
+            <div class="font-mono text-sm font-black text-emerald-700">${o1 * o2}</div>
+          </div>
+        `;
+        container.appendChild(wrap);
+
+      } else if (mType === 'pemdas') {
+        document.getElementById('manipulative-title').innerText = 'Order of Operations (PEMDAS Tree)';
+        document.getElementById('problem-subtext').innerText = 'Parentheses first, then outer operation!';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex flex-col sm:flex-row items-center justify-center gap-3 p-2';
+        wrap.innerHTML = `
+          <div class="p-3 bg-purple-50 rounded-2xl border-2 border-purple-200 text-center shadow-xs">
+            <span class="text-[10px] font-extrabold uppercase text-purple-700 tracking-wider">Step 1: Parentheses</span>
+            <div class="font-mono text-sm font-black text-purple-900 mt-1">${prob.step1 || 'Solve inside ( )'}</div>
+          </div>
+          <div class="text-xl font-bold text-slate-400">➔</div>
+          <div class="p-3 bg-emerald-50 rounded-2xl border-2 border-emerald-200 text-center shadow-xs">
+            <span class="text-[10px] font-extrabold uppercase text-emerald-700 tracking-wider">Step 2: Finish</span>
+            <div class="font-mono text-sm font-black text-emerald-900 mt-1">${prob.step2 || 'Evaluate result'}</div>
+          </div>
+        `;
+        container.appendChild(wrap);
+
+      } else if (mType === 'decimals') {
+        document.getElementById('manipulative-title').innerText = 'Decimal Place Value Grid';
+        document.getElementById('problem-subtext').innerText = 'Align the decimal points carefully!';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-center justify-center gap-2 p-2 bg-white rounded-2xl border-2 border-sky-200 shadow-sm text-center text-xs font-bold';
+        wrap.innerHTML = `
+          <div class="p-2 bg-sky-50 rounded-xl border border-sky-200">
+            <span class="text-[10px] uppercase text-sky-600 block">Ones</span>
+            <span class="font-mono text-lg font-black text-sky-950">${Math.floor(prob.n1)}</span>
+          </div>
+          <span class="text-2xl font-black text-slate-400">.</span>
+          <div class="p-2 bg-amber-50 rounded-xl border border-amber-200">
+            <span class="text-[10px] uppercase text-amber-600 block">Tenths</span>
+            <span class="font-mono text-lg font-black text-amber-950">${Math.round((prob.n1 % 1) * 10)}</span>
+          </div>
+          <span class="text-xl font-black text-slate-400 mx-1">${prob.op}</span>
+          <div class="p-2 bg-sky-50 rounded-xl border border-sky-200">
+            <span class="text-[10px] uppercase text-sky-600 block">Ones</span>
+            <span class="font-mono text-lg font-black text-sky-950">${Math.floor(prob.n2)}</span>
+          </div>
+          <span class="text-2xl font-black text-slate-400">.</span>
+          <div class="p-2 bg-amber-50 rounded-xl border border-amber-200">
+            <span class="text-[10px] uppercase text-amber-600 block">Tenths</span>
+            <span class="font-mono text-lg font-black text-amber-950">${Math.round((prob.n2 % 1) * 10)}</span>
+          </div>
+        `;
+        container.appendChild(wrap);
+
+      } else {
+        // Division with remainders
+        document.getElementById('manipulative-title').innerText = 'Equal Sharing Groups & Remainder';
+        document.getElementById('problem-subtext').innerText = `Share ${prob.n1} items equally into ${prob.n2} groups!`;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'p-3 bg-white rounded-2xl border-2 border-amber-200 text-center text-xs font-bold shadow-xs';
+        wrap.innerHTML = `
+          <div class="flex items-center justify-center gap-2">
+            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-xl">Whole Quotient: <strong>${prob.ans}</strong> in each group</span>
+            <span class="bg-rose-100 text-rose-900 px-2.5 py-1 rounded-xl">Remainder: <strong>${prob.remainder || 0}</strong> leftover</span>
+          </div>
+        `;
+        container.appendChild(wrap);
       }
     }
 
     function autoPopulateManipulative() {
-      const { n1, n2, op } = state.currentProblem;
-      if (state.tier === 'k1') {
+      const prob = state.currentProblem;
+      const { n1, n2, op } = prob;
+      const mType = prob.manipulativeType || 'ten_frame_single';
+
+      if (mType === 'ten_frame_single') {
         state.manipulativeState.tenFrameSlots = new Array(10).fill(null);
         if (op === '+') {
           for (let i = 0; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
           for (let i = n1; i < n1 + n2 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'amber';
           addByteMessage(`I've modeled **${n1}** blue tokens plus **${n2}** amber tokens in your ten-frame! Putting them together gives **${n1 + n2}**.`);
         } else {
-          // Subtraction: start with n1 total. First (n1 - n2) stay blue, last n2 are crossed out with ✕
           const remaining = Math.max(0, n1 - n2);
-          for (let i = 0; i < remaining && i < 10; i++) {
-            state.manipulativeState.tenFrameSlots[i] = 'blue';
-          }
-          for (let i = remaining; i < n1 && i < 10; i++) {
-            state.manipulativeState.tenFrameSlots[i] = 'crossed';
-          }
-
-          if (remaining === 0) {
-            addByteMessage(`We start with **${n1}** tokens and take away all **${n2}** (all crossed out with **✕**)! That leaves **0** remaining!`);
-          } else {
-            addByteMessage(`We start with **${n1}** tokens and take away **${n2}** (crossed out with **✕**). Count the blue tokens left: **${remaining}**!`);
-          }
+          for (let i = 0; i < remaining && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
+          for (let i = remaining; i < n1 && i < 10; i++) state.manipulativeState.tenFrameSlots[i] = 'crossed';
+          addByteMessage(`We started with **${n1}** tokens and crossed out **${n2}**. Remaining tokens: **${remaining}**!`);
+        }
+        renderManipulative();
+        playSoundEffect('tap');
+      } else if (mType === 'ten_frame_double') {
+        state.manipulativeState.tenFrameSlots = new Array(20).fill(null);
+        if (op === '+') {
+          for (let i = 0; i < n1 && i < 20; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
+          for (let i = n1; i < n1 + n2 && i < 20; i++) state.manipulativeState.tenFrameSlots[i] = 'amber';
+          addByteMessage(`I've placed **${n1}** blue tokens and **${n2}** amber tokens across both frames! Total: **${n1 + n2}**.`);
+        } else {
+          const remaining = Math.max(0, n1 - n2);
+          for (let i = 0; i < remaining && i < 20; i++) state.manipulativeState.tenFrameSlots[i] = 'blue';
+          for (let i = remaining; i < n1 && i < 20; i++) state.manipulativeState.tenFrameSlots[i] = 'crossed';
+          addByteMessage(`Took away **${n2}** from **${n1}**. Count the blue tokens left: **${remaining}**!`);
         }
         renderManipulative();
         playSoundEffect('tap');
       } else {
         renderManipulative();
+        addByteMessage(`Manipulative auto-updated for **${prob.equationStr}**!`);
+        playSoundEffect('tap');
       }
     }
 
     function clearManipulative() {
-      state.manipulativeState.tenFrameSlots = new Array(10).fill(null);
+      state.manipulativeState.tenFrameSlots = new Array(20).fill(null);
       renderManipulative();
       playSoundEffect('tap');
     }
@@ -2157,7 +2498,7 @@
     function handleFormSubmit(e) {
       e.preventDefault();
       const input = document.getElementById('answer-input');
-      const val = parseInt(input.value.trim());
+      const val = parseFloat(input.value.trim());
       if (isNaN(val)) return;
 
       const { ans } = state.currentProblem;
@@ -2181,7 +2522,10 @@
       state.profile.history[qKey].lastSeenDate = todayStr;
       state.profile.history[qKey].timesSeen += 1;
 
-      if (val === ans) {
+      // High-precision comparison supporting whole numbers and decimals
+      const isCorrect = Math.abs(val - ans) < 0.01;
+
+      if (isCorrect) {
         // Correct Answer
         playSoundEffect('correct');
         state.streak += 1;
@@ -2189,8 +2533,6 @@
         state.profile.totalQuestionsSolved += 1;
         saveLearnerProfile();
         
-        // Adaptive SmartScore progression algorithm:
-        // Climbs fast early (10-15 pts), slows in 80s, tight in 90s Challenge Zone
         let pointGain = 10;
         if (state.smartScore < 70) pointGain = 12;
         else if (state.smartScore < 85) pointGain = 7;
@@ -2886,7 +3228,7 @@
         state.profile.onboarded = true;
         saveLearnerProfile();
         document.getElementById('onboarding-modal').classList.add('hidden');
-        switchGradeTier(state.profile.gradeTier || 'k1');
+        switchGradeTier(normalizeTier(state.profile.gradeTier || 'k'));
         addByteMessage(`Welcome back, **${state.profile.name}**! Your progress and daily streak of **${state.profile.dailyStreak || 1} days** have been loaded! 🚀`);
       } else {
         // New user! Proceed to avatar and grade selection
@@ -2899,7 +3241,7 @@
     function handleProfileSetupSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('onboard-name').value.trim() || 'Explorer';
-      const grade = document.getElementById('onboard-grade').value || 'k1';
+      const grade = normalizeTier(document.getElementById('onboard-grade').value || 'k');
 
       state.profile.email = currentPendingEmail;
       state.profile.name = name;
@@ -2935,7 +3277,7 @@
       if (!state.profile.onboarded) {
         state.profile = { ...DEFAULT_PROFILE, onboarded: true, name: 'Guest Explorer' };
         saveLearnerProfile();
-        switchGradeTier(state.tier || 'k1');
+        switchGradeTier(normalizeTier(state.tier || 'k'));
         addByteMessage("Welcome, **Guest Explorer**! You can sign in or sync an account anytime from your profile. Let's do some math! 🚀");
       } else {
         updateProfileUI();
@@ -2962,66 +3304,94 @@
     }
 
     function updateBreadcrumbAndExample() {
-      const tier = state.tier;
-      const op = state.selectedOperation || 'mixed';
-      const breadcrumb = document.getElementById('breadcrumb-skill');
+      const skill = getCurrentSkill();
       const exampleTitle = document.getElementById('example-title');
       const exampleIntro = document.getElementById('example-intro-text');
       const exampleBox = document.getElementById('example-steps-container');
 
-      if (tier === 'k1') {
-        if (op === 'add') {
-          if (breadcrumb) breadcrumb.innerText = 'A.1 Add numbers using interactive Ten-Frames (Sums up to 10)';
-          if (exampleTitle) exampleTitle.innerHTML = '<i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: Adding with Ten-Frames';
-          if (exampleIntro) exampleIntro.innerHTML = 'A <strong>ten-frame</strong> has 10 spaces organized in 2 rows of 5. To add numbers like <strong>4 + 3</strong>:';
-          if (exampleBox) {
-            exampleBox.innerHTML = `
-              <div class="text-xs font-semibold text-sky-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span> 1. Place 4 blue counters</div>
-              <div class="text-xs font-semibold text-amber-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-amber-400 inline-block shadow-sm"></span> 2. Place 3 yellow counters</div>
-              <div class="text-xs font-bold text-emerald-800">3. Count all counters: 4 + 3 = 7!</div>
-            `;
-          }
-        } else if (op === 'sub') {
-          if (breadcrumb) breadcrumb.innerText = 'A.2 Subtract numbers using interactive Ten-Frames (Differences within 10)';
-          if (exampleTitle) exampleTitle.innerHTML = '<i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: Subtracting with Ten-Frames';
-          if (exampleIntro) exampleIntro.innerHTML = 'To subtract numbers like <strong>9 − 4</strong> using a ten-frame:';
-          if (exampleBox) {
-            exampleBox.innerHTML = `
-              <div class="text-xs font-semibold text-sky-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span> 1. Start with 9 counters</div>
-              <div class="text-xs font-semibold text-rose-800 flex items-center gap-1.5"><span class="w-3.5 h-3.5 rounded bg-rose-100 border border-rose-300 text-rose-600 font-bold inline-flex items-center justify-center text-[10px]">✕</span> 2. Cross out 4 counters (✕)</div>
-              <div class="text-xs font-bold text-emerald-800">3. Count the remaining counters: 9 − 4 = 5!</div>
-            `;
-          }
-        } else {
-          if (breadcrumb) breadcrumb.innerText = 'A.3 Addition and Subtraction within 10 (Interactive Mixed CRA)';
-          if (exampleTitle) exampleTitle.innerHTML = '<i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: Ten-Frames Mixed Practice';
-          if (exampleIntro) exampleIntro.innerHTML = 'In a ten-frame, combine two colored groups to add, or cross out counters with ✕ to subtract.';
-          if (exampleBox) {
-            exampleBox.innerHTML = `
-              <div class="text-xs font-semibold text-sky-800">🔵 Blue = Starting counters</div>
-              <div class="text-xs font-semibold text-amber-800">🟡 Yellow = Added counters</div>
-              <div class="text-xs font-semibold text-rose-800">❌ Rose = Taken away</div>
-            `;
-          }
+      if (exampleTitle) {
+        exampleTitle.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: ${skill.name}`;
+      }
+
+      if (skill.manipulative === 'ten_frame_single') {
+        if (exampleIntro) exampleIntro.innerHTML = 'A <strong>Ten-Frame</strong> organizes 10 spaces into two 5-space rows. Use blue counters for the first number and yellow counters (or red crosses ✕) for the operation.';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500 inline-block shadow-sm"></span> 1. Place initial counters in the ten-frame</div>
+            <div class="text-xs font-semibold text-amber-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-amber-400 inline-block shadow-sm"></span> 2. Add yellow counters or cross out (✕) to subtract</div>
+            <div class="text-xs font-bold text-emerald-800">3. Count the remaining active counters!</div>
+          `;
         }
-      } else if (tier === '23') {
-        if (breadcrumb) breadcrumb.innerText = op === 'add' ? 'B.1 Multi-digit addition with Base-10 blocks' : op === 'sub' ? 'B.2 Multi-digit subtraction with regrouping' : 'B.3 Multi-digit place-value arithmetic';
-        if (exampleTitle) exampleTitle.innerHTML = '<i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: Base-10 Regrouping';
+      } else if (skill.manipulative === 'ten_frame_double') {
+        if (exampleIntro) exampleIntro.innerHTML = 'With <strong>Double Ten-Frames (20 spaces)</strong>, we "Make a Ten" first by filling the top frame, then place the remaining ones in the bottom frame.';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-sky-500 inline-block"></span> 1. Fill the first frame to make a complete Ten (10)</div>
+            <div class="text-xs font-semibold text-amber-800 flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-amber-400 inline-block"></span> 2. Place extra ones in the second ten-frame</div>
+            <div class="text-xs font-bold text-emerald-800">3. Combine 10 + ones to find the sum!</div>
+          `;
+        }
+      } else if (skill.manipulative === 'base10') {
         if (exampleIntro) exampleIntro.innerHTML = 'Tens rods equal 10 ones. When adding or subtracting, bundle 10 ones into 1 ten rod (or unbundle 1 ten into 10 ones).';
         if (exampleBox) {
           exampleBox.innerHTML = `
             <div class="text-xs font-semibold text-sky-800">1. Count Tens Rods (10s)</div>
             <div class="text-xs font-semibold text-amber-800">2. Count Ones Cubes (1s)</div>
-            <div class="text-xs font-bold text-emerald-800">3. Regroup 10 ones whenever needed!</div>
+            <div class="text-xs font-bold text-emerald-800">3. Regroup 10 ones into 1 ten rod when needed!</div>
           `;
         }
-      } else {
-        if (breadcrumb) breadcrumb.innerText = op === 'add' ? 'C.1 Multiplication facts with Area Arrays' : op === 'sub' ? 'C.2 Division facts with visual grids' : 'C.3 Multiplication and Division fluency';
-        if (exampleTitle) exampleTitle.innerHTML = '<i data-lucide="sparkles" class="w-5 h-5 text-amber-600"></i> Example Walkthrough: Area Arrays';
-        if (exampleIntro) exampleIntro.innerHTML = 'In an Area Array, multiply rows by columns to find the total units.';
+      } else if (skill.manipulative === 'arrays') {
+        if (exampleIntro) exampleIntro.innerHTML = 'In an <strong>Area Array Grid</strong>, multiplication is modeled as equal rows and columns.';
         if (exampleBox) {
           exampleBox.innerHTML = `
-            <div class="text-xs font-semibold text-purple-800">Rows × Columns = Total Area Units</div>
+            <div class="text-xs font-semibold text-purple-800">1. Count the number of rows</div>
+            <div class="text-xs font-semibold text-purple-800">2. Count the number of columns</div>
+            <div class="text-xs font-bold text-emerald-800">3. Rows × Columns = Total Area Grid units!</div>
+          `;
+        }
+      } else if (skill.manipulative === 'division_remainders') {
+        if (exampleIntro) exampleIntro.innerHTML = 'Division groups total items into equal columns. Leftover items that do not fill a complete group become the remainder (R).';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800">1. Find how many equal groups fit completely (Quotient)</div>
+            <div class="text-xs font-semibold text-amber-800">2. Count the leftover dots (Remainder R)</div>
+            <div class="text-xs font-bold text-emerald-800">3. Total = (Divisor × Quotient) + Remainder</div>
+          `;
+        }
+      } else if (skill.manipulative === 'partial_products') {
+        if (exampleIntro) exampleIntro.innerHTML = 'The <strong>Area Model (Partial Products)</strong> breaks two-digit factors into tens and ones (e.g. 24 = 20 + 4), then multiplies each sub-rectangle.';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800">1. Multiply Tens box (e.g. 20 × 6 = 120)</div>
+            <div class="text-xs font-semibold text-amber-800">2. Multiply Ones box (e.g. 4 × 6 = 24)</div>
+            <div class="text-xs font-bold text-emerald-800">3. Add partial products together: 120 + 24 = 144!</div>
+          `;
+        }
+      } else if (skill.manipulative === 'fractions') {
+        if (exampleIntro) exampleIntro.innerHTML = 'Fractions represent equal parts of a whole strip. When adding fractions with like denominators, keep the denominator and add the shaded parts.';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800">1. Confirm denominators are equal</div>
+            <div class="text-xs font-semibold text-amber-800">2. Add or subtract shaded parts (numerators)</div>
+            <div class="text-xs font-bold text-emerald-800">3. Denominator stays constant: 2/5 + 1/5 = 3/5!</div>
+          `;
+        }
+      } else if (skill.manipulative === 'pemdas') {
+        if (exampleIntro) exampleIntro.innerHTML = '<strong>PEMDAS Order of Operations</strong>: Always evaluate Parentheses first, then Multiply/Divide left-to-right, then Add/Subtract left-to-right.';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-rose-800">1. Parentheses ( ) first!</div>
+            <div class="text-xs font-semibold text-indigo-800">2. Multiply & Divide (left-to-right)</div>
+            <div class="text-xs font-bold text-emerald-800">3. Add & Subtract (left-to-right)</div>
+          `;
+        }
+      } else if (skill.manipulative === 'decimals') {
+        if (exampleIntro) exampleIntro.innerHTML = 'When adding or subtracting decimals, line up the decimal point so tenths and hundredths align.';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800">1. Align decimal points vertically</div>
+            <div class="text-xs font-semibold text-amber-800">2. Add or subtract column by column</div>
+            <div class="text-xs font-bold text-emerald-800">3. Drop the decimal point straight down!</div>
           `;
         }
       }
@@ -3056,7 +3426,7 @@
 
     function copyDirectPracticeLink() {
       const email = state.profile.email || '';
-      const tier = state.tier || 'k1';
+      const tier = state.tier || 'k';
       const op = state.selectedOperation || 'mixed';
       const origin = window.location.origin.includes('localhost') ? window.location.origin : 'https://nerdy-arithmetic-ai.web.app';
       const link = `${origin}/?email=${encodeURIComponent(email)}&grade=${tier}&op=${op}`;
@@ -3110,15 +3480,23 @@
       document.getElementById('rep-accuracy-rate').innerText = accuracy;
 
       // Dynamic skills tag
-      const skillTag = state.tier === 'k1' ? 'Ten-Frames Addition & Subtraction (Within 10)' : state.tier === '23' ? 'Base-10 Regrouping & Multi-digit Place Value' : 'Multiplication Arrays & Times Tables Mastery';
+      const currentSkill = getCurrentSkill();
+      const gradeTitle = CURRICULUM[state.tier]?.title || 'Kindergarten';
+      const skillTag = `${gradeTitle}: ${currentSkill.name} (${currentSkill.ccss})`;
       document.getElementById('rep-skills-tag').innerText = skillTag;
 
       // Dynamic recommendation
-      const rec = state.tier === 'k1' 
-        ? `${studentName} showed fantastic progress modeling arithmetic on interactive ten-frames! For next week, recommend practicing zero differences (e.g. 9 - 9 = 0) and progressing into teens regrouping.`
-        : state.tier === '23'
+      const rec = state.tier === 'k' 
+        ? `${studentName} showed fantastic progress modeling arithmetic on interactive ten-frames! For next week, recommend practicing zero differences (e.g. 9 - 9 = 0) and teen numbers.`
+        : state.tier === '1'
+        ? `${studentName} is mastering Make-a-Ten and teen number bonds! Next week, practice double ten-frames crossing 10.`
+        : state.tier === '2'
         ? `${studentName} is mastering place value bundling! Next week, practice multi-digit subtraction with borrowing across zero.`
-        : `${studentName} has high accuracy in times tables arrays! Next week, advance to mental division and multi-step word problems.`;
+        : state.tier === '3'
+        ? `${studentName} has high accuracy in times tables arrays! Next week, advance to mental division and multi-step word problems.`
+        : state.tier === '4'
+        ? `${studentName} excelled with partial product area models! Next week, tackle division with remainders and fraction equivalence.`
+        : `${studentName} demonstrated strong mastery of PEMDAS order of operations and decimal place values! Keep up the daily practice.`;
       document.getElementById('rep-ai-recommendation').innerText = rec;
 
       // Reset send button
@@ -3161,7 +3539,7 @@ Schedule: Automated Sunday Evening Dispatch
 • Daily Streak: ${p.dailyStreak || 1} days active 🔥
 • Skills Mastered: ${p.skillsMastered || 0} trophies 🏆
 • Accuracy Rate: 94%
-• Active CRA Manipulatives: Ten-Frames, Base-10 Blocks, Area Arrays
+• Active CCSS Skill: ${getCurrentSkill().name} (${getCurrentSkill().ccss})
 • Byte's Socratic Recommendation: Continued daily retention practice!
 
 Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.email || '')}&grade=${state.tier}`;
@@ -3188,11 +3566,9 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (nameEl) nameEl.innerText = p.name || 'Alex';
       if (avatarEl) avatarEl.innerText = p.avatar || '🦊';
       
-      const skillName = state.tier === 'k1' 
-        ? 'Kindergarten – Grade 1: Ten-Frames Addition & Subtraction (Within 10)'
-        : state.tier === '23'
-          ? 'Grades 2 – 3: Multi-Digit Addition & Subtraction with Regrouping'
-          : 'Grades 4 – 5: Area Arrays, Multiplication & Division Fluency';
+      const currentSkill = getCurrentSkill();
+      const gradeTitle = CURRICULUM[state.tier]?.title || 'Kindergarten';
+      const skillName = `${gradeTitle}: ${currentSkill.name} (${currentSkill.ccss})`;
       if (skillEl) skillEl.innerText = skillName;
 
       const now = new Date();
@@ -3280,9 +3656,8 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (repEmail) repEmail.innerText = p.email || 'student@example.com';
       if (repStreak) repStreak.innerHTML = `<span>🔥 ${p.dailyStreak || 1}-Day Streak</span>`;
       if (repGrade) {
-        repGrade.innerText = p.gradeTier === 'k1' ? 'Kindergarten & Grade 1 (Concrete CRA Ten-Frames)' 
-          : p.gradeTier === '23' ? 'Grades 2 – 3 (Base-10 Regrouping & Multi-Digit)' 
-          : 'Grades 4 – 5 (Times Tables & Area Arrays)';
+        const gradeTitle = CURRICULUM[normalizeTier(p.gradeTier)]?.title || 'Kindergarten';
+        repGrade.innerText = gradeTitle;
       }
 
       // Compute analytics safely with null-coalescing
@@ -3314,10 +3689,10 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       const sessionsTbody = document.getElementById('report-sessions-table-body');
       if (sessionsTbody) {
         const sessions = (p.sessions && p.sessions.length > 0) ? p.sessions : [
-          { date: 'Today', time: 'Just now', tier: 'k1', op: 'Mixed Mode', duration: '12m', questionsSolved: 24, accuracy: '96%', smartScore: 100, status: 'Mastered 🏆' },
-          { date: 'Yesterday', time: '5:20 PM', tier: 'k1', op: 'Addition (+)', duration: '10m', questionsSolved: 18, accuracy: '94%', smartScore: 92, status: 'Mastered 🌟' },
-          { date: 'Sep 14', time: '4:15 PM', tier: 'k1', op: 'Subtraction (-)', duration: '8m', questionsSolved: 12, accuracy: '91%', smartScore: 85, status: 'Proficient 🟢' },
-          { date: 'Sep 13', time: '6:30 PM', tier: 'k1', op: 'Ten-Frames', duration: '15m', questionsSolved: 20, accuracy: '95%', smartScore: 90, status: 'Mastered 🌟' }
+          { date: 'Today', time: 'Just now', tier: state.tier, op: 'Mixed Mode', duration: '12m', questionsSolved: 24, accuracy: '96%', smartScore: 100, status: 'Mastered 🏆' },
+          { date: 'Yesterday', time: '5:20 PM', tier: state.tier, op: 'Core Skill', duration: '10m', questionsSolved: 18, accuracy: '94%', smartScore: 92, status: 'Mastered 🌟' },
+          { date: 'Sep 14', time: '4:15 PM', tier: state.tier, op: 'Interactive Practice', duration: '8m', questionsSolved: 12, accuracy: '91%', smartScore: 85, status: 'Proficient 🟢' },
+          { date: 'Sep 13', time: '6:30 PM', tier: state.tier, op: 'Visual Manipulative', duration: '15m', questionsSolved: 20, accuracy: '95%', smartScore: 90, status: 'Mastered 🌟' }
         ];
 
         sessionsTbody.innerHTML = sessions.map(s => `
@@ -3327,7 +3702,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
             </td>
             <td class="py-3 px-3">
               <span class="font-bold text-sky-700">${s.op || 'Mixed Mode'}</span>
-              <span class="text-[10px] text-slate-400 ml-1 font-mono">(${s.tier ? s.tier.toUpperCase() : 'K1'})</span>
+              <span class="text-[10px] text-slate-400 ml-1 font-mono">(${s.tier ? s.tier.toUpperCase() : state.tier.toUpperCase()})</span>
             </td>
             <td class="py-3 px-3 text-center text-slate-600 font-mono">${s.duration || '10m'}</td>
             <td class="py-3 px-3 text-center font-black text-slate-900 font-mono">${s.questionsSolved || 15}</td>
@@ -3449,18 +3824,11 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (nameEl) nameEl.innerText = p.name || 'Alex';
       if (scoreEl) scoreEl.innerText = `${state.smartScore} / 100`;
 
-      const gradeName = state.tier === 'k1' 
-        ? 'Kindergarten – Grade 1' 
-        : state.tier === '23' 
-          ? 'Grades 2 – 3' 
-          : 'Grades 4 – 5';
+      const gradeName = CURRICULUM[state.tier]?.title || 'Kindergarten';
       if (tierEl) tierEl.innerText = gradeName;
 
-      const goalName = state.tier === 'k1' 
-        ? (state.selectedOperation === 'add' ? 'Ten-Frames Addition within 10' : state.selectedOperation === 'sub' ? 'Ten-Frames Subtraction within 10' : 'Ten-Frames Addition & Subtraction')
-        : state.tier === '23' 
-          ? 'Base-10 Regrouping & Place Value' 
-          : 'Area Array Factoring & Fluency';
+      const currentSkill = getCurrentSkill();
+      const goalName = currentSkill ? `${currentSkill.name} (${currentSkill.ccss})` : 'Math Mastery';
       if (goalEl) goalEl.innerText = goalName;
 
       const misconception = state.streak === 0
@@ -3517,7 +3885,8 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (pName) pName.innerText = p.name || 'Explorer';
       if (pEmail) pEmail.innerText = p.email || 'student@example.com';
       if (pGrade) {
-        pGrade.innerText = p.gradeTier === 'k1' ? 'Kindergarten – Grade 1' : p.gradeTier === '23' ? 'Grades 2 – 3' : 'Grades 4 – 5';
+        const gradeTitle = CURRICULUM[normalizeTier(p.gradeTier)]?.title || 'Kindergarten';
+        pGrade.innerText = gradeTitle;
       }
 
       const streakEl = document.getElementById('stat-daily-streak');
@@ -3539,7 +3908,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 <span class="font-bold text-slate-800">${s.date} ${s.time || ''}</span>
-                <span class="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800">${s.tier.toUpperCase()} · ${s.op}</span>
+                <span class="text-[10px] uppercase font-extrabold px-1.5 py-0.5 rounded bg-sky-100 text-sky-800">${(s.tier || 'K').toUpperCase()} · ${s.op}</span>
               </div>
               <div class="text-right">
                 <span class="font-black text-slate-900">${s.questionsSolved} solved</span>
@@ -3609,8 +3978,8 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         saveLearnerProfile();
       }
 
-      if (gradeParam && ['k1', '23', '45'].includes(gradeParam)) {
-        state.tier = gradeParam;
+      if (gradeParam) {
+        state.tier = normalizeTier(gradeParam);
       }
       if (opParam && ['mixed', 'add', 'sub'].includes(opParam)) {
         state.selectedOperation = opParam;
@@ -3624,7 +3993,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         if (cancelLabel) cancelLabel.innerText = 'Continue as Guest Explorer 🦊';
         document.getElementById('onboarding-modal').classList.remove('hidden');
       } else {
-        state.tier = state.profile.gradeTier || state.tier || 'k1';
+        state.tier = normalizeTier(state.profile.gradeTier || state.tier || 'k');
         switchGradeTier(state.tier);
       }
 

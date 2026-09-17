@@ -60,7 +60,7 @@ class ChatMessage(BaseModel):
 
 class SocraticRequest(BaseModel):
     user_message: str
-    tier: Optional[str] = "k1"           # k1 | 23 | 45
+    tier: Optional[str] = "k"            # k | 1 | 2 | 3 | 4 | 5 (or legacy k1, 23, 45)
     skill_title: Optional[str] = "Addition"
     equation: Optional[str] = ""
     expected_answer: Optional[str] = ""
@@ -93,37 +93,78 @@ def classify_cognitive_misconception(equation: str, expected: str, user_val_str:
     except Exception:
         return diagnosis
 
-    # Parse operands from equation if present (e.g., "7 + 5 = ?")
-    nums = [float(n) for n in re.findall(r'\d+', equation)]
-    
-    # 1. Off-by-one counting error
+    # Parse numbers from equation (float-aware)
+    raw_nums = re.findall(r'\d+\.?\d*', equation)
+    nums = [float(n) for n in raw_nums]
+
+    # 1. Decimal Place Value / Alignment Error
+    if ('.' in expected or '.' in user_val_str) and abs_diff > 0:
+        if abs(user_val - exp_val * 10) < 0.05 or abs(user_val * 10 - exp_val) < 0.05:
+            return {
+                "type": "decimal_shift",
+                "label": "Decimal Place Value Slip",
+                "heuristic_hint": "Double check where the decimal point belongs! Tenths must stay in tenths.",
+                "emoji": "📏"
+            }
+        elif abs_diff in (0.1, 0.01):
+            return {
+                "type": "decimal_precision",
+                "label": "Decimal Column Calculation Slip",
+                "heuristic_hint": "You're very close! Line up the decimal point vertically and re-add the columns.",
+                "emoji": "🎯"
+            }
+
+    # 2. PEMDAS / Order of Operations Error
+    if any(op in equation for op in ['×', '*', '/']) and any(op in equation for op in ['+', '-']):
+        # Common slip: evaluated left-to-right ignoring multiplication precedence, e.g. 4 + 3 * 5 = 35 instead of 19
+        if len(nums) >= 3:
+            n1, n2, n3 = nums[0], nums[1], nums[2]
+            if '+' in equation and ('×' in equation or '*' in equation):
+                # (n1 + n2) * n3 slip
+                if abs(user_val - ((n1 + n2) * n3)) < 0.01:
+                    return {
+                        "type": "pemdas_order_slip",
+                        "label": "PEMDAS Order of Operations Slip",
+                        "heuristic_hint": "Remember PEMDAS! Multiplication must ALWAYS be calculated before addition.",
+                        "emoji": "📐"
+                    }
+                # Parentheses evaluated after
+                if '(' in equation and ')' in equation and abs(user_val - exp_val) > 0.01:
+                    return {
+                        "type": "parentheses_precedence",
+                        "label": "Parentheses First Rule",
+                        "heuristic_hint": "Look inside the parentheses ( ) first! Always calculate the bracketed numbers before anything else.",
+                        "emoji": "🔍"
+                    }
+
+    # 3. Off-by-one counting error
     if abs_diff == 1:
         return {
             "type": "counting_slip",
             "label": "Off-by-One Counting Slip",
-            "heuristic_hint": "You're so close—just 1 away! Touch and count the last dot on the ten-frame one more time.",
+            "heuristic_hint": "You're so close—just 1 away! Touch and count the last item on the visual manipulative one more time.",
             "emoji": "🎯"
         }
 
-    # 2. Inverted Operator (+ instead of -, or - instead of +)
+    # 4. Inverted Operator (+ instead of -, or - instead of +)
     if len(nums) >= 2:
         n1, n2 = nums[0], nums[1]
-        if '+' in equation and user_val == abs(n1 - n2):
+        if '+' in equation and abs(user_val - abs(n1 - n2)) < 0.01:
             return {
                 "type": "inverted_operator",
                 "label": "Operation Confusion",
-                "heuristic_hint": "Look at the sign! It's a PLUS sign (+), which means we are putting groups together, not taking away.",
+                "heuristic_hint": "Look at the sign! It's a PLUS sign (+), which means we combine groups together, not take away.",
                 "emoji": "➕"
             }
-        elif '-' in equation and user_val == (n1 + n2):
+        elif '-' in equation and abs(user_val - (n1 + n2)) < 0.01:
             return {
                 "type": "inverted_operator",
                 "label": "Operation Confusion",
-                "heuristic_hint": "Check the sign! It's a MINUS sign (−), so we are taking items away from our starting group.",
+                "heuristic_hint": "Check the sign! It's a MINUS sign (−), so we take items away from our starting group.",
                 "emoji": "➖"
             }
 
-    # 3. Base-10 Regrouping / Place-Value slip
+    # 5. Base-10 Regrouping / Place-Value slip
     if abs_diff in (10, 9, 11):
         return {
             "type": "regrouping_slip",
@@ -132,30 +173,30 @@ def classify_cognitive_misconception(equation: str, expected: str, user_val_str:
             "emoji": "📦"
         }
 
-    # 4. Multiplied instead of added, or vice-versa
+    # 6. Multiplied instead of added, or vice-versa
     if len(nums) >= 2:
         n1, n2 = nums[0], nums[1]
-        if '×' in equation and user_val == (n1 + n2):
+        if '×' in equation and abs(user_val - (n1 + n2)) < 0.01:
             return {
                 "type": "multiplication_as_addition",
                 "label": "Repeated Addition Needed",
-                "heuristic_hint": f"Remember, {int(n1)} × {int(n2)} means {int(n1)} groups of {int(n2)}, not just {int(n1)} + {int(n2)}!",
+                "heuristic_hint": f"Remember, {int(n1)} × {int(n2)} means {int(n1)} equal groups of {int(n2)}, not just {int(n1)} + {int(n2)}!",
                 "emoji": "✖️"
             }
 
-    # 5. Magnitude guidance
+    # 7. Magnitude guidance
     if user_val > exp_val:
         return {
             "type": "overshoot",
             "label": "Answer Too High",
-            "heuristic_hint": f"Your answer ({int(user_val)}) is a bit too high. Try counting up from the larger number {int(max(nums)) if nums else ''}!",
+            "heuristic_hint": f"Your answer ({user_val_str}) is a bit too high. Try counting or grouping again using the visual blocks above!",
             "emoji": "🎈"
         }
     else:
         return {
             "type": "undershoot",
             "label": "Answer Too Low",
-            "heuristic_hint": f"Your answer ({int(user_val)}) is a little bit low. Double check using our visual blocks above!",
+            "heuristic_hint": f"Your answer ({user_val_str}) is a little bit low. Double check your steps using the visual manipulative!",
             "emoji": "🌱"
         }
 
@@ -183,7 +224,7 @@ async def socratic_tutor_endpoint(req: SocraticRequest):
         req.equation or "",
         req.expected_answer or "",
         req.user_answer or req.user_message or "",
-        req.tier or "k1"
+        req.tier or "k"
     )
 
     api_key = os.environ.get("GEMINI_API_KEY") or req.api_key
@@ -203,12 +244,18 @@ async def socratic_tutor_endpoint(req: SocraticRequest):
         client = genai.Client(api_key=api_key)
 
         tier_instructions = {
-            "k1": "The student is in Kindergarten or 1st Grade (ages 5-7). Use very simple, warm words, short sentences (under 25 words), and concrete visual references like colored dots, fingers, or apples.",
-            "23": "The student is in 2nd or 3rd Grade (ages 7-9). Guide them to think about place value (tens and ones), regrouping blocks, and number line hops. Keep it under 35 words.",
-            "45": "The student is in 4th or 5th Grade (ages 9-11). Encourage them with mental math strategies, array grids, and factoring patterns. Keep it concise and inspiring under 40 words."
+            "k": "The student is in Kindergarten (age 5-6). Use very simple, warm words, short sentences (under 20 words), and ten-frame counters/dots.",
+            "1": "The student is in 1st Grade (age 6-7). Guide them with Make-a-Ten, double ten-frames, and number bonds. Under 25 words.",
+            "2": "The student is in 2nd Grade (age 7-8). Guide them to think about place value (tens rods and ones cubes) and bundling/unbundling. Under 30 words.",
+            "3": "The student is in 3rd Grade (age 8-9). Guide them using area array rows and columns, times tables patterns, and equal groupings. Under 35 words.",
+            "4": "The student is in 4th Grade (age 9-10). Guide them with partial products, area models, multi-digit place value, and fraction strips. Under 40 words.",
+            "5": "The student is in 5th Grade (age 10-11). Guide them with PEMDAS order of operations, decimal place value alignment, and fraction operations. Under 40 words.",
+            "k1": "The student is in Kindergarten or 1st Grade (ages 5-7). Keep it simple, warm, and visual.",
+            "23": "The student is in 2nd or 3rd Grade (ages 7-9). Guide them with place value and regrouping.",
+            "45": "The student is in 4th or 5th Grade (ages 9-11). Guide them with arrays, PEMDAS, and decimals."
         }
 
-        grade_context = tier_instructions.get(req.tier or "k1", tier_instructions["k1"])
+        grade_context = tier_instructions.get(req.tier or "k", tier_instructions["k"])
 
         system_instruction = f"""
 You are "Byte", the cheerful, encouraging robotic math tutor on Nerdy Arithmetic AI.
