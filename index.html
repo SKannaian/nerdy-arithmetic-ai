@@ -260,176 +260,17 @@
     </div>
   </div>
 
-  <!-- MAIN PRACTICE WORKSPACE (9-COL PROBLEM + 3-COL HUD) -->
-  <main id="view-practice" class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-2.5 sm:py-3 grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-start">
+  <!-- MAIN PRACTICE WORKSPACE (ZEN FOCUS MODE: CENTERED PROBLEM + TOP HUD) -->
+  <main id="view-practice" class="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-6 py-2 sm:py-3 flex flex-col space-y-3 items-center">
 
-    <!-- LEFT COLUMN: PROBLEM ARENA (COLS 1-8) -->
-    <section class="lg:col-span-8 flex flex-col space-y-2 sm:space-y-2.5">
-
-      <!-- MAIN PROBLEM CARD -->
-      <div id="problem-card" class="bg-white rounded-3xl p-3.5 sm:p-5 nerdy-shadow relative transition-all duration-300">
-        
-        <!-- CARD HEADER -->
-        <div class="flex justify-between items-center pb-2 mb-2 border-b border-slate-100">
-          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span id="tier-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
-              Kindergarten · Concrete CRA
-            </span>
-            <span id="streak-badge" class="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-              <span id="streak-num">0</span> in a row ⚡
-            </span>
-            <span id="fresh-badge" class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-              <i data-lucide="sparkles" class="w-3 h-3 text-emerald-500"></i>
-              <span id="fresh-badge-text">Fresh Question</span>
-            </span>
-          </div>
-
-          <div class="flex items-center gap-1.5">
-            <button onclick="readEquationAloud()" class="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Read Question Aloud">
-              <i data-lucide="headphones" class="w-3.5 h-3.5 text-sky-600"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- SKILL OPERATION SELECTOR (USER CHOICE) -->
-        <div class="flex items-center justify-center gap-1 sm:gap-1.5 mb-1.5 bg-slate-100/90 p-1 rounded-xl w-fit mx-auto border border-slate-200 shadow-xs">
-          <button type="button" onclick="setOperationChoice('mixed')" id="op-btn-mixed" class="op-btn px-2.5 py-0.5 rounded-lg text-xs font-bold transition bg-white text-sky-700 shadow-sm border border-slate-200">
-            🔀 Mixed Mode
-          </button>
-          <button type="button" onclick="setOperationChoice('add')" id="op-btn-add" class="op-btn px-2.5 py-0.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-sky-700">
-            ➕ Addition
-          </button>
-          <button type="button" onclick="setOperationChoice('sub')" id="op-btn-sub" class="op-btn px-2.5 py-0.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-sky-700">
-            ➖ Subtraction
-          </button>
-        </div>
-
-        <!-- EQUATION DISPLAY -->
-        <div class="text-center my-1">
-          <h2 class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Arithmetic Challenge</h2>
-          <div id="equation-display" class="font-mono text-3xl sm:text-5xl font-black text-slate-900 tracking-wider my-0.5 select-none drop-shadow-sm">
-            4 + 3 = ?
-          </div>
-          <p id="problem-subtext" class="text-[11px] font-medium text-slate-500">
-            Use the interactive ten-frame below to model the arithmetic!
-          </p>
-        </div>
-
-        <!-- =================================================================== -->
-        <!-- INTERACTIVE CONCRETE-REPRESENTATIONAL-ABSTRACT (CRA) CANVAS         -->
-        <!-- =================================================================== -->
-        <div class="my-1.5 p-2 sm:p-2.5 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center relative">
-          
-          <div class="w-full flex justify-between items-center mb-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
-              <i data-lucide="shapes" class="w-3 h-3 text-sky-600"></i>
-              <span id="manipulative-title">Interactive Ten-Frame Manipulative</span>
-            </span>
-            <span class="text-[10px] font-semibold text-slate-400">Touch slots to add/remove counters</span>
-          </div>
-
-          <!-- DYNAMIC MANIPULATIVE CONTAINER -->
-          <div id="manipulative-viewport" class="w-full flex flex-col items-center justify-center p-0.5">
-            <!-- Dynamically populated -->
-          </div>
-
-          <!-- Manipulative Helper Controls -->
-          <div class="mt-1.5 flex flex-wrap gap-1.5 justify-center">
-            <button type="button" onclick="autoPopulateManipulative()" class="px-2 py-0.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-[10px] font-bold text-slate-700 shadow-sm transition">
-              🪄 Auto-Model
-            </button>
-            <button type="button" onclick="clearManipulative()" class="px-2 py-0.5 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-[10px] font-semibold text-slate-500 shadow-sm transition">
-              Clear
-            </button>
-          </div>
-        </div>
-
-        <!-- ANSWER SUBMISSION FORM -->
-        <form onsubmit="handleFormSubmit(event)" class="mt-2 flex flex-row items-center justify-center gap-2 max-w-xs mx-auto">
-          <div class="relative w-32 sm:w-36">
-            <input 
-              type="number" 
-              id="answer-input" 
-              placeholder="?" 
-              class="w-full text-center text-2xl font-mono font-black py-1.5 px-3 rounded-xl bg-white border-2 border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition text-slate-900 shadow-inner"
-              required 
-              autocomplete="off"
-              autofocus
-            />
-          </div>
-
-          <button 
-            type="submit" 
-            id="submit-btn" 
-            class="nerdy-green-btn text-white font-display font-bold text-sm sm:text-base px-5 py-2 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer select-none shadow-md"
-          >
-            <span>Submit</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </button>
-        </form>
-
-        <!-- FEEDBACK NOTIFICATION BANNER -->
-        <div id="feedback-banner" class="mt-1 min-h-[18px] text-center font-bold text-xs sm:text-sm transition-all"></div>
-
-        <!-- SOCRATIC PROMPT & SKIP BAR -->
-        <div class="mt-1.5 pt-1.5 border-t border-slate-100 flex flex-wrap justify-between items-center text-[11px] font-semibold text-slate-500 gap-1.5">
-          <button type="button" onclick="requestByteHint()" class="text-sky-600 hover:text-sky-800 flex items-center gap-1 hover:underline">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-500"></i>
-            <span>Ask Byte for a Hint</span>
-          </button>
-          <div class="flex items-center gap-2.5">
-            <button type="button" onclick="openTutorHandoffModal()" class="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-bold hover:underline">
-              <i data-lucide="user-check" class="w-3.5 h-3.5 text-indigo-500"></i>
-              <span>Live Tutor Help</span>
-            </button>
-            <button type="button" onclick="skipProblem()" class="text-slate-400 hover:text-slate-600 flex items-center gap-1">
-              <i data-lucide="skip-forward" class="w-3 h-3"></i>
-              <span>Skip</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ON-SCREEN KEYPAD (COMPACT SINGLE-VIEW DESIGN) -->
-      <div id="touch-keypad" class="bg-white rounded-2xl p-2 sm:p-2.5 nerdy-shadow flex flex-col items-center">
-        <div class="text-[10px] font-bold text-slate-400 uppercase mb-1 flex items-center gap-1">
-          <i data-lucide="grid" class="w-3 h-3 text-slate-400"></i> Kid-Friendly Touch Keypad
-        </div>
-        <div class="grid grid-cols-6 gap-1 w-full max-w-md">
-          <button type="button" onclick="keypadPress('1')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">1</button>
-          <button type="button" onclick="keypadPress('2')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">2</button>
-          <button type="button" onclick="keypadPress('3')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">3</button>
-          <button type="button" onclick="keypadPress('4')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">4</button>
-          <button type="button" onclick="keypadPress('5')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">5</button>
-          <button type="button" onclick="keypadPress('6')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">6</button>
-          <button type="button" onclick="keypadPress('7')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">7</button>
-          <button type="button" onclick="keypadPress('8')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">8</button>
-          <button type="button" onclick="keypadPress('9')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">9</button>
-          <button type="button" onclick="keypadPress('0')" class="py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 rounded-lg font-bold font-mono text-sm transition">0</button>
-          <button type="button" onclick="keypadPress('back')" class="col-span-2 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-bold text-xs transition">⌫ Back</button>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- RIGHT COLUMN: THE SIGNATURE HUD (COLS 9-12) -->
-    <aside class="lg:col-span-4 flex flex-col space-y-2.5">
-
-      <!-- MASTERY SCORECARD (SMARTSCORE HUD) -->
-      <div class="bg-white rounded-3xl p-3.5 sm:p-4 nerdy-shadow flex flex-col items-center text-center relative overflow-hidden">
-        
-        <!-- Scorecard Header -->
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 mb-1.5">
-          Session Mastery Scorecard
-        </span>
-
-        <!-- Circular SmartScore Gauge -->
-        <div class="relative w-28 h-28 flex items-center justify-center my-1">
+    <!-- UNIFIED HUD STATS STRIP -->
+    <section class="w-full bg-white rounded-2xl px-3.5 sm:px-5 py-2.5 nerdy-shadow flex flex-wrap items-center justify-between gap-2.5 border border-slate-100">
+      
+      <!-- Left: SmartScore Mini Gauge & Mastery Milestone -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <div class="relative w-10 h-10 flex items-center justify-center shrink-0">
           <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
-            <!-- Background track -->
-            <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f5f9" stroke-width="10"></circle>
-            <!-- Progress track -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
             <circle 
               id="smartscore-circle" 
               class="smartscore-ring" 
@@ -438,110 +279,284 @@
               r="50" 
               fill="none" 
               stroke="#0284c7" 
-              stroke-width="10" 
+              stroke-width="12" 
               stroke-linecap="round" 
               stroke-dasharray="314.159" 
               stroke-dashoffset="314.159"
             ></circle>
           </svg>
-          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span class="text-[9px] font-bold uppercase text-slate-400 tracking-wider">SmartScore</span>
-            <span id="smartscore-val" class="font-display font-black text-3xl text-sky-600 leading-none">0</span>
-            <span class="text-[9px] font-semibold text-slate-400">out of 100</span>
-          </div>
+          <span class="absolute text-xs">⭐</span>
         </div>
-
-        <!-- Mastery Milestone Badge -->
-        <div class="mt-1">
-          <div id="mastery-ribbon" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200">
+        <div class="flex flex-col">
+          <div class="flex items-baseline gap-1">
+            <span class="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">SmartScore</span>
+            <span id="smartscore-val" class="font-display font-black text-xl sm:text-2xl text-sky-600 leading-none">0</span>
+            <span class="text-[10px] font-bold text-slate-400">/ 100</span>
+          </div>
+          <div id="mastery-ribbon" class="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500">
             <span>🌱 Practice Zone</span>
           </div>
         </div>
-
-        <!-- Stat Counters (Questions & Timer) -->
-        <div class="grid grid-cols-2 gap-2 w-full mt-2.5 pt-2.5 border-t border-slate-100 text-left">
-          <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Questions</div>
-            <div id="questions-counter" class="font-mono text-lg font-black text-slate-800 mt-0.5">0</div>
-          </div>
-          <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
-            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Time</div>
-            <div id="time-counter" class="font-mono text-lg font-black text-slate-800 mt-0.5">00:00</div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- BYTE: SOCRATIC AI COMPANION CARD -->
-      <div class="bg-gradient-to-b from-sky-50 to-white rounded-3xl p-3.5 border border-sky-200 nerdy-shadow flex flex-col relative overflow-hidden">
-        
-        <!-- Byte Header -->
-        <div class="flex items-center justify-between pb-2 border-b border-sky-100">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center text-lg shadow-xs">
-              🤖
-            </div>
-            <div>
-              <h3 class="text-xs font-display font-bold text-slate-900 flex items-center gap-1">
-                Byte <span class="text-[9px] bg-sky-100 text-sky-700 px-1 py-0.2 rounded font-sans font-bold">Socratic AI</span>
-              </h3>
-              <p class="text-[10px] text-slate-500">Math Copilot</p>
-            </div>
+      <!-- Right: Problem Counters, Timer & Streak -->
+      <div class="flex items-center gap-2 sm:gap-3 text-xs font-bold text-slate-600">
+        <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-100" title="Challenges Solved">
+          <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i>
+          <span class="text-[10px] text-slate-400 font-semibold uppercase hidden sm:inline">Solved:</span>
+          <span id="questions-counter" class="font-mono font-black text-slate-800">0</span>
+        </div>
+        <div class="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-xl border border-slate-100" title="Session Time">
+          <i data-lucide="timer" class="w-3.5 h-3.5 text-sky-500"></i>
+          <span id="time-counter" class="font-mono font-black text-slate-800">00:00</span>
+        </div>
+        <div id="streak-badge" class="inline-flex items-center gap-1 text-xs font-extrabold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-200" title="Current Streak">
+          <span id="streak-num">0</span> <span class="text-[11px]">streak 🔥</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN PROBLEM CARD (FULL BREATHING ROOM) -->
+    <div id="problem-card" class="w-full bg-white rounded-3xl p-4 sm:p-6 nerdy-shadow relative transition-all duration-300 flex flex-col">
+      
+      <!-- CARD SUB-HEADER (CLEAN & SUBTLE) -->
+      <div class="flex justify-between items-center pb-2.5 mb-2 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span id="tier-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300">
+            Kindergarten · Concrete CRA
+          </span>
+          <span id="fresh-badge" class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            <i data-lucide="sparkles" class="w-3 h-3 text-emerald-500"></i>
+            <span id="fresh-badge-text">Fresh Question</span>
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- SKILL OPERATION SELECTOR -->
+          <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-xl border border-slate-200">
+            <button type="button" onclick="setOperationChoice('mixed')" id="op-btn-mixed" class="op-btn px-2 py-0.5 rounded-lg text-xs font-bold transition bg-white text-sky-700 shadow-sm border border-slate-200">
+              🔀 Mixed
+            </button>
+            <button type="button" onclick="setOperationChoice('add')" id="op-btn-add" class="op-btn px-2 py-0.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-sky-700">
+              ➕ Add
+            </button>
+            <button type="button" onclick="setOperationChoice('sub')" id="op-btn-sub" class="op-btn px-2 py-0.5 rounded-lg text-xs font-bold transition text-slate-600 hover:text-sky-700">
+              ➖ Sub
+            </button>
           </div>
-          <button onclick="readByteAloud()" class="p-1 text-sky-600 hover:bg-sky-100 rounded-lg transition" title="Read Byte aloud">
-            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+
+          <button onclick="readEquationAloud()" class="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Read Question Aloud">
+            <i data-lucide="headphones" class="w-4 h-4 text-sky-600"></i>
           </button>
         </div>
+      </div>
 
-        <!-- Cognitive Misconception Indicator -->
-        <div id="misconception-pill" class="hidden mt-2 px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-[10px] font-bold flex items-center gap-1">
-          <span id="misconception-emoji">🎯</span>
-          <span id="misconception-text">Thinking it through...</span>
+      <!-- EQUATION HERO DISPLAY -->
+      <div class="text-center my-2">
+        <h2 class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Arithmetic Challenge</h2>
+        <div id="equation-display" class="font-mono text-4xl sm:text-6xl font-black text-slate-900 tracking-wider my-1 select-none drop-shadow-xs">
+          4 + 3 = ?
+        </div>
+        <p id="problem-subtext" class="text-xs font-medium text-slate-500">
+          Use the interactive ten-frame below to model the arithmetic!
+        </p>
+      </div>
+
+      <!-- INTERACTIVE CRA MANIPULATIVE CANVAS -->
+      <div class="my-2 p-2.5 sm:p-3 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center relative">
+        <div class="w-full flex justify-between items-center mb-1.5">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+            <i data-lucide="shapes" class="w-3.5 h-3.5 text-sky-600"></i>
+            <span id="manipulative-title">Interactive Ten-Frame Manipulative</span>
+          </span>
+          <span class="text-[10px] font-semibold text-slate-400 hidden sm:inline">Touch slots to add/remove counters</span>
         </div>
 
-        <!-- Byte Live Dialogue Feed -->
-        <div id="byte-feed" class="overflow-y-auto space-y-2 my-2 pr-1 text-[11px] max-h-32 sm:max-h-40">
-          <div class="bg-white p-2.5 rounded-xl border border-sky-100 text-slate-700 leading-relaxed shadow-xs">
-            <span class="font-bold text-sky-700 block mb-0.5">🤖 Byte:</span>
-            Hi friend! I'm Byte, your friendly Socratic math buddy! When you're stuck, I'll give you hints and clues—without ever spoiling the answer! 🚀
-          </div>
+        <!-- DYNAMIC MANIPULATIVE CONTAINER -->
+        <div id="manipulative-viewport" class="w-full flex flex-col items-center justify-center p-0.5">
+          <!-- Dynamically populated -->
         </div>
 
-        <!-- Interactive Question Form to Byte -->
-        <form onsubmit="handleByteQuestion(event)" class="mt-auto pt-1.5 border-t border-sky-100 flex gap-1.5">
+        <!-- Manipulative Controls -->
+        <div class="mt-2 flex flex-wrap gap-2 justify-center">
+          <button type="button" onclick="autoPopulateManipulative()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-xs font-bold text-slate-700 shadow-sm transition flex items-center gap-1">
+            <span>🪄 Auto-Model</span>
+          </button>
+          <button type="button" onclick="clearManipulative()" class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 hover:bg-slate-100 text-xs font-semibold text-slate-500 shadow-sm transition">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- ANSWER SUBMISSION FORM + KEYPAD TOGGLE -->
+      <form onsubmit="handleFormSubmit(event)" class="mt-2 flex flex-row items-center justify-center gap-2 max-w-sm mx-auto w-full">
+        <div class="relative w-32 sm:w-36">
           <input 
-            type="text" 
-            id="byte-input" 
-            placeholder="Ask Byte a question..." 
-            class="flex-1 bg-white border border-sky-200 rounded-xl px-2.5 py-1 text-xs text-slate-800 outline-none focus:border-sky-500 shadow-inner"
+            type="number" 
+            id="answer-input" 
+            placeholder="?" 
+            class="w-full text-center text-3xl font-mono font-black py-1.5 px-3 rounded-xl bg-white border-2 border-slate-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition text-slate-900 shadow-inner"
+            required 
             autocomplete="off"
+            autofocus
           />
-          <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-bold p-1.5 rounded-xl transition shadow-xs flex items-center justify-center">
-            <i data-lucide="send" class="w-3 h-3"></i>
-          </button>
-        </form>
-
-        <!-- VARSITY TUTORS LIVE CONNECT CARD -->
-        <div class="mt-2 p-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-200 flex items-center justify-between gap-1.5 shadow-xs">
-          <div class="flex items-center gap-1.5 text-[10px] font-bold text-indigo-950">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Varsity Tutors Ready</span>
-          </div>
-          <button type="button" onclick="openTutorHandoffModal()" class="px-2 py-0.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold shadow-xs transition flex items-center gap-1">
-            <i data-lucide="user-check" class="w-3 h-3"></i>
-            <span>Live 1-on-1 👨‍🏫</span>
-          </button>
         </div>
 
-        <div class="mt-1 text-[9px] text-slate-400 text-center font-medium">
-          Powered by Gemini 2.5 Flash · Socratic Pedagogy
-        </div>
+        <button 
+          type="submit" 
+          id="submit-btn" 
+          class="nerdy-green-btn text-white font-display font-bold text-sm sm:text-base px-6 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer select-none shadow-md"
+        >
+          <span>Submit</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
 
+        <!-- Touch Keypad Toggle Button -->
+        <button 
+          type="button" 
+          onclick="toggleTouchKeypad()" 
+          id="toggle-keypad-btn" 
+          class="p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 transition shadow-xs" 
+          title="Toggle On-Screen Keypad"
+        >
+          <i data-lucide="keyboard" class="w-5 h-5"></i>
+        </button>
+      </form>
+
+      <!-- FEEDBACK NOTIFICATION BANNER -->
+      <div id="feedback-banner" class="mt-1 min-h-[20px] text-center font-bold text-xs sm:text-sm transition-all"></div>
+
+      <!-- ON-SCREEN KEYPAD (TOGGLEABLE, HIDDEN BY DEFAULT ON DESKTOP) -->
+      <div id="touch-keypad" class="hidden mt-2 p-2.5 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col items-center mx-auto w-full max-w-md transition-all">
+        <div class="text-[10px] font-bold text-slate-400 uppercase mb-1.5 flex items-center justify-between w-full px-1">
+          <span class="flex items-center gap-1"><i data-lucide="grid" class="w-3 h-3"></i> Touch Keypad</span>
+          <button type="button" onclick="toggleTouchKeypad()" class="text-slate-400 hover:text-slate-700 text-xs font-bold">✕ Close</button>
+        </div>
+        <div class="grid grid-cols-6 gap-1.5 w-full">
+          <button type="button" onclick="keypadPress('1')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">1</button>
+          <button type="button" onclick="keypadPress('2')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">2</button>
+          <button type="button" onclick="keypadPress('3')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">3</button>
+          <button type="button" onclick="keypadPress('4')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">4</button>
+          <button type="button" onclick="keypadPress('5')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">5</button>
+          <button type="button" onclick="keypadPress('6')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">6</button>
+          <button type="button" onclick="keypadPress('7')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">7</button>
+          <button type="button" onclick="keypadPress('8')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">8</button>
+          <button type="button" onclick="keypadPress('9')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">9</button>
+          <button type="button" onclick="keypadPress('0')" class="py-2 bg-white hover:bg-slate-100 active:bg-slate-200 text-slate-900 rounded-xl font-bold font-mono text-base shadow-xs transition">0</button>
+          <button type="button" onclick="keypadPress('back')" class="col-span-2 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl font-bold text-xs shadow-xs transition">⌫ Back</button>
+        </div>
       </div>
 
-    </aside>
+      <!-- FOOTER HELP BAR (LIGHTWEIGHT) -->
+      <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap justify-between items-center text-xs font-semibold text-slate-500 gap-2">
+        <button type="button" onclick="requestByteHint()" class="text-sky-600 hover:text-sky-800 flex items-center gap-1.5 font-bold hover:underline">
+          <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+          <span>Need a hint? Ask Byte</span>
+        </button>
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="openTutorHandoffModal()" class="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-bold hover:underline">
+            <i data-lucide="user-check" class="w-4 h-4 text-indigo-500"></i>
+            <span>Live Tutor Help</span>
+          </button>
+          <button type="button" onclick="skipProblem()" class="text-slate-400 hover:text-slate-600 flex items-center gap-1">
+            <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
+            <span>Skip</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
 
   </main>
+
+  <!-- FLOATING BYTE LAUNCHER BUTTON -->
+  <div id="byte-floating-container" class="fixed bottom-5 right-5 z-40 flex items-center gap-2">
+    <div id="byte-bubble-hint" class="hidden bg-white px-3 py-1.5 rounded-2xl shadow-lg border border-sky-200 text-xs font-bold text-sky-900 animate-bounce">
+      Byte has a hint! 💡
+    </div>
+    <button onclick="toggleByteDrawer()" class="bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white rounded-full px-4 py-2.5 shadow-xl flex items-center gap-2 transition hover:scale-105 border-2 border-white/90">
+      <span class="text-xl">🤖</span>
+      <span class="font-display font-bold text-xs sm:text-sm">Ask Byte</span>
+    </button>
+  </div>
+
+  <!-- BYTE SLIDE-OVER DRAWER (ON-DEMAND SOCRATIC AI COMPANION) -->
+  <div id="byte-drawer-backdrop" onclick="toggleByteDrawer()" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 transition-opacity"></div>
+  <aside id="byte-drawer" class="fixed top-0 right-0 h-full w-full max-w-sm sm:max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    
+    <!-- Drawer Header -->
+    <div class="p-4 border-b border-sky-100 bg-gradient-to-r from-sky-50 to-white flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center text-xl shadow-sm">
+          🤖
+        </div>
+        <div>
+          <h3 class="text-sm font-display font-bold text-slate-900 flex items-center gap-1.5">
+            Byte <span class="text-[10px] bg-sky-100 text-sky-700 px-1.5 py-0.5 rounded font-sans font-extrabold">Socratic AI</span>
+          </h3>
+          <p class="text-[11px] text-slate-500">Your Elementary Math Copilot</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button onclick="readByteAloud()" class="p-1.5 text-sky-600 hover:bg-sky-100 rounded-xl transition" title="Read Byte aloud">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
+        <button onclick="toggleByteDrawer()" class="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition" title="Close">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="flex-1 p-4 overflow-y-auto flex flex-col space-y-3">
+      
+      <!-- Cognitive Misconception Indicator -->
+      <div id="misconception-pill" class="hidden px-3 py-1 bg-amber-100 text-amber-900 border border-amber-300 rounded-xl text-xs font-bold flex items-center gap-1.5">
+        <span id="misconception-emoji">🎯</span>
+        <span id="misconception-text">Thinking it through...</span>
+      </div>
+
+      <!-- Byte Live Dialogue Feed -->
+      <div id="byte-feed" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-xs">
+        <div class="bg-sky-50 p-3 rounded-2xl border border-sky-100 text-slate-700 leading-relaxed">
+          <span class="font-bold text-sky-700 block mb-1">🤖 Byte:</span>
+          Hi friend! I'm Byte, your friendly Socratic math buddy! When you're stuck, I'll give you hints and clues—without ever spoiling the answer! 🚀
+        </div>
+      </div>
+
+      <!-- Live 1-on-1 Tutor Option -->
+      <div class="p-2.5 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-1.5 text-xs font-bold text-indigo-950">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Need Human Help?</span>
+        </div>
+        <button type="button" onclick="openTutorHandoffModal()" class="px-2.5 py-1 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1">
+          <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+          <span>Live Tutor 👨‍🏫</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer Footer Input -->
+    <div class="p-3 border-t border-slate-100 bg-slate-50">
+      <form onsubmit="handleByteQuestion(event)" class="flex gap-2">
+        <input 
+          type="text" 
+          id="byte-input" 
+          placeholder="Ask Byte a question..." 
+          class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-sky-500 shadow-inner"
+          autocomplete="off"
+        />
+        <button type="submit" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-3 py-2 rounded-xl transition shadow-xs flex items-center justify-center">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </form>
+      <div class="mt-1.5 text-[10px] text-slate-400 text-center font-medium">
+        Powered by Gemini 2.5 Flash · Socratic Pedagogy
+      </div>
+    </div>
+
+  </aside>
 
   <!-- ===================================================================== -->
   <!-- PROGRESS STATUS REPORT VIEW (K–5 KID-FRIENDLY DASHBOARD)             -->
@@ -2350,27 +2365,59 @@
       const pillEmoji = document.getElementById('misconception-emoji');
       const pillText = document.getElementById('misconception-text');
 
-      pill.classList.remove('hidden');
-      pillEmoji.innerText = emoji || '💡';
-      pillText.innerText = label || 'Socratic Hint';
+      if (pill) {
+        pill.classList.remove('hidden');
+        pillEmoji.innerText = emoji || '💡';
+        pillText.innerText = label || 'Socratic Hint';
+      }
 
       addByteMessage(text);
       state.lastByteMessage = text.replace(/🤖|\*\*Byte:\*\*|\*/g, '').trim();
+
+      // Open Byte's slide-over drawer so student sees the hint
+      toggleByteDrawer(true);
     }
 
     function addByteMessage(msg) {
       const feed = document.getElementById('byte-feed');
+      if (!feed) return;
       const item = document.createElement('div');
-      item.className = 'bg-white p-3.5 rounded-2xl border border-sky-100 text-slate-700 leading-relaxed shadow-sm bounce-in';
+      item.className = 'bg-sky-50 p-3 rounded-2xl border border-sky-100 text-slate-700 leading-relaxed shadow-xs bounce-in';
       item.innerHTML = `<span class="font-bold text-sky-700 block mb-1">🤖 Byte:</span> ${msg}`;
       feed.appendChild(item);
       feed.scrollTop = feed.scrollHeight;
     }
 
     function requestByteHint() {
+      toggleByteDrawer(true);
       state.hintLadderLevel = Math.min(3, state.hintLadderLevel + 1);
       const { n1, n2, op } = state.currentProblem;
       triggerSocraticDiagnosis(Math.max(n1, n2));
+    }
+
+    // ── BYTE SLIDE-OVER DRAWER CONTROLLER ────────────────────────────────────
+    function toggleByteDrawer(forceOpen) {
+      const drawer = document.getElementById('byte-drawer');
+      const backdrop = document.getElementById('byte-drawer-backdrop');
+      const bubble = document.getElementById('byte-bubble-hint');
+      if (!drawer || !backdrop) return;
+
+      const isCurrentlyOpen = !drawer.classList.contains('translate-x-full');
+      const shouldOpen = forceOpen !== undefined ? forceOpen : !isCurrentlyOpen;
+
+      if (shouldOpen) {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('hidden');
+        if (bubble) bubble.classList.add('hidden');
+        setTimeout(() => {
+          const input = document.getElementById('byte-input');
+          if (input) input.focus();
+        }, 150);
+      } else {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+      if (window.lucide) lucide.createIcons();
     }
 
     async function handleByteQuestion(e) {
@@ -2462,6 +2509,23 @@
     }
 
     // ── KID-FRIENDLY TOUCH KEYPAD ───────────────────────────────────────────
+    function toggleTouchKeypad() {
+      const kp = document.getElementById('touch-keypad');
+      if (!kp) return;
+      kp.classList.toggle('hidden');
+      const toggleBtn = document.getElementById('toggle-keypad-btn');
+      if (toggleBtn) {
+        if (kp.classList.contains('hidden')) {
+          toggleBtn.classList.remove('bg-sky-100', 'text-sky-700', 'border-sky-300');
+          toggleBtn.classList.add('bg-slate-50', 'text-slate-600');
+        } else {
+          toggleBtn.classList.remove('bg-slate-50', 'text-slate-600');
+          toggleBtn.classList.add('bg-sky-100', 'text-sky-700', 'border-sky-300');
+        }
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+
     function keypadPress(val) {
       playSoundEffect('tap');
       const input = document.getElementById('answer-input');
@@ -3157,10 +3221,13 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       const reportView = document.getElementById('view-report');
       const breadcrumbTier = document.getElementById('breadcrumb-tier');
       const breadcrumbSkill = document.getElementById('breadcrumb-skill');
+      const byteFloating = document.getElementById('byte-floating-container');
 
       if (tabName === 'report') {
         practiceView.classList.add('hidden');
         reportView.classList.remove('hidden');
+        if (byteFloating) byteFloating.classList.add('hidden');
+        toggleByteDrawer(false);
 
         // Tab button styles
         reportBtn.className = 'px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-sky-700 shadow-xs border border-slate-200';
@@ -3173,6 +3240,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       } else {
         reportView.classList.add('hidden');
         practiceView.classList.remove('hidden');
+        if (byteFloating) byteFloating.classList.remove('hidden');
 
         // Tab button styles
         practiceBtn.className = 'px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-sky-700 shadow-xs border border-slate-200';
