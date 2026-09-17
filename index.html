@@ -3456,10 +3456,38 @@
       let emoji = '🧩';
       let hint = 'Count the tokens on the visual manipulative carefully!';
 
-      if (diff === 1) {
+      if (prob.op === '-' && wrongVal === (prob.n1 + prob.n2)) {
+        label = 'Inverted Operator (+ instead of −)';
+        emoji = '🔄';
+        hint = 'Looks like you added! Remember this is subtraction (−), so we take away counters.';
+      } else if (prob.op === '+' && wrongVal === Math.abs(prob.n1 - prob.n2)) {
+        label = 'Inverted Operator (− instead of +)';
+        emoji = '🔄';
+        hint = 'Looks like you subtracted! The plus sign (+) means we join both groups together.';
+      } else if ((prob.op === '×' || prob.manipulativeType === 'equal_groups') && wrongVal === (prob.n1 + prob.n2)) {
+        label = 'Multiplied vs Added Slip';
+        emoji = '✖️';
+        hint = `You added ${prob.n1} + ${prob.n2}! In multiplication, we count ${prob.n1} equal groups of ${prob.n2}.`;
+      } else if (prob.manipulativeType === 'base10' && diff === 10) {
+        label = 'Place Value Bundling Slip';
+        emoji = '📦';
+        hint = 'You are 10 away! Check if you need to bundle 10 ones into a ten rod, or unbundle a ten rod into 10 ones.';
+      } else if (prob.manipulativeType === 'pemdas') {
+        label = 'Order of Operations Slip';
+        emoji = '📋';
+        hint = `Remember PEMDAS: evaluate inside the parentheses first (${prob.step1})!`;
+      } else if (prob.manipulativeType === 'division_remainders' && wrongVal === prob.n1) {
+        label = 'Equal Sharing Leftovers';
+        emoji = '🧺';
+        hint = `Find how many whole items go into each of the ${prob.n2} equal groups!`;
+      } else if (prob.manipulativeType === 'fractions' && typeof prob.denom === 'number') {
+        label = 'Fraction Denominator Slip';
+        emoji = '🍕';
+        hint = `When adding fractions with like denominators, add just the top numerators—the bottom stays ${prob.denom}!`;
+      } else if (diff === 1) {
         label = 'Off-by-One Counting Slip';
         emoji = '🎯';
-        hint = 'You are super close—just 1 away! Touch and count the last dot on the ten-frame one more time.';
+        hint = 'You are super close—just 1 away! Touch and count the tokens on the manipulative one more time.';
       } else if (wrongVal > ans) {
         label = 'Answer Too High';
         emoji = '🎈';
@@ -4106,6 +4134,15 @@
             <div class="text-xs font-semibold text-sky-800">1. Count Tens Rods (10s)</div>
             <div class="text-xs font-semibold text-amber-800">2. Count Ones Cubes (1s)</div>
             <div class="text-xs font-bold text-emerald-800">3. Regroup 10 ones into 1 ten rod when needed!</div>
+          `;
+        }
+      } else if (skill.manipulative === 'equal_groups') {
+        if (exampleIntro) exampleIntro.innerHTML = '<strong>Skip-Counting & Equal Groups</strong>: Multiplication begins with counting equal groups (e.g. 4 groups of 5). Count by the group size to find the total!';
+        if (exampleBox) {
+          exampleBox.innerHTML = `
+            <div class="text-xs font-semibold text-sky-800">1. Identify the number of equal groups</div>
+            <div class="text-xs font-semibold text-amber-800">2. Count the items inside each group card</div>
+            <div class="text-xs font-bold text-emerald-800">3. Skip-count (e.g. 5, 10, 15, 20) to find the total!</div>
           `;
         }
       } else if (skill.manipulative === 'arrays') {
