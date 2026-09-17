@@ -1151,6 +1151,367 @@
 
     </div>
 
+    <!-- ======================================================================= -->
+    <!-- K–5 COMMON CORE STANDARDS & CURRICULUM ARCHITECTURE                     -->
+    <!-- ======================================================================= -->
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 sm:p-7 space-y-5">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-sky-600 text-white flex items-center justify-center text-2xl shadow-md shadow-purple-500/20 shrink-0">
+            📚
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="font-display font-extrabold text-lg sm:text-xl text-slate-900">K–5 Common Core Curriculum & Standards Matrix</h3>
+              <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 border border-purple-200 font-extrabold text-[10px]">
+                18 Skills · 6 Elementary Grades
+              </span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Comprehensive pedagogical mapping: Common Core (CCSS) standards, virtual CRA scaffolding, mathematical guardrails, and automated cognitive error diagnoses.
+            </p>
+          </div>
+        </div>
+
+        <!-- Grade Filter Bar for Curriculum -->
+        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-bold shrink-0 flex-wrap">
+          <span class="text-[11px] text-slate-400 font-semibold px-1.5 hidden sm:inline">Filter Grade:</span>
+          <button type="button" onclick="filterCurriculumAdmin('all')" id="curric-tab-all" class="px-2.5 py-1 rounded-xl bg-purple-600 text-white shadow-xs transition">All</button>
+          <button type="button" onclick="filterCurriculumAdmin('k')" id="curric-tab-k" class="px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition">K</button>
+          <button type="button" onclick="filterCurriculumAdmin('1')" id="curric-tab-1" class="px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition">1st</button>
+          <button type="button" onclick="filterCurriculumAdmin('2')" id="curric-tab-2" class="px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition">2nd</button>
+          <button type="button" onclick="filterCurriculumAdmin('3')" id="curric-tab-3" class="px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition">3rd</button>
+          <button type="button" onclick="filterCurriculumAdmin('4')" id="curric-tab-4" class="px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition">4th</button>
+          <button type="button" onclick="filterCurriculumAdmin('5')" id="curric-tab-5" class="px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition">5th</button>
+        </div>
+      </div>
+
+      <!-- Curriculum Cards Grid (All 6 Grades) -->
+      <div id="admin-curriculum-container" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        <!-- CARD 1: Kindergarten -->
+        <div id="curric-card-k" class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-amber-50/70 to-orange-50/40 border border-amber-200 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 rounded-xl bg-amber-400 text-slate-900 font-extrabold text-xs shadow-xs">
+                Kindergarten (K)
+              </span>
+              <span class="text-[10px] font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
+                CCSS.MATH.CONTENT.K.OA.A.1-4
+              </span>
+            </div>
+            <h4 class="font-display font-bold text-sm text-slate-900">Foundational Cardinality & Make-10 Strategies</h4>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Builds visual number sense and conservation of quantity using tactile 10-frame counters with non-negative constraints.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-white/80 rounded-xl border border-amber-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-amber-900 text-[11px] block">K.1 Ten-Frames within 10</strong>
+                <span class="text-[10px] text-slate-500">CRA: Single 10-Frame counters (dual-color + red ✕) · Sums $\le 10$, $A-B \ge 0$</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('k', 'k_ten_frame')" class="px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-amber-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-amber-900 text-[11px] block">K.2 Making 10 Friends ($n_1 + ? = 10$)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Pre-filled blue tokens; student counts open slots to complete the 10</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('k', 'k_make_10')" class="px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-amber-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-amber-900 text-[11px] block">K.3 Number Decomposition ($N = n_1 + ?$)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Color partition of sums 5–10 into two distinct addends</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('k', 'k_decompose')" class="px-2 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+          </div>
+          <div class="text-[10px] text-amber-800 font-semibold bg-amber-100/70 p-2 rounded-xl border border-amber-200">
+            🎯 <strong>Socratic Diagnostics:</strong> Off-by-One Counting Slip, Inverted Operator (+ vs −).
+          </div>
+        </div>
+
+        <!-- CARD 2: 1st Grade -->
+        <div id="curric-card-1" class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50/70 to-blue-50/40 border border-sky-200 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 rounded-xl bg-sky-500 text-white font-extrabold text-xs shadow-xs">
+                1st Grade
+              </span>
+              <span class="text-[10px] font-mono font-bold text-sky-800 bg-sky-100 px-2 py-0.5 rounded border border-sky-300">
+                CCSS.MATH.CONTENT.1.OA.C.6, 1.NBT.B.2
+              </span>
+            </div>
+            <h4 class="font-display font-bold text-sm text-slate-900">Make-a-Ten Addition, Missing Addends & Place Value</h4>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Transitions to 20-space double ten-frames and introduces Base-10 rods to bundle groups of 10.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-white/80 rounded-xl border border-sky-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-sky-900 text-[11px] block">1.1 Addition & Subtraction within 20</strong>
+                <span class="text-[10px] text-slate-500">CRA: Double Ten-Frames (20 slots) · Sums $\le 20$, Minuends $\le 19$</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('1', 'g1_within_20')" class="px-2 py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-sky-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-sky-900 text-[11px] block">1.2 Missing Addends to 20 ($n_1 + ? = \text{Total}$)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Double frames visual target bounding for missing parts</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('1', 'g1_missing_addend')" class="px-2 py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-sky-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-sky-900 text-[11px] block">1.3 Tens & Ones Place Value (to 100)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Tens rods ($10$) + ones cubes ($1$) visual decomposition</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('1', 'g1_tens_ones')" class="px-2 py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+          </div>
+          <div class="text-[10px] text-sky-800 font-semibold bg-sky-100/70 p-2 rounded-xl border border-sky-200">
+            🎯 <strong>Socratic Diagnostics:</strong> Minuend Accounting Slip, Inverted Operator (+ vs −).
+          </div>
+        </div>
+
+        <!-- CARD 3: 2nd Grade -->
+        <div id="curric-card-2" class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-50/70 to-teal-50/40 border border-emerald-200 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-xs">
+                2nd Grade
+              </span>
+              <span class="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                CCSS.MATH.CONTENT.2.NBT.B.5, 2.OA.C.4
+              </span>
+            </div>
+            <h4 class="font-display font-bold text-sm text-slate-900">2-Digit Regrouping (Carrying/Borrowing) & Equal Groups</h4>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Masters place value bundling/unbundling with side-by-side Base-10 models and equal groups foundations for multiplication.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-white/80 rounded-xl border border-emerald-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-emerald-900 text-[11px] block">2.1 2-Digit Addition with Regrouping</strong>
+                <span class="text-[10px] text-slate-500">CRA: Side-by-side Base-10 cards with carrying alert ($12 \text{ ones} \rightarrow 1 \text{ ten}$)</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('2', 'g2_add_regroup')" class="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-emerald-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-emerald-900 text-[11px] block">2.2 2-Digit Subtraction with Regrouping</strong>
+                <span class="text-[10px] text-slate-500">CRA: Unbundling alert when $\text{ones}_1 < \text{ones}_2$ prevents subtracting smaller from larger</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('2', 'g2_sub_regroup')" class="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-emerald-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-emerald-900 text-[11px] block">2.3 Skip Counting & Equal Groups</strong>
+                <span class="text-[10px] text-slate-500">CRA: Equal Groups visualizer (cards of 2, 5, 10 with item dots)</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('2', 'g2_skip_count')" class="px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+          </div>
+          <div class="text-[10px] text-emerald-800 font-semibold bg-emerald-100/70 p-2 rounded-xl border border-emerald-200">
+            🎯 <strong>Socratic Diagnostics:</strong> Place Value Bundling Slip, Unbundling Borrowing Slip, Multiplied vs Added Slip.
+          </div>
+        </div>
+
+        <!-- CARD 4: 3rd Grade -->
+        <div id="curric-card-3" class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-purple-50/70 to-indigo-50/40 border border-purple-200 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 rounded-xl bg-purple-600 text-white font-extrabold text-xs shadow-xs">
+                3rd Grade
+              </span>
+              <span class="text-[10px] font-mono font-bold text-purple-800 bg-purple-100 px-2 py-0.5 rounded border border-purple-300">
+                CCSS.MATH.CONTENT.3.OA.A.1, 3.OA.A.2, 3.NF.A.1
+              </span>
+            </div>
+            <h4 class="font-display font-bold text-sm text-slate-900">Multiplication Times Tables, Division Arrays & Unit Fractions</h4>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Establishes multiplication and division fact fluency via rectangular area arrays and introduces visual unit fractions.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-white/80 rounded-xl border border-purple-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-purple-900 text-[11px] block">3.1 Times Tables (1×1 to 10×10)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Multiplication Area Array grid with row & column headers</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('3', 'g3_times_tables')" class="px-2 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-purple-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-purple-900 text-[11px] block">3.2 Division Arrays (Equal Sharing)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Array equal-sharing model with row partitioning without remainder</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('3', 'g3_division')" class="px-2 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-purple-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-purple-900 text-[11px] block">3.3 Visual Unit Fractions</strong>
+                <span class="text-[10px] text-slate-500">CRA: Segmented fraction strips with shaded parts ($1/2, 1/3, 1/4, 1/6, 1/8$)</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('3', 'g3_fractions')" class="px-2 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+          </div>
+          <div class="text-[10px] text-purple-800 font-semibold bg-purple-100/70 p-2 rounded-xl border border-purple-200">
+            🎯 <strong>Socratic Diagnostics:</strong> Multiplied vs Added Slip, Fraction Part vs Whole Confusion.
+          </div>
+        </div>
+
+        <!-- CARD 5: 4th Grade -->
+        <div id="curric-card-4" class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-indigo-50/70 to-blue-50/40 border border-indigo-200 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 rounded-xl bg-indigo-600 text-white font-extrabold text-xs shadow-xs">
+                4th Grade
+              </span>
+              <span class="text-[10px] font-mono font-bold text-indigo-800 bg-indigo-100 px-2 py-0.5 rounded border border-indigo-300">
+                CCSS.MATH.CONTENT.4.NBT.B.5, 4.OA.A.3, 4.NF.B.3
+              </span>
+            </div>
+            <h4 class="font-display font-bold text-sm text-slate-900">Multi-Digit Partial Products, Division Remainders & Like Fractions</h4>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Expands multiplication to $2\times2$ partial product grids, remainder accounting in equal sharing, and like-denominator fraction addition.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-white/80 rounded-xl border border-indigo-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-indigo-900 text-[11px] block">4.1 2-Digit Partial Products Area Model</strong>
+                <span class="text-[10px] text-slate-500">CRA: $2\times2$ sub-rectangle grid summing 4 partial products</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('4', 'g4_mult_2digit')" class="px-2 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-indigo-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-indigo-900 text-[11px] block">4.2 Division with Remainders (Whole Quotient)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Equal sharing group buckets with remainder dot tracking ($0 < R < D$)</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('4', 'g4_div_remainders')" class="px-2 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-indigo-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-indigo-900 text-[11px] block">4.3 Adding Like-Denominator Fractions</strong>
+                <span class="text-[10px] text-slate-500">CRA: Dual-color fraction strips ($p_1/d + p_2/d < 1$)</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('4', 'g4_add_fractions')" class="px-2 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+          </div>
+          <div class="text-[10px] text-indigo-800 font-semibold bg-indigo-100/70 p-2 rounded-xl border border-indigo-200">
+            🎯 <strong>Socratic Diagnostics:</strong> Equal Sharing Leftovers, Fraction Denominator Slip (adding denominators).
+          </div>
+        </div>
+
+        <!-- CARD 6: 5th Grade -->
+        <div id="curric-card-5" class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-rose-50/70 to-purple-50/40 border border-rose-200 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="px-2.5 py-1 rounded-xl bg-rose-600 text-white font-extrabold text-xs shadow-xs">
+                5th Grade
+              </span>
+              <span class="text-[10px] font-mono font-bold text-rose-800 bg-rose-100 px-2 py-0.5 rounded border border-rose-300">
+                CCSS.MATH.CONTENT.5.OA.A.1, 5.NBT.B.7
+              </span>
+            </div>
+            <h4 class="font-display font-bold text-sm text-slate-900">Order of Operations (PEMDAS) & Decimal Place Value</h4>
+            <p class="text-[11px] text-slate-600 mt-1">
+              Multi-step operations with parentheses and decimal operations to tenths/hundredths with touch keypad decimal point support.
+            </p>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-white/80 rounded-xl border border-rose-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-rose-900 text-[11px] block">5.1 PEMDAS with Parentheses</strong>
+                <span class="text-[10px] text-slate-500">CRA: Two-step evaluation tree; Step 2 displays open target ($= ?$) without leaks</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('5', 'g5_pemdas')" class="px-2 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-rose-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-rose-900 text-[11px] block">5.2 Decimal Addition & Subtraction (Tenths)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Decimal column place-value grid aligning Ones and Tenths</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('5', 'g5_decimal_add_sub')" class="px-2 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+            <div class="p-2.5 bg-white/80 rounded-xl border border-rose-200/80 flex items-start justify-between gap-2">
+              <div>
+                <strong class="text-rose-900 text-[11px] block">5.3 Decimal Multiplication (Tenths by Whole)</strong>
+                <span class="text-[10px] text-slate-500">CRA: Decimal multiplier grid with repeated grouping</span>
+              </div>
+              <button onclick="launchSkillFromAdmin('5', 'g5_decimal_mult')" class="px-2 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold text-[10px] shrink-0 transition">
+                Test 🚀
+              </button>
+            </div>
+          </div>
+          <div class="text-[10px] text-rose-800 font-semibold bg-rose-100/70 p-2 rounded-xl border border-rose-200">
+            🎯 <strong>Socratic Diagnostics:</strong> Order of Operations Slip (PEMDAS sequence), Decimal Place Value Alignment.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Curriculum Telemetry Summary -->
+      <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span><strong>100% CCSS Conformance:</strong> All 18 skills enforce Concrete-Representational-Abstract (CRA) scaffolding with zero premature answer leakage.</span>
+        </div>
+        <div class="flex items-center gap-2 font-mono text-[11px]">
+          <span class="bg-purple-100 text-purple-900 px-2 py-0.5 rounded font-bold">18 Skills</span>
+          <span class="bg-sky-100 text-sky-900 px-2 py-0.5 rounded font-bold">8 CRA Manipulatives</span>
+          <span class="bg-emerald-100 text-emerald-900 px-2 py-0.5 rounded font-bold">6 Grades (K–5)</span>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ======================================================================= -->
@@ -4461,7 +4822,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         if (byteFloating) byteFloating.classList.remove('hidden');
 
         if (practiceBtn) practiceBtn.className = 'px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-sky-700 shadow-xs border border-slate-200';
-        updateBreadcrumb();
+        updateBreadcrumbAndExample();
       }
       if (window.lucide) lucide.createIcons();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4640,6 +5001,41 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
     function handleAdminSort(sortVal) {
       currentAdminSort = sortVal;
       renderAdminTable();
+    }
+
+    // ── ADMIN CURRICULUM ARCHITECTURE CONTROLLER ───────────────────────────
+    function filterCurriculumAdmin(grade) {
+      ['all', 'k', '1', '2', '3', '4', '5'].forEach(g => {
+        const tab = document.getElementById(`curric-tab-${g}`);
+        if (tab) {
+          if (g === grade) {
+            tab.className = 'px-2.5 py-1 rounded-xl bg-purple-600 text-white shadow-xs transition';
+          } else {
+            tab.className = 'px-2.5 py-1 rounded-xl text-slate-600 hover:text-slate-900 transition';
+          }
+        }
+      });
+      ['k', '1', '2', '3', '4', '5'].forEach(g => {
+        const card = document.getElementById(`curric-card-${g}`);
+        if (card) {
+          if (grade === 'all' || grade === g) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        }
+      });
+      playSoundEffect('tap');
+    }
+
+    function launchSkillFromAdmin(tier, skillId) {
+      switchGradeTier(tier);
+      changeSkill(skillId);
+      switchAppTab('practice');
+      const cur = CURRICULUM[tier];
+      const sObj = (cur && cur.skills) ? cur.skills.find(s => s.id === skillId) : null;
+      const sName = sObj ? sObj.name : skillId;
+      addByteMessage(`🚀 Switched to **${cur ? cur.title : tier} · ${sName}** directly from the Admin Curriculum Center!`);
     }
 
     function renderAdminView() {
