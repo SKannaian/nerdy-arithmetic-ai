@@ -2608,15 +2608,15 @@
           const variant = Math.floor(Math.random() * 3);
           if (variant === 0) {
             const ans = (a + b) * c;
-            return { n1: a, n2: b, n3: c, ans, equationStr: `(${a} + ${b}) × ${c} = ?`, manipulativeType: 'pemdas', step1: `(${a} + ${b}) = ${a + b}`, step2: `${a + b} × ${c} = ${ans}` };
+            return { n1: a, n2: b, n3: c, ans, equationStr: `(${a} + ${b}) × ${c} = ?`, manipulativeType: 'pemdas', step1: `(${a} + ${b}) = ${a + b}`, step2: `${a + b} × ${c} = ?`, fullSolution: `${a + b} × ${c} = ${ans}` };
           } else if (variant === 1) {
             const ans = (a * b) + c;
-            return { n1: a, n2: b, n3: c, ans, equationStr: `(${a} × ${b}) + ${c} = ?`, manipulativeType: 'pemdas', step1: `(${a} × ${b}) = ${a * b}`, step2: `${a * b} + ${c} = ${ans}` };
+            return { n1: a, n2: b, n3: c, ans, equationStr: `(${a} × ${b}) + ${c} = ?`, manipulativeType: 'pemdas', step1: `(${a} × ${b}) = ${a * b}`, step2: `${a * b} + ${c} = ?`, fullSolution: `${a * b} + ${c} = ${ans}` };
           } else {
             const prod = a * b;
             const total = prod + Math.floor(Math.random() * 8) + 5;
             const ans = total - prod;
-            return { n1: total, n2: a, n3: b, ans, equationStr: `${total} - (${a} × ${b}) = ?`, manipulativeType: 'pemdas', step1: `(${a} × ${b}) = ${prod}`, step2: `${total} - ${prod} = ${ans}` };
+            return { n1: total, n2: a, n3: b, ans, equationStr: `${total} - (${a} × ${b}) = ?`, manipulativeType: 'pemdas', step1: `(${a} × ${b}) = ${prod}`, step2: `${total} - ${prod} = ?`, fullSolution: `${total} - ${prod} = ${ans}` };
           }
         }
       }
@@ -2828,15 +2828,15 @@
 
         wrap.appendChild(bar);
         wrap.innerHTML += `
-          <div class="text-xs font-bold text-sky-800 bg-sky-50 px-3 py-1 rounded-xl border border-sky-200">
-            Shaded Parts: <strong class="text-sky-900">${shaded}</strong> out of <strong class="text-sky-900">${denom}</strong> (${shaded}/${denom})
+          <div class="text-xs font-bold text-sky-800 bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-200 text-center">
+            Bar divided into <strong class="text-sky-900">${denom}</strong> equal parts. Count how many parts are shaded blue!
           </div>
         `;
         container.appendChild(wrap);
 
       } else if (mType === 'partial_products') {
         document.getElementById('manipulative-title').innerText = `2x2 Area Model (${prob.n1} × ${prob.n2})`;
-        document.getElementById('problem-subtext').innerText = 'Decompose tens and ones to multiply!';
+        document.getElementById('problem-subtext').innerText = 'Sum all 4 partial product boxes to find the total product!';
 
         const t1 = Math.floor(prob.n1 / 10) * 10;
         const o1 = prob.n1 % 10;
@@ -2847,19 +2847,19 @@
         wrap.className = 'grid grid-cols-2 gap-2 max-w-xs text-xs font-bold p-2 bg-white rounded-2xl border-2 border-indigo-200 shadow-sm text-center';
         wrap.innerHTML = `
           <div class="bg-indigo-50 p-2.5 rounded-xl border border-indigo-200 text-indigo-900">
-            <span>${t1} × ${t2}</span>
+            <span class="text-[10px] text-indigo-500 font-semibold block">${t1} × ${t2}</span>
             <div class="font-mono text-sm font-black text-indigo-700">${t1 * t2}</div>
           </div>
           <div class="bg-sky-50 p-2.5 rounded-xl border border-sky-200 text-sky-900">
-            <span>${o1} × ${t2}</span>
+            <span class="text-[10px] text-sky-500 font-semibold block">${o1} × ${t2}</span>
             <div class="font-mono text-sm font-black text-sky-700">${o1 * t2}</div>
           </div>
           <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200 text-amber-900">
-            <span>${t1} × ${o2}</span>
+            <span class="text-[10px] text-amber-500 font-semibold block">${t1} × ${o2}</span>
             <div class="font-mono text-sm font-black text-amber-700">${t1 * o2}</div>
           </div>
           <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-emerald-900">
-            <span>${o1} × ${o2}</span>
+            <span class="text-[10px] text-emerald-500 font-semibold block">${o1} × ${o2}</span>
             <div class="font-mono text-sm font-black text-emerald-700">${o1 * o2}</div>
           </div>
         `;
@@ -2867,17 +2867,17 @@
 
       } else if (mType === 'pemdas') {
         document.getElementById('manipulative-title').innerText = 'Order of Operations (PEMDAS Tree)';
-        document.getElementById('problem-subtext').innerText = 'Parentheses first, then outer operation!';
+        document.getElementById('problem-subtext').innerText = 'Parentheses first, then calculate the outer operation!';
 
         const wrap = document.createElement('div');
         wrap.className = 'flex flex-col sm:flex-row items-center justify-center gap-3 p-2';
         wrap.innerHTML = `
-          <div class="p-3 bg-purple-50 rounded-2xl border-2 border-purple-200 text-center shadow-xs">
+          <div class="p-3 bg-purple-50 rounded-2xl border-2 border-purple-200 text-center shadow-xs min-w-[130px]">
             <span class="text-[10px] font-extrabold uppercase text-purple-700 tracking-wider">Step 1: Parentheses</span>
             <div class="font-mono text-sm font-black text-purple-900 mt-1">${prob.step1 || 'Solve inside ( )'}</div>
           </div>
           <div class="text-xl font-bold text-slate-400">➔</div>
-          <div class="p-3 bg-emerald-50 rounded-2xl border-2 border-emerald-200 text-center shadow-xs">
+          <div class="p-3 bg-emerald-50 rounded-2xl border-2 border-emerald-200 text-center shadow-xs min-w-[130px]">
             <span class="text-[10px] font-extrabold uppercase text-emerald-700 tracking-wider">Step 2: Finish</span>
             <div class="font-mono text-sm font-black text-emerald-900 mt-1">${prob.step2 || 'Evaluate result'}</div>
           </div>
@@ -2915,15 +2915,18 @@
 
       } else {
         // Division with remainders
-        document.getElementById('manipulative-title').innerText = 'Equal Sharing Groups & Remainder';
+        document.getElementById('manipulative-title').innerText = 'Equal Sharing Groups Model';
         document.getElementById('problem-subtext').innerText = `Share ${prob.n1} items equally into ${prob.n2} groups!`;
 
         const wrap = document.createElement('div');
         wrap.className = 'p-3 bg-white rounded-2xl border-2 border-amber-200 text-center text-xs font-bold shadow-xs';
         wrap.innerHTML = `
-          <div class="flex items-center justify-center gap-2">
-            <span class="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-xl">Whole Quotient: <strong>${prob.ans}</strong> in each group</span>
-            <span class="bg-rose-100 text-rose-900 px-2.5 py-1 rounded-xl">Remainder: <strong>${prob.remainder || 0}</strong> leftover</span>
+          <div class="flex flex-wrap items-center justify-center gap-2">
+            <span class="bg-amber-100 text-amber-900 px-3 py-1.5 rounded-xl">Total Items: <strong>${prob.n1}</strong></span>
+            <span class="text-amber-500 font-bold">÷</span>
+            <span class="bg-sky-100 text-sky-900 px-3 py-1.5 rounded-xl">Equal Groups: <strong>${prob.n2}</strong></span>
+            <span class="text-slate-400 font-bold">=</span>
+            <span class="bg-emerald-50 text-emerald-800 border border-emerald-300 px-3 py-1.5 rounded-xl font-mono">Quotient: <strong>?</strong></span>
           </div>
         `;
         container.appendChild(wrap);
@@ -2962,6 +2965,43 @@
           addByteMessage(`Took away **${n2}** from **${n1}**. Count the blue tokens left: **${remaining}**!`);
         }
         renderManipulative();
+        playSoundEffect('tap');
+      } else if (mType === 'pemdas') {
+        const container = document.getElementById('manipulative-viewport');
+        if (container) {
+          container.innerHTML = `
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 p-2">
+              <div class="p-3 bg-purple-100 rounded-2xl border-2 border-purple-400 text-center shadow-xs min-w-[130px]">
+                <span class="text-[10px] font-extrabold uppercase text-purple-800 tracking-wider">Step 1: Parentheses</span>
+                <div class="font-mono text-sm font-black text-purple-950 mt-1">${prob.step1}</div>
+              </div>
+              <div class="text-xl font-bold text-slate-400">➔</div>
+              <div class="p-3 bg-emerald-100 rounded-2xl border-2 border-emerald-400 text-center shadow-xs min-w-[130px] ring-2 ring-emerald-300">
+                <span class="text-[10px] font-extrabold uppercase text-emerald-800 tracking-wider">Step 2: Auto-Model Solution</span>
+                <div class="font-mono text-sm font-black text-emerald-950 mt-1">${prob.fullSolution || prob.step2}</div>
+              </div>
+            </div>
+          `;
+        }
+        addByteMessage(`PEMDAS Hint: First evaluate inside the parentheses: **${prob.step1}**. Then solve the second step: **${prob.fullSolution}**!`);
+        playSoundEffect('tap');
+      } else if (mType === 'division_remainders') {
+        const container = document.getElementById('manipulative-viewport');
+        if (container) {
+          container.innerHTML = `
+            <div class="p-3 bg-amber-50 rounded-2xl border-2 border-amber-300 text-center text-xs font-bold shadow-xs">
+              <div class="flex flex-wrap items-center justify-center gap-2">
+                <span class="bg-amber-100 text-amber-900 px-3 py-1.5 rounded-xl">Total Items: <strong>${prob.n1}</strong></span>
+                <span class="text-amber-600 font-bold">÷</span>
+                <span class="bg-sky-100 text-sky-900 px-3 py-1.5 rounded-xl">Equal Groups: <strong>${prob.n2}</strong></span>
+                <span class="text-slate-400 font-bold">=</span>
+                <span class="bg-emerald-100 text-emerald-950 border border-emerald-300 px-3 py-1.5 rounded-xl font-mono">Quotient: <strong>${prob.ans}</strong></span>
+                <span class="bg-rose-100 text-rose-900 border border-rose-300 px-3 py-1.5 rounded-xl font-mono">Remainder: <strong>${prob.remainder || 0}</strong></span>
+              </div>
+            </div>
+          `;
+        }
+        addByteMessage(`Division Model: ${prob.n1} divided into ${prob.n2} equal groups gives **${prob.ans}** in each group, with **${prob.remainder || 0}** left over!`);
         playSoundEffect('tap');
       } else {
         renderManipulative();
