@@ -191,15 +191,11 @@
       <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
 
         <!-- LOGIN & PROFILE DYNAMIC GROUP -->
-        <div id="header-login-group" class="hidden flex items-center gap-1 sm:gap-1.5 shrink-0">
-          <button onclick="startEmailAuth('student')" class="px-2 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold transition flex items-center gap-1 bg-sky-600 hover:bg-sky-700 text-white shadow-md">🎒 Student</button>
-          <button onclick="startDemoAuth('student')" class="demo-auth-btn hidden px-1.5 py-1 sm:py-1.5 rounded-xl text-[9px] sm:text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 transition shadow-md">⚡ Demo</button>
-          
-          <button onclick="startEmailAuth('teacher')" class="hidden sm:flex px-2 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold transition items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white shadow-md">🍎 Teacher</button>
-          <button onclick="startDemoAuth('teacher')" class="demo-auth-btn hidden sm:flex px-1.5 py-1 sm:py-1.5 rounded-xl text-[9px] sm:text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 transition shadow-md">⚡ Demo</button>
-          
-          <button onclick="startEmailAuth('admin')" class="hidden md:flex px-2 py-1 sm:py-1.5 rounded-xl text-[10px] sm:text-xs font-bold transition items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md">🛡️ Admin</button>
-          <button onclick="startDemoAuth('admin')" class="demo-auth-btn hidden md:flex px-1.5 py-1 sm:py-1.5 rounded-xl text-[9px] sm:text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 transition shadow-md">⚡ Demo</button>
+        <div id="header-login-group" class="hidden flex items-center shrink-0">
+          <button onclick="openSignInModal()" class="px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-sm font-bold transition flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white shadow-md">
+            <i data-lucide="log-in" class="w-4 h-4"></i>
+            <span>Sign In</span>
+          </button>
         </div>
 
         <div id="header-profile-group" class="hidden flex items-center gap-1.5 sm:gap-2 shrink-0">
@@ -2260,7 +2256,62 @@
       </div>
 
       <!-- STEP 4 (OPTIONAL): EMAIL ADDRESS LINKING / SIGN-IN -->
-      <div id="onboard-step-email" class="hidden">
+              <!-- STEP: ROLE SELECTION (SIGN IN) -->
+        <div id="onboard-step-role-select" class="hidden">
+          <div class="text-center mb-6">
+            <h3 class="font-display font-extrabold text-2xl text-slate-900">Welcome to Nerdy AI</h3>
+            <p class="text-sm text-slate-500 mt-1">Select your account type to sign in.</p>
+          </div>
+          
+          <div class="space-y-3">
+            <button type="button" onclick="startEmailAuth('student')" class="w-full p-4 rounded-2xl border-2 border-sky-100 hover:border-sky-400 bg-sky-50/50 hover:bg-sky-50 transition flex items-center justify-between group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl group-hover:scale-110 transition">🎒</div>
+                <div class="text-left">
+                  <div class="font-bold text-slate-800 text-base">Student</div>
+                  <div class="text-[11px] text-slate-500">Practice math and earn rewards</div>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-5 h-5 text-sky-300 group-hover:text-sky-500 transition"></i>
+            </button>
+            
+            <button type="button" onclick="startEmailAuth('teacher')" class="w-full p-4 rounded-2xl border-2 border-purple-100 hover:border-purple-400 bg-purple-50/50 hover:bg-purple-50 transition flex items-center justify-between group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl group-hover:scale-110 transition">🍎</div>
+                <div class="text-left">
+                  <div class="font-bold text-slate-800 text-base">Teacher</div>
+                  <div class="text-[11px] text-slate-500">Monitor classes and assignments</div>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-5 h-5 text-purple-300 group-hover:text-purple-500 transition"></i>
+            </button>
+            
+            <button type="button" onclick="startEmailAuth('admin')" class="w-full p-4 rounded-2xl border-2 border-emerald-100 hover:border-emerald-400 bg-emerald-50/50 hover:bg-emerald-50 transition flex items-center justify-between group">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-110 transition">🛡️</div>
+                <div class="text-left">
+                  <div class="font-bold text-slate-800 text-base">Administrator</div>
+                  <div class="text-[11px] text-slate-500">Manage school-wide settings</div>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-300 group-hover:text-emerald-500 transition"></i>
+            </button>
+          </div>
+          
+          <!-- Subtle Demo Links (Visible only if Demo Mode is enabled) -->
+          <div class="demo-auth-btn hidden mt-6 text-center pt-4 border-t border-slate-100">
+            <p class="text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-wider">Quick Demo Access</p>
+            <div class="flex justify-center items-center gap-3 text-xs">
+              <button type="button" onclick="startDemoAuth('student')" class="text-amber-600 hover:text-amber-800 hover:underline font-semibold flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3"></i> Student</button>
+              <span class="text-slate-300">|</span>
+              <button type="button" onclick="startDemoAuth('teacher')" class="text-amber-600 hover:text-amber-800 hover:underline font-semibold flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3"></i> Teacher</button>
+              <span class="text-slate-300">|</span>
+              <button type="button" onclick="startDemoAuth('admin')" class="text-amber-600 hover:text-amber-800 hover:underline font-semibold flex items-center gap-1"><i data-lucide="zap" class="w-3 h-3"></i> Admin</button>
+            </div>
+          </div>
+        </div>
+
+<div id="onboard-step-email" class="hidden">
         <div class="text-center mb-4">
           <div class="w-14 h-14 rounded-3xl bg-gradient-to-tr from-sky-400 to-blue-600 text-white mx-auto flex items-center justify-center text-2xl shadow-lg shadow-sky-500/20 mb-2">
             ✉️
@@ -5344,6 +5395,21 @@
       });
     }
 
+    function openSignInModal() {
+      // Hide all steps
+      document.getElementById('onboard-step-welcome').classList.add('hidden');
+      document.getElementById('onboard-step-tour').classList.add('hidden');
+      document.getElementById('onboard-step-launch').classList.add('hidden');
+      document.getElementById('onboard-step-email').classList.add('hidden');
+      document.getElementById('onboard-step-otp').classList.add('hidden');
+      document.getElementById('onboard-step-profile').classList.add('hidden');
+      
+      // Show role selection and modal
+      const roleSelect = document.getElementById('onboard-step-role-select');
+      if (roleSelect) roleSelect.classList.remove('hidden');
+      document.getElementById('onboarding-modal').classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    }
     function startEmailAuth(role) {
       onboardSelectedRole = role; // store role for later
       document.getElementById('onboard-step-welcome').classList.add('hidden');
@@ -5351,6 +5417,8 @@
       document.getElementById('onboard-step-launch').classList.add('hidden');
       document.getElementById('onboard-step-profile').classList.add('hidden');
       document.getElementById('onboard-step-otp').classList.add('hidden');
+      const roleSelect = document.getElementById('onboard-step-role-select');
+      if (roleSelect) roleSelect.classList.add('hidden');
       
       document.getElementById('onboard-step-email').classList.remove('hidden');
       document.getElementById('onboarding-modal').classList.remove('hidden');
