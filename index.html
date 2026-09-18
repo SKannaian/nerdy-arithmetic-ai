@@ -5035,27 +5035,26 @@
     function openSignInModal(preSelectedRole = null) {
       document.getElementById('onboarding-modal').classList.remove('hidden');
       
-      if (preSelectedRole) {
-        startEmailAuth(preSelectedRole);
-      } else {
-        // Hide all steps
-        document.getElementById('onboard-step-welcome').classList.add('hidden');
-        document.getElementById('onboard-step-tour').classList.add('hidden');
-        document.getElementById('onboard-step-launch').classList.add('hidden');
-        document.getElementById('onboard-step-email').classList.add('hidden');
-        document.getElementById('onboard-step-otp').classList.add('hidden');
-        document.getElementById('onboard-step-profile').classList.add('hidden');
-        
-        // Show role selection
-        const roleSelect = document.getElementById('onboard-step-role-select');
-        const defaultRadio = document.querySelector('input[name="auth-role"][value="student"]');
-        if (defaultRadio) {
-          defaultRadio.checked = true;
-          updateRoleSelectionUI();
-        }
-        if (roleSelect) roleSelect.classList.remove('hidden');
-        if (window.lucide) lucide.createIcons();
+      // Hide all steps
+      document.getElementById('onboard-step-welcome').classList.add('hidden');
+      document.getElementById('onboard-step-tour').classList.add('hidden');
+      document.getElementById('onboard-step-launch').classList.add('hidden');
+      document.getElementById('onboard-step-email').classList.add('hidden');
+      document.getElementById('onboard-step-otp').classList.add('hidden');
+      document.getElementById('onboard-step-profile').classList.add('hidden');
+      
+      // Show role selection
+      const roleSelect = document.getElementById('onboard-step-role-select');
+      
+      const roleToSelect = preSelectedRole || 'student';
+      const targetRadio = document.querySelector(`input[name="auth-role"][value="${roleToSelect}"]`);
+      if (targetRadio) {
+        targetRadio.checked = true;
+        updateRoleSelectionUI();
       }
+      
+      if (roleSelect) roleSelect.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
     }
     function startEmailAuth(role) {
       onboardSelectedRole = role; // store role for later
