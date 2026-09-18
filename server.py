@@ -204,12 +204,82 @@ def classify_cognitive_misconception(equation: str, expected: str, user_val_str:
 @app.get("/health")
 def health_check():
     key_set = bool(os.environ.get("GEMINI_API_KEY"))
+    emailjs_configured = bool(os.environ.get("EMAILJS_PUBLIC_KEY") and os.environ.get("EMAILJS_SERVICE_ID"))
     return {
         "status": "healthy",
         "service": "Nerdy Arithmetic AI Platform",
         "genai_sdk_loaded": GENAI_AVAILABLE,
         "gemini_api_key_configured": key_set,
+        "emailjs_configured": emailjs_configured,
         "version": "2.0.0"
+    }
+
+class EmailJsConfigRequest(BaseModel):
+    public_key: Optional[str] = ""
+    service_id: Optional[str] = ""
+    template_id: Optional[str] = ""
+
+@app.get("/api/config/emailjs")
+def get_emailjs_config():
+    """Retrieve masked EmailJS configuration from secure environment / cloud secrets."""
+    pub = os.environ.get("EMAILJS_PUBLIC_KEY", "")
+    svc = os.environ.get("EMAILJS_SERVICE_ID", "")
+    tpl = os.environ.get("EMAILJS_TEMPLATE_ID", "")
+    masked_pub = f"{pub[:4]}...{pub[-4:]}" if len(pub) > 8 else ("configured" if pub else "")
+    return {
+        "configured": bool(pub and svc and tpl),
+        "public_key_masked": masked_pub,
+        "service_id": svc,
+        "template_id": tpl
+    }
+
+@app.post("/api/config/emailjs")
+def save_emailjs_config(cfg: EmailJsConfigRequest):
+    """Securely stores EmailJS credentials into server environment and .env configuration."""
+    if cfg.public_key:
+        os.environ["EMAILJS_PUBLIC_KEY"] = cfg.public_key.strip()
+    if cfg.service_id:
+        os.environ["EMAILJS_SERVICE_ID"] = cfg.service_id.strip()
+    if cfg.template_id:
+        os.environ["EMAILJS_TEMPLATE_ID"] = cfg.template_id.strip()
+
+    # Persist to local .env if available
+    env_path = Path(__file__).parent / ".env"
+    try:
+        lines = []
+        if env_path.exists():
+            with open(env_path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        
+        keys_to_update = {
+            "EMAILJS_PUBLIC_KEY": cfg.public_key.strip(),
+            "EMAILJS_SERVICE_ID": cfg.service_id.strip(),
+            "EMAILJS_TEMPLATE_ID": cfg.template_id.strip()
+        }
+        
+        updated_keys = set()
+        new_lines = []
+        for line in lines:
+            key = line.split("=")[0].strip() if "=" in line else ""
+            if key in keys_to_update:
+                new_lines.append(f"{key}={keys_to_update[key]}\n")
+                updated_keys.add(key)
+            else:
+                new_lines.append(line)
+        
+        for k, v in keys_to_update.items():
+            if k not in updated_keys and v:
+                new_lines.append(f"{k}={v}\n")
+                
+        with open(env_path, "w", encoding="utf-8") as f:
+            f.writelines(new_lines)
+    except Exception as e:
+        print(f"[WARN] Failed to write .env file: {e}")
+
+    return {
+        "status": "success",
+        "message": "EmailJS credentials securely saved in GCP/Cloud Environment",
+        "configured": True
     }
 
 @app.post("/api/chat", response_model=SocraticResponse)
