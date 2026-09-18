@@ -34,44 +34,36 @@ Before we get into the demo, here is a quick look at how we built this:
 
 ---
 
-### ⏱️ MINUTE 1: LIVE PRODUCT DEMO (0:00 – 1:00)
+### ⏱️ MINUTE 1: THE LEARNING EXPERIENCE (0:00 – 1:00)
 
-**[0:00 – 0:15] The Hook & Mission:**  
-*(Camera on speaker, then screen transitions to live app)*  
-> *"Hi everyone! I’m Sathish, an AI Data Engineer with 20 years of IT experience, and I’m super excited to show you **Nerdy Arithmetic AI**, a fun math game built for K-5 students. Instead of typical chatbots that just give away the answer, I built a hands-on learning experience that actually helps kids understand math visually."*
+**[0:00 – 0:15] The Hook:**  
+*(Camera on you, then switch to the live app home screen)*  
+> *"Hi everyone! I’m Sathish, an AI Data Engineer with 20 years of IT experience. I’m super excited to show you **Nerdy Arithmetic AI**, a math game for K-5 students. Instead of typical chatbots that just give away the answer, I built a hands-on learning experience that helps kids understand math visually."*
 
-**[0:15 – 0:35] Visual Math Tools:**  
-*(Screen: Click "➖ Subtraction", then click "Auto-Model Equation" on a subtraction problem)*  
-> *"For early learners, we built interactive visual tools. If a student is subtracting, the app actually crosses out the counters so they can see exactly what's happening. And as they level up in grades, we swap these out for base-10 blocks and multiplication grids."*
-*(Reference: [Visual Tools Architecture](ARCHITECTURE.md#4-jerome-bruners-cra-manipulatives-architecture))*
+**[0:15 – 0:35] Visual Problem Solving:**  
+*(Screen: Click "➖ Subtraction", then click "Auto-Model Equation")*  
+> *"When a student starts a problem, the app dynamically generates a unique equation—no hardcoded questions here. For early learners, we built interactive visual tools. If they are subtracting, the app actually crosses out the counters so they can see exactly what's happening."*
 
-**[0:35 – 0:50] Byte: The AI Tutor:**  
-*(Screen: Type a wrong answer and submit)*  
-> *"If a student makes a mistake, our AI tutor, Byte, doesn't just mark it wrong. It figures out *why* they got it wrong—like if they accidentally added instead of subtracted—and gives them a helpful hint to guide them to the right answer. It even reads the hint out loud."*
-*(Reference: [AI Feedback Loop](ARCHITECTURE.md#5-the-socratic-ai-feedback--cognitive-misconception-loop-byte))*
-
-**[0:50 – 1:00] SmartScore Progress:**  
-*(Screen: Point to circular SmartScore ring)*  
-> *"As students practice, their SmartScore goes up. They earn ribbons and eventually hit the Gold Challenge Zone when they truly master a skill."*
-*(Reference: [SmartScore Progression](ARCHITECTURE.md#6-smartscore-mastery-progression--state-machine))*
+**[0:35 – 1:00] Byte the AI Tutor:**  
+*(Screen: Type a wrong answer and hit Submit)*  
+> *"If a student makes a mistake, our AI tutor, Byte, doesn't just mark it wrong. Powered by Gemini 2.5 Flash, it analyzes *why* they got it wrong—like if they accidentally added instead of subtracted—and gives them a helpful, spoken hint. And if the internet ever drops, our local offline engine takes over so the learning never stops."*
 
 ---
 
-### ⏱️ MINUTE 2: DASHBOARDS, TECHNOLOGY & IMPACT (1:00 – 2:00)
+### ⏱️ MINUTE 2: DASHBOARDS & ECOSYSTEM (1:00 – 2:00)
 
-**[1:00 – 1:20] Analytics & Dashboards:**  
-*(Screen: Switch between Progress Report tab and Teacher/Admin Dashboards)*  
-> *"We also built detailed dashboards. Parents can check the Progress Report charts to see exactly where their kids are struggling and improving. Meanwhile, teachers and admins have their own secure command centers to manage students and tweak settings."*
-*(Reference: [User Roles & Onboarding](ARCHITECTURE.md#2-end-to-end-learner-journey--onboarding-flow))*
+**[1:00 – 1:25] Dashboards & Role-Based Access:**  
+*(Screen: Click the Progress Report tab, then switch to Teacher/Admin mode)*  
+> *"As students practice, their SmartScore goes up and everything is saved instantly to the browser's local database. Parents can open the Progress Report to see exactly where their kids are struggling. We also built secure, role-based access so teachers and admins have their own command centers to manage settings."*
 
-**[1:20 – 1:40] How It's Built & Deployed:**  
-*(Screen: Flash [High-Level System Topology](ARCHITECTURE.md#1-high-level-system-topology) and [Anti-Repetition](ARCHITECTURE.md#3-anti-repetition--spaced-repetition-engine) diagrams)*  
-> *"On the tech side, the frontend is built with vanilla JavaScript and hosted on Google Firebase. Every time we push code to GitHub, our CI/CD pipeline automatically deploys it. We use Gemini 2.5 Flash for the AI, but just in case the API goes down, we built a local offline fallback so the app never crashes. We also wrote a custom script so kids never see the exact same math problem twice in one day."*
+**[1:25 – 1:45] The Varsity Tutors Handoff:**  
+*(Screen: Click "Live Varsity Tutor Help" to show the telemetry dossier)*  
+> *"But what if a kid is really stuck? We built a direct bridge to Varsity Tutors. With one click, all of the student's progress and AI error analysis is sent right to a live human tutor's screen so they can jump in and help immediately."*
 
-**[1:40 – 2:00] Varsity Tutors Connection & Wrap Up:**  
-*(Screen: Click "Send Telemetry to Live Varsity Tutor", then Official Certificate)*  
-> *"Finally, this ties right back into Varsity Tutors. If a kid is really stuck, they can click a button to connect with a live human tutor, and all their progress is sent right to the tutor's screen. Once they hit a perfect 100 score, they even get a printable certificate. You can check out the live app at nerdy-arithmetic-ai.web.app. Thanks for watching!"*
-*(Reference: [Varsity Tutors Connection](ARCHITECTURE.md#7-varsity-tutors-live-human-tutoring-telemetry-hand-off))*
+**[1:45 – 2:00] The Tech Stack & Wrap Up:**  
+*(Screen: Briefly flash the [Architecture Diagram](ARCHITECTURE.md#1-high-level-system-topology) or stay on the App)*  
+> *"Everything you see is built with vanilla JavaScript for maximum speed and hosted globally on Google Firebase. It's a complete, end-to-end edge application. You can check it out live at nerdy-arithmetic-ai.web.app. Thanks for watching!"*
+
 
 ---
 
