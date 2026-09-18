@@ -11,7 +11,7 @@
 ## 🛠️ Tech Stack & Automated Infrastructure
 Before we get into the demo, here is a quick look at how we built this:
 - **Frontend Core:** Pure Vanilla JavaScript, HTML, and TailwindCSS to keep things incredibly fast.
-- **Procedural Generation:** No hardcoded problem banks! Every math equation is generated dynamically on-the-fly based on grade-level bounds.
+- **Procedural Gen & Anti-Repetition:** Every math equation is generated dynamically on-the-fly. We also use a deterministic hashing filter (saved in local storage) to guarantee a student never sees the exact same math problem twice in one day.
 - **AI Engine:** Powered by Google Gemini 2.5 Flash for the live Socratic tutor, and built using Google AI Studio and Antigravity IDE for rapid prompt engineering and agentic coding.
 - **Hosting & Cloud:** Hosted on **Google Cloud Firebase Hosting**.
 - **Automated Deployments:** We set up a **GitHub Actions CI/CD Pipeline**. Whenever we push code to `main`, it automatically deploys to our live Firebase site.

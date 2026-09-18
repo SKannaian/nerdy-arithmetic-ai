@@ -36,7 +36,7 @@ graph LR
             direction TB
             UI["🎮 Gamified UI & CRA Manipulatives<br/>(Concrete-Representational-Abstract)"]:::primary
             Auth["🔐 Role-Based Email Auth<br/>(Access Security)"]:::logic
-            Gen["🎲 Procedural Math Generator<br/>(Infinite Problems)"]:::logic
+            Gen["🎲 Procedural Gen & Anti-Repetition<br/>(Infinite, Unique Math)"]:::logic
             AI["🧠 Cognitive AI & Fallback Engine<br/>(Error Diagnosis & Uptime)"]:::logic
             DB["💾 Local User Database<br/>(Browser localStorage)"]:::primary
             
