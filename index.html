@@ -5115,9 +5115,9 @@
         const revealContainer = document.getElementById('demo-reveal-container');
         if (revealContainer) {
           if (otpDeliveryMode === 'email') {
-            revealContainer.classList.add('hidden');
+            revealContainer.style.display = 'none';
           } else {
-            revealContainer.classList.remove('hidden');
+            revealContainer.style.display = 'flex';
           }
         } // 'demo' | 'email'
 
@@ -5160,9 +5160,9 @@
         const revealContainer = document.getElementById('demo-reveal-container');
         if (revealContainer) {
           if (otpDeliveryMode === 'email') {
-            revealContainer.classList.add('hidden');
+            revealContainer.style.display = 'none';
           } else {
-            revealContainer.classList.remove('hidden');
+            revealContainer.style.display = 'flex';
           }
         }
       updateOtpStepDisplay();
