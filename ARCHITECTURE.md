@@ -32,13 +32,13 @@ graph LR
     classDef cloud fill:#d97706,stroke:#b45309,stroke-width:2px,color:#ffffff,font-weight:bold;
 
     subgraph Firebase ["☁️ Hosted Globally on Google Firebase"]
-        subgraph Client ["Client Browser (Single Page App)"]
+        subgraph Client ["💻 Client Browser (Single Page App)"]
             direction TB
-            UI["Gamified UI & CRA Manipulatives<br/>(Visual Interfaces)"]:::primary
-            Auth["Role-Based Email Auth<br/>(Access Security)"]:::logic
-            Gen["Procedural Math Generator<br/>(Infinite Problems)"]:::logic
-            AI["Cognitive AI & Fallback Engine<br/>(Error Diagnosis & Uptime)"]:::logic
-            DB["Local User Database<br/>(Zero-Lag Storage)"]:::primary
+            UI["🎮 Gamified UI & CRA Manipulatives<br/>(Concrete-Representational-Abstract)"]:::primary
+            Auth["🔐 Role-Based Email Auth<br/>(Access Security)"]:::logic
+            Gen["🎲 Procedural Math Generator<br/>(Infinite Problems)"]:::logic
+            AI["🧠 Cognitive AI & Fallback Engine<br/>(Error Diagnosis & Uptime)"]:::logic
+            DB["💾 Local User Database<br/>(Browser localStorage)"]:::primary
             
             UI --> Auth
             UI --> Gen
@@ -49,11 +49,11 @@ graph LR
         end
     end
 
-    subgraph External ["External Cloud APIs"]
+    subgraph External ["🌐 External Cloud APIs"]
         direction TB
-        Email["EmailJS API<br/>(Real Email OTP)"]:::cloud
-        Gemini["Google Gemini 2.5 Flash<br/>(Socratic Mentorship)"]:::cloud
-        Varsity["Varsity Tutors Bridge<br/>(Live Human Handoff)"]:::cloud
+        Email["📨 EmailJS API<br/>(Real Email OTP)"]:::cloud
+        Gemini["✨ Google Gemini 2.5 Flash<br/>(Socratic Mentorship)"]:::cloud
+        Varsity["🧑‍🏫 Varsity Tutors Bridge<br/>(Live Human Handoff)"]:::cloud
     end
 
     %% Cross-boundary connections
