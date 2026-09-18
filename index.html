@@ -170,19 +170,22 @@
       </div>
 
             <!-- APP MODE TABS: STUDENT, TEACHER, ADMIN -->
-      <nav class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0 gap-1">
-        <button onclick="switchAppTab('practice')" id="tab-nav-practice" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-sky-700 shadow-xs border border-slate-200">
-          <i data-lucide="backpack" class="w-4 h-4 text-sky-600"></i>
-          <span>Student</span>
-        </button>
-        <button onclick="switchAppTab('teacher')" id="tab-nav-teacher" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:bg-white hover:text-purple-700">
-          <i data-lucide="apple" class="w-4 h-4 text-purple-500"></i>
-          <span>Teacher</span>
-        </button>
-        <button onclick="switchAppTab('admin')" id="tab-nav-admin" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:bg-white hover:text-emerald-700">
-          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
-          <span>Admin</span>
-        </button>
+      <nav class="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200 shadow-inner shrink-0 gap-2 sm:gap-3 px-3">
+        <label class="flex items-center gap-1.5 cursor-pointer hover:text-sky-600 transition text-xs font-bold text-slate-600">
+          <input type="radio" name="header-role" value="student" checked onchange="handleHeaderRoleChange(this.value)" class="accent-sky-600 w-3.5 h-3.5">
+          <i data-lucide="backpack" class="w-4 h-4 text-sky-600 hidden sm:block"></i>
+          Student
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer hover:text-purple-600 transition text-xs font-bold text-slate-600">
+          <input type="radio" name="header-role" value="teacher" onchange="handleHeaderRoleChange(this.value)" class="accent-purple-600 w-3.5 h-3.5">
+          <i data-lucide="apple" class="w-4 h-4 text-purple-500 hidden sm:block"></i>
+          Teacher
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer hover:text-emerald-600 transition text-xs font-bold text-slate-600">
+          <input type="radio" name="header-role" value="admin" onchange="handleHeaderRoleChange(this.value)" class="accent-emerald-600 w-3.5 h-3.5">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500 hidden sm:block"></i>
+          Admin
+        </label>
       </nav>
 
       
@@ -192,9 +195,9 @@
 
         <!-- LOGIN & PROFILE DYNAMIC GROUP -->
         <div id="header-login-group" class="hidden flex items-center shrink-0">
-          <button onclick="openSignInModal()" class="px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-sm font-bold transition flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white shadow-md">
+          <button id="header-signin-btn" onclick="openSignInModal()" class="px-3 sm:px-5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-sm font-bold transition flex items-center gap-1.5 bg-sky-600 hover:bg-sky-700 text-white shadow-md">
             <i data-lucide="log-in" class="w-4 h-4"></i>
-            <span>Sign In</span>
+            <span id="header-signin-text">Sign In as Student</span>
           </button>
         </div>
 
@@ -5032,29 +5035,10 @@
       });
     }
 
-    function openSignInModal(preSelectedRole = null) {
-      document.getElementById('onboarding-modal').classList.remove('hidden');
-      
-      // Hide all steps
-      document.getElementById('onboard-step-welcome').classList.add('hidden');
-      document.getElementById('onboard-step-tour').classList.add('hidden');
-      document.getElementById('onboard-step-launch').classList.add('hidden');
-      document.getElementById('onboard-step-email').classList.add('hidden');
-      document.getElementById('onboard-step-otp').classList.add('hidden');
-      document.getElementById('onboard-step-profile').classList.add('hidden');
-      
-      // Show role selection
-      const roleSelect = document.getElementById('onboard-step-role-select');
-      
-      const roleToSelect = preSelectedRole || 'student';
-      const targetRadio = document.querySelector(`input[name="auth-role"][value="${roleToSelect}"]`);
-      if (targetRadio) {
-        targetRadio.checked = true;
-        updateRoleSelectionUI();
-      }
-      
-      if (roleSelect) roleSelect.classList.remove('hidden');
-      if (window.lucide) lucide.createIcons();
+        function openSignInModal() {
+      const selectedRadio = document.querySelector('input[name="header-role"]:checked');
+      const role = selectedRadio ? selectedRadio.value : 'student';
+      startEmailAuth(role);
     }
     function startEmailAuth(role) {
       onboardSelectedRole = role; // store role for later
@@ -5603,6 +5587,14 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       }
 
       currentAppTab = tabName;
+      let mappedRadio = tabName === 'practice' || tabName === 'report' ? 'student' : tabName;
+      const targetRadio = document.querySelector(`input[name="header-role"][value="${mappedRadio}"]`);
+      if (targetRadio && !targetRadio.checked) {
+         targetRadio.checked = true;
+         // update the sign in button color if we were logged out and navigated programmatically
+         handleHeaderRoleChange(mappedRadio);
+      }
+
       const practiceBtn = document.getElementById('tab-nav-practice');
       const teacherBtn = document.getElementById('tab-nav-teacher');
       const adminBtn = document.getElementById('tab-nav-admin');
