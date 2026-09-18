@@ -34,11 +34,11 @@ graph LR
     subgraph Firebase ["☁️ Hosted Globally on Google Firebase"]
         subgraph Client ["Client Browser (Single Page App)"]
             direction TB
-            UI["Gamified UI & CRA Manipulatives"]:::primary
-            Auth["Role-Based Email Auth"]:::logic
-            Gen["Procedural Math Generator"]:::logic
-            AI["Cognitive AI & Fallback Engine"]:::logic
-            DB["Local User Database"]:::primary
+            UI["Gamified UI & CRA Manipulatives<br/>(Visual Interfaces)"]:::primary
+            Auth["Role-Based Email Auth<br/>(Access Security)"]:::logic
+            Gen["Procedural Math Generator<br/>(Infinite Problems)"]:::logic
+            AI["Cognitive AI & Fallback Engine<br/>(Error Diagnosis & Uptime)"]:::logic
+            DB["Local User Database<br/>(Zero-Lag Storage)"]:::primary
             
             UI --> Auth
             UI --> Gen
@@ -51,9 +51,9 @@ graph LR
 
     subgraph External ["External Cloud APIs"]
         direction TB
-        Email["EmailJS (OTP Dispatch)"]:::cloud
-        Gemini["Google Gemini 2.5 Flash"]:::cloud
-        Varsity["Varsity Tutors Bridge"]:::cloud
+        Email["EmailJS API<br/>(Real Email OTP)"]:::cloud
+        Gemini["Google Gemini 2.5 Flash<br/>(Socratic Mentorship)"]:::cloud
+        Varsity["Varsity Tutors Bridge<br/>(Live Human Handoff)"]:::cloud
     end
 
     %% Cross-boundary connections
