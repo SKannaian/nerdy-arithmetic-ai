@@ -5111,18 +5111,20 @@
     let selectedAvatarChar = '🦊';
     let currentPendingOtp = null;
     let currentPendingEmail = '';
-    let otpDeliveryMode = 'demo';
-        const revealContainer = document.getElementById('demo-reveal-container');
-        if (revealContainer) {
-          if (otpDeliveryMode === 'email') {
-            revealContainer.style.display = 'none';
-          } else {
-            revealContainer.style.display = 'flex';
-          }
-        } // 'demo' | 'email'
+    let otpDeliveryMode = 'demo'; // 'demo' | 'email'
 
     function setOtpDeliveryMode(mode) {
       otpDeliveryMode = mode;
+      
+      const revealContainer = document.getElementById('demo-reveal-container');
+      if (revealContainer) {
+        if (otpDeliveryMode === 'email') {
+          revealContainer.style.display = 'none';
+        } else {
+          revealContainer.style.display = 'flex';
+        }
+      }
+
       const demoBtn = document.getElementById('otp-mode-demo-btn');
       const emailBtn = document.getElementById('otp-mode-email-btn');
       const helpText = document.getElementById('otp-mode-help');
