@@ -294,11 +294,47 @@
   <main id="view-practice" class="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-6 py-2 sm:py-3 flex flex-col space-y-3 items-center">
 
     <!-- UNIFIED HUD STATS STRIP -->
-    <section class="w-full bg-white/95 backdrop-blur-xs rounded-2xl px-3.5 sm:px-5 py-2.5 nerdy-shadow flex flex-wrap items-center justify-between gap-2.5 border border-sky-200/80">
+    <section class="w-full bg-white/95 backdrop-blur-xs rounded-3xl p-3 sm:p-4 nerdy-shadow flex flex-wrap items-center justify-between gap-3 border border-sky-200/80">
       
-      <!-- Left: SmartScore Mini Gauge & Mastery Milestone -->
-      <div class="flex items-center gap-2.5 sm:gap-3">
-        <div class="relative w-10 h-10 flex items-center justify-center shrink-0">
+      <!-- Left / Top: Large Amount Solved & Large Timer (+ Streak) -->
+      <div class="flex items-center gap-2 sm:gap-3.5 flex-wrap">
+        
+        <!-- Large Solved Card -->
+        <div class="flex items-center gap-2.5 bg-gradient-to-br from-emerald-50 to-teal-50/60 px-3.5 sm:px-4 py-2 rounded-2xl border border-emerald-200 shadow-xs" title="Total Problems Solved">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-600 shrink-0">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[10px] sm:text-[11px] font-extrabold uppercase text-emerald-800 tracking-wider">Solved</div>
+            <div id="questions-counter" class="font-mono font-black text-2xl sm:text-3xl text-emerald-700 leading-none">0</div>
+          </div>
+        </div>
+
+        <!-- Large Time Elapsed Card -->
+        <div class="flex items-center gap-2.5 bg-gradient-to-br from-sky-50 to-blue-50/60 px-3.5 sm:px-4 py-2 rounded-2xl border border-sky-200 shadow-xs" title="Session Time Elapsed">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-600 shrink-0">
+            <i data-lucide="timer" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="text-[10px] sm:text-[11px] font-extrabold uppercase text-sky-800 tracking-wider">Time</div>
+            <div id="time-counter" class="font-mono font-black text-2xl sm:text-3xl text-sky-700 leading-none">00:00</div>
+          </div>
+        </div>
+
+        <!-- Streak Badge -->
+        <div id="streak-badge" class="inline-flex items-center gap-2 px-3 py-2 rounded-2xl border border-amber-300 bg-gradient-to-br from-amber-50 to-orange-50/70 shadow-xs font-bold text-amber-900" title="Current Daily Practice Streak">
+          <span class="text-lg">🔥</span>
+          <div class="flex flex-col">
+            <span class="text-[9px] font-extrabold uppercase text-amber-700 tracking-wider leading-tight">Streak</span>
+            <span class="font-mono font-black text-sm text-amber-950 leading-tight"><span id="streak-num">0</span> <span class="text-[10px] font-semibold text-amber-800">in a row</span></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Side: SmartScore Gauge & Progress Bar -->
+      <div class="flex items-center gap-3 bg-gradient-to-br from-purple-50/70 via-indigo-50/50 to-sky-50/60 px-3.5 py-2 sm:py-2.5 rounded-2xl border border-purple-200/90 shadow-xs ml-auto sm:ml-0">
+        <div class="relative w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
           <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
             <circle cx="60" cy="60" r="50" fill="none" stroke="#f1f5f9" stroke-width="12"></circle>
             <circle 
@@ -315,33 +351,26 @@
               stroke-dashoffset="314.159"
             ></circle>
           </svg>
-          <span class="absolute text-xs">⭐</span>
+          <span class="absolute text-xs sm:text-sm">⭐</span>
         </div>
-        <div class="flex flex-col">
-          <div class="flex items-baseline gap-1">
-            <span class="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">SmartScore</span>
-            <span id="smartscore-val" class="font-display font-black text-xl sm:text-2xl text-sky-600 leading-none">0</span>
-            <span class="text-[10px] font-bold text-slate-400">/ 100</span>
-          </div>
-          <div id="mastery-ribbon" class="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500">
-            <span>🌱 Practice Zone</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- Right: Problem Counters, Timer & Streak -->
-      <div class="flex items-center gap-2 sm:gap-3 text-xs font-bold text-slate-600">
-        <div class="flex items-center gap-1.5 bg-emerald-50/90 px-2.5 py-1 rounded-xl border border-emerald-200 shadow-xs" title="Challenges Solved">
-          <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
-          <span class="text-[10px] text-emerald-800 font-bold uppercase hidden sm:inline">Solved:</span>
-          <span id="questions-counter" class="font-mono font-black text-emerald-950">0</span>
-        </div>
-        <div class="flex items-center gap-1.5 bg-sky-50/90 px-2.5 py-1 rounded-xl border border-sky-200 shadow-xs" title="Session Time">
-          <i data-lucide="timer" class="w-3.5 h-3.5 text-sky-600"></i>
-          <span id="time-counter" class="font-mono font-black text-sky-950">00:00</span>
-        </div>
-        <div id="streak-badge" class="inline-flex items-center gap-1 text-xs font-extrabold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-xl border border-amber-300 shadow-xs" title="Current Streak">
-          <span id="streak-num">0</span> <span class="text-[11px]">streak 🔥</span>
+        <div class="flex flex-col">
+          <div class="flex items-baseline gap-1.5">
+            <span class="text-[10px] font-extrabold uppercase text-purple-700 tracking-wider">SmartScore</span>
+            <span id="smartscore-val" class="font-display font-black text-2xl sm:text-3xl text-purple-700 leading-none">0</span>
+            <span class="text-[11px] font-bold text-slate-400">/ 100</span>
+          </div>
+
+          <!-- Horizontal SmartScore Progress Bar -->
+          <div class="w-28 sm:w-36 bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200 mt-1">
+            <div id="smartscore-horizontal-bar" class="bg-gradient-to-r from-sky-500 to-purple-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+
+          <div class="mt-1">
+            <span id="mastery-ribbon" class="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500">
+              🌱 Practice Zone
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -3832,32 +3861,51 @@
 
     function updateSmartScoreDisplay() {
       const score = state.smartScore;
-      document.getElementById('smartscore-val').innerText = score;
+      const valEl = document.getElementById('smartscore-val');
+      if (valEl) valEl.innerText = score;
       
       // Update SVG gauge ring
       const circle = document.getElementById('smartscore-circle');
       const maxOffset = 314.159;
       const offset = maxOffset - (score / 100) * maxOffset;
-      circle.style.strokeDashoffset = offset;
+      if (circle) circle.style.strokeDashoffset = offset;
+
+      // Update Horizontal Progress Bar
+      const hBar = document.getElementById('smartscore-horizontal-bar');
+      if (hBar) {
+        hBar.style.width = `${Math.min(100, Math.max(0, score))}%`;
+      }
 
       // Color code by milestone
       const ribbon = document.getElementById('mastery-ribbon');
       if (score >= 90) {
-        circle.setAttribute('stroke', '#f59e0b'); // Gold
-        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300';
-        ribbon.innerHTML = '🥇 Gold Challenge Zone';
+        if (circle) circle.setAttribute('stroke', '#f59e0b'); // Gold
+        if (hBar) hBar.className = 'bg-gradient-to-r from-amber-400 to-amber-600 h-full rounded-full transition-all duration-500';
+        if (ribbon) {
+          ribbon.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-900 border border-amber-300';
+          ribbon.innerHTML = '🥇 Gold Challenge Zone';
+        }
       } else if (score >= 80) {
-        circle.setAttribute('stroke', '#a855f7'); // Purple
-        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-900 border border-purple-300';
-        ribbon.innerHTML = '🥈 Silver Ribbon';
+        if (circle) circle.setAttribute('stroke', '#a855f7'); // Purple
+        if (hBar) hBar.className = 'bg-gradient-to-r from-purple-500 to-indigo-600 h-full rounded-full transition-all duration-500';
+        if (ribbon) {
+          ribbon.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-900 border border-purple-300';
+          ribbon.innerHTML = '🥈 Silver Ribbon';
+        }
       } else if (score >= 70) {
-        circle.setAttribute('stroke', '#16a34a'); // Green
-        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300';
-        ribbon.innerHTML = '🥉 Bronze Ribbon';
+        if (circle) circle.setAttribute('stroke', '#16a34a'); // Green
+        if (hBar) hBar.className = 'bg-gradient-to-r from-emerald-400 to-teal-500 h-full rounded-full transition-all duration-500';
+        if (ribbon) {
+          ribbon.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300';
+          ribbon.innerHTML = '🥉 Bronze Ribbon';
+        }
       } else {
-        circle.setAttribute('stroke', '#0284c7'); // Blue
-        ribbon.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200';
-        ribbon.innerHTML = '🌱 Practice Zone';
+        if (circle) circle.setAttribute('stroke', '#0284c7'); // Blue
+        if (hBar) hBar.className = 'bg-gradient-to-r from-sky-400 to-blue-600 h-full rounded-full transition-all duration-500';
+        if (ribbon) {
+          ribbon.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200';
+          ribbon.innerHTML = '🌱 Practice Zone';
+        }
       }
     }
 
