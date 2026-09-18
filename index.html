@@ -150,7 +150,7 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-sky-200 selection:text-sky-900">
-  <div id="app-wrapper" class="hidden w-full flex-1 flex-col">
+  <div id="app-wrapper" class="w-full flex-1 flex flex-col">
 
   <!-- TOP HEADER (NERDY LEARNING STYLE) -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
@@ -1946,7 +1946,7 @@
 
   <!-- LEARNER ONBOARDING & EXPLORER JOURNEY MODAL -->
     </div>
-<div id="landing-page-view" class="min-h-screen bg-gradient-to-br from-slate-50 to-sky-50 flex items-center justify-center p-4 w-full">
+<div id="onboarding-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-2xl border border-slate-200 bounce-in relative max-h-[92vh] overflow-y-auto">
       
       <!-- Top Close Button (Go straight to practice) -->
@@ -1954,8 +1954,13 @@
         ✕
       </button>
 
-      <!-- PROGRESS STEPPER HEADER -->
-      <div id="onboard-stepper" class="mb-4 sm:mb-5 border-b border-slate-100 pb-3">
+      
+        <!-- Top Close Button -->
+        <button type="button" id="onboard-close-btn" onclick="document.getElementById('onboarding-modal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 font-bold p-1.5 rounded-full hover:bg-slate-100 transition z-20" title="Close">
+          ✖
+        </button>
+        <!-- PROGRESS STEPPER HEADER -->
+      <div id="onboard-stepper" class="hidden mb-4 sm:mb-5 border-b border-slate-100 pb-3">
         <div class="flex items-center justify-between gap-1 text-[11px] font-bold">
           <button type="button" onclick="goToOnboardStep('welcome')" id="onboard-pill-welcome" class="flex-1 py-1.5 px-2 rounded-xl flex items-center justify-center gap-1 bg-sky-50 text-sky-700 border border-sky-200 transition">
             <span>1. Explorer Setup</span>
@@ -1981,7 +1986,7 @@
           <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">Common Core K–5 Socratic arithmetic with visual manipulatives, live AI tutor Byte, and SmartScore mastery.</p>
         </div>
 
-        <!-- Authentication & Login -->
+<div class="hidden">        <!-- Authentication & Login -->
         <div>
           <label class="block font-bold text-slate-700 text-sm mb-2 text-center">Login to Your Account</label>
           <div class="space-y-3">
@@ -2010,7 +2015,7 @@
               </button>
             </div>
           </div>
-        </div>
+        </div></div>
 
         <!-- Avatar & Nickname Row -->
         <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-3">
@@ -4184,6 +4189,7 @@
         state.profile.history[qKey].correctCount += 1;
         state.profile.totalQuestionsSolved += 1;
         saveLearnerProfile();
+        updateProfileUI();
         
         let pointGain = 10;
         if (state.smartScore < 70) pointGain = 12;
@@ -4201,6 +4207,7 @@
         if (state.smartScore === 100) {
           state.profile.skillsMastered += 1;
           saveLearnerProfile();
+        updateProfileUI();
           triggerConfetti();
           playSoundEffect('milestone');
           document.getElementById('mastery-modal').classList.remove('hidden');
@@ -4228,6 +4235,7 @@
           state.profile.troubleSpots.push(qKey);
         }
         saveLearnerProfile();
+        updateProfileUI();
 
         // Gentle adjustment on mistakes to enforce genuine mastery
         state.smartScore = Math.max(0, state.smartScore - (state.smartScore >= 90 ? 8 : 4));
@@ -5228,9 +5236,7 @@
     }
 
     function jumpDirectToAdminPortal() {
-      document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+      document.getElementById('onboarding-modal').classList.add('hidden');
       openAdminAuthModal();
     }
 
@@ -5300,10 +5306,9 @@
       state.profile.gradeTier = grade;
       state.profile.onboarded = true;
       saveLearnerProfile();
+        updateProfileUI();
 
-      document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+      document.getElementById('onboarding-modal').classList.add('hidden');
       switchGradeTier(grade);
       triggerConfetti();
       playSoundEffect('correct');
@@ -5326,7 +5331,14 @@
     function startEmailAuth(role) {
       onboardSelectedRole = role; // store role for later
       document.getElementById('onboard-step-welcome').classList.add('hidden');
+      document.getElementById('onboard-step-tour').classList.add('hidden');
+      document.getElementById('onboard-step-launch').classList.add('hidden');
+      document.getElementById('onboard-step-profile').classList.add('hidden');
+      document.getElementById('onboard-step-otp').classList.add('hidden');
+      
       document.getElementById('onboard-step-email').classList.remove('hidden');
+      document.getElementById('onboarding-modal').classList.remove('hidden');
+      
       document.getElementById('auth-email-input').focus();
       playSoundEffect('tap');
     }
@@ -5339,10 +5351,9 @@
       state.profile.role = role;
       state.profile.name = "Demo " + role.charAt(0).toUpperCase() + role.slice(1);
       saveLearnerProfile();
+        updateProfileUI();
       
-      document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+      document.getElementById('onboarding-modal').classList.add('hidden');
       if (role === 'admin' || role === 'teacher') {
         switchAppTab('admin');
       } else {
@@ -5440,9 +5451,8 @@
         state.profile = { ...DEFAULT_PROFILE, ...usersDb[currentPendingEmail] };
         state.profile.onboarded = true;
         saveLearnerProfile();
-        document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+        updateProfileUI();
+        document.getElementById('onboarding-modal').classList.add('hidden');
         switchGradeTier(normalizeTier(state.profile.gradeTier || 'k'));
         addByteMessage(`Welcome back, **${state.profile.name}**! Your progress and daily streak of **${state.profile.dailyStreak || 1} days** have been loaded! 🚀`);
       } else {
@@ -5455,9 +5465,8 @@
         state.profile.gradeTier = grade;
         state.profile.onboarded = true;
         saveLearnerProfile();
-        document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+        updateProfileUI();
+        document.getElementById('onboarding-modal').classList.add('hidden');
         switchGradeTier(grade);
         triggerConfetti();
         addByteMessage(`Welcome aboard, **${name}**! Your account is activated with **${currentPendingEmail}**. Let's solve some fun math problems! 🚀`);
@@ -5475,10 +5484,9 @@
       state.profile.gradeTier = grade;
       state.profile.onboarded = true;
       saveLearnerProfile();
+        updateProfileUI();
 
-      document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+      document.getElementById('onboarding-modal').classList.add('hidden');
       switchGradeTier(grade);
       addByteMessage(`Welcome aboard, **${name}**! Your account is activated with **${currentPendingEmail}**. Let's solve some fun math problems! 🚀`);
     }
@@ -5499,19 +5507,19 @@
           sessions: []
         };
         saveLearnerProfile();
+        updateProfileUI();
         location.reload();
       }
     }
 
     function cancelOnboarding() {
-      document.getElementById('landing-page-view').classList.add('hidden');
-      document.getElementById('app-wrapper').classList.remove('hidden');
-      document.getElementById('app-wrapper').classList.add('flex');
+      document.getElementById('onboarding-modal').classList.add('hidden');
       if (!state.profile.onboarded) {
         const name = (document.getElementById('onboard-name')?.value || '').trim() || 'Guest Explorer';
         const grade = normalizeTier(onboardSelectedGrade || state.tier || 'k');
         state.profile = { ...DEFAULT_PROFILE, onboarded: true, name: name, avatar: selectedAvatarChar, gradeTier: grade };
         saveLearnerProfile();
+        updateProfileUI();
         switchGradeTier(grade);
         addByteMessage(`Welcome, **${name}**! You can sign in or sync an account anytime from your profile. Let's do some math! 🚀`);
       } else {
@@ -5666,6 +5674,7 @@
         if (state.profile.sessions.length > 20) state.profile.sessions.pop();
       }
       saveLearnerProfile();
+        updateProfileUI();
     }
 
     function copyDirectPracticeLink() {
@@ -5689,6 +5698,7 @@
     function toggleDailyReminder() {
       state.profile.dailyReminder = !state.profile.dailyReminder;
       saveLearnerProfile();
+        updateProfileUI();
       const badge = document.getElementById('reminder-toggle-badge');
       if (badge) {
         if (state.profile.dailyReminder) {
@@ -6437,6 +6447,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         onboarded: true
       };
       saveLearnerProfile();
+        updateProfileUI();
       switchGradeTier(gradeNorm);
       switchAppTab('practice');
       addByteMessage(`🚀 **Switched Learner Profile!** You are now practicing as **${s.name}** (${CURRICULUM[gradeNorm]?.title || gradeNorm.toUpperCase()}).`);
@@ -6836,6 +6847,17 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
 
     function updateProfileUI() {
       const p = state.profile;
+      const lgGroup = document.getElementById('header-login-group');
+      const pfGroup = document.getElementById('header-profile-group');
+      if (p.onboarded) {
+        if (lgGroup) lgGroup.classList.add('hidden');
+        if (pfGroup) pfGroup.classList.remove('hidden');
+        if (pfGroup) pfGroup.classList.add('flex');
+      } else {
+        if (lgGroup) lgGroup.classList.remove('hidden');
+        if (lgGroup) lgGroup.classList.add('flex');
+        if (pfGroup) pfGroup.classList.add('hidden');
+      }
       document.getElementById('header-avatar').innerText = p.avatar || '🦊';
       document.getElementById('header-name').innerText = p.name || 'Explorer';
       document.getElementById('header-streak-badge').innerText = `${p.dailyStreak || 1}d 🔥`;
@@ -6894,6 +6916,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (confirm('Reset your profile progress and daily streak?')) {
         state.profile = { ...DEFAULT_PROFILE, onboarded: true, email: state.profile.email };
         saveLearnerProfile();
+        updateProfileUI();
         toggleProfileModal();
         generateProblem();
       }
@@ -6917,6 +6940,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         state.profile.lastActiveDate = today;
       }
       saveLearnerProfile();
+        updateProfileUI();
     }
 
     // ── BOOTSTRAP ────────────────────────────────────────────────────────────
@@ -6959,6 +6983,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
           state.profile.onboarded = true;
         }
         saveLearnerProfile();
+        updateProfileUI();
       }
 
       if (gradeParam) {
@@ -6976,9 +7001,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         if (cancelLabel) cancelLabel.innerText = 'Continue as Guest Explorer 🦊';
         openOnboardingModal('welcome');
       } else {
-        document.getElementById('landing-page-view').classList.add('hidden');
-        document.getElementById('app-wrapper').classList.remove('hidden');
-        document.getElementById('app-wrapper').classList.add('flex');
+        document.getElementById('onboarding-modal').classList.add('hidden');
         state.tier = normalizeTier(state.profile.gradeTier || state.tier || 'k');
         switchGradeTier(state.tier);
       }
