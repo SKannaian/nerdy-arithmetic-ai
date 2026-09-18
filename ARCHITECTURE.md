@@ -26,32 +26,38 @@ Nerdy Arithmetic AI is built on a **modern, decoupled, edge-capable architecture
 
 ```mermaid
 graph TB
+    %% Styling - High Contrast for Presentations
+    classDef primary fill:#2563eb,stroke:#1e40af,stroke-width:2px,color:#ffffff,font-weight:bold;
+    classDef logic fill:#059669,stroke:#047857,stroke-width:2px,color:#ffffff,font-weight:bold;
+    classDef cloud fill:#d97706,stroke:#b45309,stroke-width:2px,color:#ffffff,font-weight:bold;
+    classDef manip fill:#7c3aed,stroke:#5b21b6,stroke-width:2px,color:#ffffff,font-weight:bold;
+
     subgraph ClientTier["Client Tier (Single Page App / Edge)"]
-        UI["Gamified Kid-Friendly UI (TailwindCSS)"]
-        HUD["Mastery HUD & Admin Dashboards"]
+        UI["Gamified Kid-Friendly UI"]:::primary
+        HUD["Mastery HUD & Admin Dashboards"]:::primary
         
         subgraph LogicLayer["Client-Side AI & Business Logic"]
-            Auth["Role-Based Auth (Email OTP)"]
-            Classifier["Cognitive Misconception Classifier"]
-            Guardrails["Socratic Anti-Spoil Guardrails"]
-            OfflineHeuristic["Zero-Crash Offline Engine"]
-            AntiRep["Anti-Repetition & Spaced Review"]
+            Auth["Role-Based Auth (Email OTP)"]:::logic
+            Classifier["Cognitive Misconception Classifier"]:::logic
+            Guardrails["Socratic Anti-Spoil Guardrails"]:::logic
+            OfflineHeuristic["Zero-Crash Offline Engine"]:::logic
+            AntiRep["Anti-Repetition Engine"]:::logic
         end
 
         subgraph Manipulatives["CRA Virtual Manipulatives"]
-            TenFrame["Ten-Frames Engine (K–1)"]
-            Base10["Base-10 Regrouping (Grades 2–3)"]
-            AreaArray["Area Arrays Grid (Grades 4–5)"]
+            TenFrame["Ten-Frames Engine (K–1)"]:::manip
+            Base10["Base-10 Regrouping (Grades 2–3)"]:::manip
+            AreaArray["Area Arrays Grid (Grades 4–5)"]:::manip
         end
         
-        UserDB["Persistent User DB (localStorage)"]
+        UserDB["Persistent User DB (localStorage)"]:::primary
     end
 
     subgraph CloudTier["Google Cloud Platform & External APIs"]
-        Firebase["Google Cloud Firebase Hosting"]
-        GeminiFlash["Google Gemini 2.5 Flash API"]
-        EmailJS["EmailJS (Real-world OTP Dispatch)"]
-        VarsityTutor["Varsity Tutors Human Telemetry Bridge"]
+        Firebase["Google Cloud Firebase Hosting"]:::cloud
+        GeminiFlash["Google Gemini 2.5 Flash API"]:::cloud
+        EmailJS["EmailJS (Real-world OTP)"]:::cloud
+        VarsityTutor["Varsity Tutors Human Bridge"]:::cloud
     end
 
     %% Client Interactions
@@ -66,11 +72,6 @@ graph TB
     LogicLayer -- "Socratic Hint Request" --> GeminiFlash
     GeminiFlash -. "Offline Fallback" .-> OfflineHeuristic
     UserDB -- "Live Dossier" --> VarsityTutor
-
-    classDef client fill:#f0f9ff,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
-    classDef cloud fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#78350f;
-    class ClientTier client;
-    class CloudTier cloud;
 ```
 
 ---
