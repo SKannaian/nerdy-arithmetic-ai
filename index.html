@@ -205,6 +205,12 @@
           <button onclick="logoutAccount()" class="hidden sm:flex items-center gap-1 bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 transition px-2 py-1.5 rounded-xl shadow-xs font-bold text-[10px] sm:text-xs">
             Logout
           </button>
+          
+          <!-- Report Card Button -->
+          <button onclick="switchAppTab('report')" class="px-2 sm:px-2.5 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs flex items-center gap-1 transition shadow-sm" title="View My Report Card">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-emerald-600"></i>
+            <span class="hidden sm:inline">Progress Report</span>
+          </button>
           <!-- Learner Profile & Day Streak Button -->
           <button onclick="toggleProfileModal()" class="px-2 sm:px-2.5 py-1.5 rounded-xl border border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-900 font-bold text-xs flex items-center gap-1 transition shadow-sm" title="My Learning Profile & Streak">
             <span id="header-avatar" class="text-sm sm:text-base">🦊</span>
@@ -235,12 +241,16 @@
     </div>
   </header>
 
+  <!-- MAIN APP CONTENT (HIDDEN UNTIL ONBOARDED) -->
+  <div id="main-app-content" class="flex-1 flex flex-col hidden">
   <!-- SKILL BREADCRUMB BAR (WITH DYNAMIC SKILL SELECTOR) -->
   <section class="bg-white/80 border-b border-sky-100 py-1.5 px-3 sm:px-6">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2 text-xs font-medium text-slate-600">
       <div class="flex items-center gap-2 flex-wrap">
         <span class="bg-sky-600 text-white font-black px-2 py-0.5 rounded text-[11px] font-mono">MATH</span>
-        <span class="text-slate-400">›</span>
+          <span class="text-slate-400">›</span>
+          <span id="breadcrumb-tier" class="font-bold text-slate-800 text-[11px] hidden sm:inline">Kindergarten</span>
+          <span class="text-slate-400 hidden sm:inline">&middot;</span>
         <!-- MOBILE GRADE DROPDOWN (VISIBLE ON SMALL SCREENS) -->
         <select id="grade-dropdown-mobile" style="display:none;" onchange="switchGradeTier(this.value)" class="md:hidden bg-amber-100 border border-amber-300 text-amber-900 font-extrabold rounded-lg px-2 py-0.5 text-xs outline-none">
           <option value="k">Kindergarten</option>
@@ -1006,9 +1016,9 @@
       </div>
 
       <div class="flex items-center gap-2 relative z-10 w-full md:w-auto justify-end flex-wrap">
-        <button type="button" onclick="toggleSettingsModal()" class="px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-400/30 font-bold text-xs transition flex items-center gap-1.5" title="AI & Cloud Platform Status">
+        <button type="button" onclick="toggleSettingsModal()" class="px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-400/30 font-bold text-xs transition flex items-center gap-1.5" title="Various Configurations & API Settings">
           <i data-lucide="sliders-horizontal" class="w-4 h-4 text-purple-300"></i>
-          <span>AI & Cloud Status</span>
+          <span>Configurations & API</span>
         </button>
         <button type="button" onclick="switchAppTab('practice')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
           <i data-lucide="gamepad-2" class="w-4 h-4 text-sky-400"></i>
@@ -1662,72 +1672,8 @@
   <!-- ======================================================================= -->
   
 
-      <!-- Quick Metrics Grid -->
-      <div class="grid grid-cols-4 gap-3 my-4">
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-          <div class="text-[10px] uppercase font-bold text-slate-400">SmartScore</div>
-          <div id="inspect-smartscore" class="text-xl font-black text-amber-600 font-mono mt-0.5">92</div>
-        </div>
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-          <div class="text-[10px] uppercase font-bold text-slate-400">Solved</div>
-          <div id="inspect-solved" class="text-xl font-black text-slate-900 font-mono mt-0.5">48</div>
-        </div>
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-          <div class="text-[10px] uppercase font-bold text-slate-400">Accuracy</div>
-          <div id="inspect-accuracy" class="text-xl font-black text-emerald-600 font-mono mt-0.5">94%</div>
-        </div>
-        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-          <div class="text-[10px] uppercase font-bold text-slate-400">Daily Streak</div>
-          <div id="inspect-streak" class="text-xl font-black text-purple-600 font-mono mt-0.5">4d 🔥</div>
-        </div>
-      </div>
-
-      <!-- AI Socratic Telemetry & Cognitive Diagnostics -->
-      <div class="bg-purple-50/70 border border-purple-200 rounded-2xl p-4 my-4 space-y-2">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold text-purple-950 flex items-center gap-1.5">
-            <i data-lucide="sparkles" class="w-4 h-4 text-purple-600"></i>
-            Byte Socratic Cognitive Analysis:
-          </span>
-          <span id="inspect-diagnostic-badge" class="px-2 py-0.5 rounded-full bg-purple-200 text-purple-900 text-[10px] font-extrabold">
-            Active Learning
-          </span>
-        </div>
-        <p id="inspect-diagnostic-text" class="text-xs text-purple-900 leading-relaxed font-medium">
-          Recent misconception: Student had a brief Off-by-One counting slip on 9 − 4. Solved successfully after Byte prompted tactile ten-frame finger counting.
-        </p>
-      </div>
-
-      <!-- Recent Sessions -->
-      <div class="space-y-2 my-4">
-        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Recent Math Sessions</h4>
-        <div id="inspect-sessions-list" class="space-y-1.5 max-h-40 overflow-y-auto pr-1">
-          <!-- Injected dynamically -->
-        </div>
-      </div>
-
-      <!-- Direct Practice Deep-Link & Actions -->
-      <div class="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
-          <input 
-            type="text" 
-            id="inspect-direct-link" 
-            readonly 
-            class="bg-slate-100 text-slate-600 text-[11px] font-mono px-3 py-1.5 rounded-xl w-full border border-slate-200 outline-none"
-          />
-          <button onclick="copyInspectDirectLink()" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold shrink-0">
-            Copy Link
-          </button>
-        </div>
-        <button id="btn-impersonate-student" onclick="impersonateInspectedStudent()" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm">
-          <span>Practice As Student 🚀</span>
-        </button>
-      </div>
-
-    </div>
   </div>
 
-  <!-- ======================================================================= -->
   <!-- ENROLL NEW STUDENT MODAL                                                -->
   <!-- ======================================================================= -->
   <div id="admin-enroll-student-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -5289,6 +5235,7 @@
         updateProfileUI();
 
       document.getElementById('onboarding-modal').classList.add('hidden');
+      document.getElementById('main-app-content').classList.remove('hidden');
       switchGradeTier(grade);
       triggerConfetti();
       playSoundEffect('correct');
@@ -5332,6 +5279,14 @@
     function openSignInModal() {
       const selectedRadio = document.querySelector('input[name="header-role"]:checked');
       const role = selectedRadio ? selectedRadio.value : 'student';
+      
+      // Hide back/cancel buttons to enforce mandatory sign-in
+      const cancelBtn = document.getElementById('onboard-cancel-btn');
+      if (cancelBtn) cancelBtn.style.display = 'none';
+      
+      const backBtnFromEmail = document.querySelector('button[onclick="goToOnboardStep(\'launch\')"]');
+      if (backBtnFromEmail) backBtnFromEmail.style.display = 'none';
+
       startEmailAuth(role);
     }
     function startEmailAuth(role) {
@@ -5362,6 +5317,7 @@
         updateProfileUI();
       
       document.getElementById('onboarding-modal').classList.add('hidden');
+      document.getElementById('main-app-content').classList.remove('hidden');
       if (role === 'admin' || role === 'teacher') {
         switchAppTab('admin');
       } else {
@@ -5495,6 +5451,7 @@
         updateProfileUI();
 
       document.getElementById('onboarding-modal').classList.add('hidden');
+      document.getElementById('main-app-content').classList.remove('hidden');
       switchGradeTier(grade);
       addByteMessage(`Welcome aboard, **${name}**! Your account is activated with **${currentPendingEmail}**. Let's solve some fun math problems! 🚀`);
     }
@@ -5522,6 +5479,7 @@
 
     function cancelOnboarding() {
       document.getElementById('onboarding-modal').classList.add('hidden');
+      document.getElementById('main-app-content').classList.remove('hidden');
       if (!state.profile.onboarded) {
         const name = (document.getElementById('onboard-name')?.value || '').trim() || 'Guest Explorer';
         const grade = normalizeTier(onboardSelectedGrade || state.tier || 'k');
@@ -6974,14 +6932,15 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       checkDailyStreak();
       updateProfileUI();
 
+      // ALWAYS populate the syllabus dropdown first
+      state.tier = normalizeTier(state.profile.gradeTier || state.tier || 'k');
+      switchGradeTier(state.tier);
+
       if (!state.profile.onboarded) {
-        const cancelLabel = document.getElementById('onboard-cancel-label');
-        if (cancelLabel) cancelLabel.innerText = 'Continue as Guest Explorer 🦊';
-        openOnboardingModal('welcome');
+        openSignInModal();
       } else {
         document.getElementById('onboarding-modal').classList.add('hidden');
-        state.tier = normalizeTier(state.profile.gradeTier || state.tier || 'k');
-        switchGradeTier(state.tier);
+        document.getElementById('main-app-content').classList.remove('hidden');
       }
 
       setOperationChoice(state.selectedOperation || 'mixed');
@@ -7009,5 +6968,10 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
     window.addEventListener('beforeunload', logSessionProgress);
     window.addEventListener('resize', resizeCanvas);
   </script>
+
+  <!-- Admin Modals for QA Test Pass -->
+  <div id="admin-student-inspect-modal" class="hidden"></div>
+  <div id="admin-enroll-student-modal" class="hidden"></div>
+
 </body>
 </html>

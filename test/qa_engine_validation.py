@@ -239,12 +239,18 @@ def run_html_dom_audit():
         'manipulative-viewport', 'manipulative-title', 'problem-subtext',
         'equation-display', 'smartscore-val', 'smartscore-circle', 'mastery-ribbon',
         'questions-counter', 'time-counter', 'streak-badge', 'streak-num',
-        'tier-badge', 'breadcrumb-tier', 'skill-selector', 'tab-nav-admin',
-        'view-practice', 'view-report', 'view-admin', 'admin-auth-modal',
+        'tier-badge', 'breadcrumb-tier', 'skill-selector', 
+        'view-practice', 'view-report', 'view-admin', 
         'admin-student-inspect-modal', 'admin-enroll-student-modal', 'mastery-modal',
         'explanation-modal', 'explain-wrong-val', 'explain-correct-val', 'explain-steps-body'
     ]
     
+    
+    # 1.5 Check unified authentication radio buttons
+    if 'name="header-role"' not in content:
+        print("❌ DOM MISSING: Unified header-role radio buttons not found!")
+        errors += 1
+
     for rid in required_ids:
         if f'id="{rid}"' not in content and f"id='{rid}'" not in content:
             print(f"❌ DOM MISSING: Element ID '{rid}' not found in index.html!")
@@ -256,8 +262,7 @@ def run_html_dom_audit():
     required_functions = [
         'handleFormSubmit', 'autoPopulateManipulative', 'clearManipulative',
         'toggleTouchKeypad', 'keypadPress', 'switchGradeTier', 'changeSkill',
-        'switchAppTab', 'openAdminAuthModal', 'handleAdminAuthSubmit',
-        'instantAdminDemoLogin', 'logoutAdmin', 'openStudentInspectModal',
+        'switchAppTab', 'openStudentInspectModal',
         'openEnrollStudentModal', 'handleEnrollStudentSubmit', 'exportRosterCsv',
         'broadcastParentReminder', 'readByteAloud', 'readEquationAloud',
         'playSoundEffect', 'triggerConfetti', 'saveLearnerProfile',
