@@ -30,6 +30,15 @@ graph LR
     classDef primary fill:#2563eb,stroke:#1e40af,stroke-width:2px,color:#ffffff,font-weight:bold;
     classDef logic fill:#059669,stroke:#047857,stroke-width:2px,color:#ffffff,font-weight:bold;
     classDef cloud fill:#d97706,stroke:#b45309,stroke-width:2px,color:#ffffff,font-weight:bold;
+    classDef tech fill:#475569,stroke:#1e293b,stroke-width:2px,color:#ffffff,font-weight:bold;
+
+    subgraph Tech ["🛠️ Tech Stack Cheat Sheet"]
+        direction TB
+        T1["🎨 Frontend<br/>(Vanilla JS, HTML, Tailwind)"]:::tech
+        T2["🧠 AI Engine<br/>(Google Gemini 2.5 Flash)"]:::tech
+        T3["☁️ Cloud<br/>(Google Firebase Hosting)"]:::tech
+        T4["⚙️ DevOps & Tools<br/>(GitHub Actions, EmailJS)"]:::tech
+    end
 
     subgraph Firebase ["☁️ Hosted Globally on Google Firebase"]
         subgraph Client ["💻 Client Browser (Single Page App)"]
@@ -57,6 +66,7 @@ graph LR
     end
 
     %% Cross-boundary connections
+    T1 ~~~ UI
     Auth -- "Verify" --> Email
     AI -- "Generate Hint" --> Gemini
     DB -- "Sync Dossier" --> Varsity
