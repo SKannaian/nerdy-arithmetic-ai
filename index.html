@@ -228,8 +228,8 @@
           <i data-lucide="volume-2" id="sound-icon" class="w-4 h-4 text-emerald-600"></i>
         </button>
 
-        <!-- Production AI Status & Settings -->
-        <button onclick="toggleSettingsModal()" class="px-2 sm:px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs flex items-center gap-1.5 transition shadow-sm" title="AI & Cloud Settings">
+        <!-- Production AI Status & Settings (Admin Only) -->
+        <button onclick="toggleSettingsModal()" id="header-settings-btn" class="hidden px-2 sm:px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs flex items-center gap-1.5 transition shadow-sm" title="AI & Cloud Platform Status (Admin Only)">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="hidden sm:inline text-[11px] font-bold text-slate-700">AI Active</span>
           <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-slate-400"></i>
@@ -990,6 +990,10 @@
       </div>
 
       <div class="flex items-center gap-2 relative z-10 w-full md:w-auto justify-end flex-wrap">
+        <button type="button" onclick="toggleSettingsModal()" class="px-3.5 py-2 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-200 border border-purple-400/30 font-bold text-xs transition flex items-center gap-1.5" title="AI & Cloud Platform Status">
+          <i data-lucide="sliders-horizontal" class="w-4 h-4 text-purple-300"></i>
+          <span>AI & Cloud Status</span>
+        </button>
         <button type="button" onclick="switchAppTab('practice')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center gap-1.5 border border-white/20">
           <i data-lucide="gamepad-2" class="w-4 h-4 text-sky-400"></i>
           <span>Enter Practice Mode</span>
@@ -2317,10 +2321,14 @@
       
       <div class="flex justify-between items-center pb-3 mb-4 border-b border-slate-100">
         <div>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-extrabold uppercase tracking-wide mb-1 border border-purple-200">
+            <i data-lucide="shield-check" class="w-3 h-3 text-purple-700"></i>
+            <span>Administrator Control Panel</span>
+          </div>
           <h3 class="font-display font-bold text-base text-slate-900 flex items-center gap-2">
             <i data-lucide="sparkles" class="w-5 h-5 text-sky-600"></i> AI & Cloud Platform Status
           </h3>
-          <p class="text-[11px] text-slate-500">Google Gemini 2.5 Flash Socratic Engine</p>
+          <p class="text-[11px] text-slate-500">Google Gemini 2.5 Flash Socratic Engine & Cloud Infrastructure</p>
         </div>
         <button onclick="toggleSettingsModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
       </div>
@@ -4549,8 +4557,12 @@
       }
     }
 
-    // ── SETTINGS MODAL ──────────────────────────────────────────────────────
+    // ── SETTINGS MODAL (ADMINISTRATOR ONLY) ─────────────────────────────────
     function toggleSettingsModal() {
+      if (!isAdminAuthenticated) {
+        openAdminAuthModal();
+        return;
+      }
       const modal = document.getElementById('settings-modal');
       const isHidden = modal.classList.toggle('hidden');
       if (!isHidden) {
@@ -4561,6 +4573,17 @@
         document.getElementById('cfg-emailjs-template-id').value = localStorage.getItem('nerdy_emailjs_template_id') || '';
       }
       if (window.lucide) lucide.createIcons();
+    }
+
+    function updateAdminVisibility() {
+      const headerSettingsBtn = document.getElementById('header-settings-btn');
+      if (headerSettingsBtn) {
+        if (isAdminAuthenticated) {
+          headerSettingsBtn.classList.remove('hidden');
+        } else {
+          headerSettingsBtn.classList.add('hidden');
+        }
+      }
     }
 
     function saveSettings() {
@@ -5299,6 +5322,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         const role = (validTeacherPasswords.includes(val.toLowerCase()) || selectedAuthRole === 'teacher') && !validAdminPasswords.includes(val.toLowerCase()) ? 'Teacher' : 'Administrator';
         sessionStorage.setItem('nerdy_admin_auth', 'true');
         sessionStorage.setItem('nerdy_admin_role', role);
+        updateAdminVisibility();
         closeAdminAuthModal();
         switchAppTab('admin');
         playSoundEffect('milestone');
@@ -5323,6 +5347,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       isAdminAuthenticated = true;
       sessionStorage.setItem('nerdy_admin_auth', 'true');
       sessionStorage.setItem('nerdy_admin_role', 'Administrator');
+      updateAdminVisibility();
       closeAdminAuthModal();
       switchAppTab('admin');
     }
@@ -5331,6 +5356,9 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       isAdminAuthenticated = false;
       sessionStorage.removeItem('nerdy_admin_auth');
       sessionStorage.removeItem('nerdy_admin_role');
+      const settingsModal = document.getElementById('settings-modal');
+      if (settingsModal) settingsModal.classList.add('hidden');
+      updateAdminVisibility();
       switchAppTab('practice');
       alert('You have successfully locked and logged out of the Teacher & Admin Portal.');
     }
@@ -6273,6 +6301,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       if (document.getElementById('cfg-api-key')) {
         document.getElementById('cfg-api-key').value = state.apiKey;
       }
+      updateAdminVisibility();
     });
 
     window.addEventListener('beforeunload', logSessionProgress);
