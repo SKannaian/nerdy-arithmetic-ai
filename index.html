@@ -512,10 +512,15 @@
 
       <!-- FOOTER HELP BAR (LIGHTWEIGHT) -->
       <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap justify-between items-center text-xs font-semibold text-slate-500 gap-2">
-        <button type="button" onclick="requestByteHint()" class="text-sky-600 hover:text-sky-800 flex items-center gap-1.5 font-bold hover:underline">
-          <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
-          <span>Need a hint? Ask Byte</span>
-        </button>
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <button type="button" onclick="requestByteHint()" class="text-sky-600 hover:text-sky-800 flex items-center gap-1.5 font-bold hover:underline">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+            <span>Need a hint? Ask Byte</span>
+          </button>
+          <button type="button" onclick="showExplanationModal()" id="footer-reveal-answer-btn" class="hidden text-purple-700 hover:text-purple-900 flex items-center gap-1 font-bold bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-xl border border-purple-200 transition text-xs shadow-2xs">
+            <span>💡 Reveal Answer</span>
+          </button>
+        </div>
         <div class="flex items-center gap-3">
           <button type="button" onclick="openTutorHandoffModal()" class="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 font-bold hover:underline">
             <i data-lucide="user-check" class="w-4 h-4 text-indigo-500"></i>
@@ -3157,6 +3162,9 @@
       document.getElementById('answer-input').value = '';
       document.getElementById('feedback-banner').innerHTML = '';
       document.getElementById('misconception-pill').classList.add('hidden');
+      state.lastWrongAnswer = null;
+      const footerReveal = document.getElementById('footer-reveal-answer-btn');
+      if (footerReveal) footerReveal.classList.add('hidden');
       
       renderManipulative();
     }
@@ -3816,6 +3824,10 @@
           addByteMessage('🥉 **Bronze Mastery Ribbon earned (70+)!** Keep going!');
         }
 
+        state.lastWrongAnswer = null;
+        const footerReveal = document.getElementById('footer-reveal-answer-btn');
+        if (footerReveal) footerReveal.classList.add('hidden');
+
         setTimeout(generateProblem, 1000);
 
       } else {
@@ -3834,14 +3846,39 @@
         card.classList.add('shake-card');
         setTimeout(() => card.classList.remove('shake-card'), 450);
 
-        banner.className = 'mt-4 min-h-[32px] text-center font-bold text-base text-rose-600';
-        banner.innerHTML = `Not quite right. Let's see what Byte thinks!`;
+        // Store wrong answer for on-demand Review & Learn
+        state.lastWrongAnswer = val;
 
-        // Trigger Socratic Diagnosis and Show Pedagogical Explanation Pop-Up
+        // Trigger Socratic Diagnosis in background for Byte
         triggerSocraticDiagnosis(val);
-        setTimeout(() => {
-          showExplanationModal(val);
-        }, 450);
+
+        // Feedback banner with explicit "Reveal Answer" action button (not automatic pop-up)
+        banner.className = 'mt-2.5 py-2.5 px-3.5 rounded-2xl bg-rose-50 border border-rose-200 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-rose-900 shadow-2xs transition-all';
+        banner.innerHTML = `
+          <div class="flex items-center gap-2 text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xs shrink-0">✕</span>
+            <div>
+              <span class="font-extrabold text-rose-700">Not quite right (${val}).</span>
+              <span class="text-slate-600 ml-1">You can try again or click Reveal Answer to view the full explanation!</span>
+            </div>
+          </div>
+          <button type="button" onclick="showExplanationModal()" id="reveal-answer-btn" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5 shrink-0 cursor-pointer hover:scale-105 active:scale-95">
+            <span>💡 Reveal Answer</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        `;
+        if (window.lucide) lucide.createIcons();
+
+        // Also display Reveal Answer option in problem card footer
+        const footerReveal = document.getElementById('footer-reveal-answer-btn');
+        if (footerReveal) footerReveal.classList.remove('hidden');
+
+        // Re-focus input for student retry
+        const input = document.getElementById('answer-input');
+        if (input) {
+          input.select();
+          input.focus();
+        }
       }
 
       updateStreakDisplay();
@@ -4167,6 +4204,12 @@
       const prob = state.currentProblem;
       if (!prob) return;
 
+      const effectiveWrongVal = (wrongVal !== undefined && wrongVal !== null && wrongVal !== '')
+        ? wrongVal 
+        : (state.lastWrongAnswer !== undefined && state.lastWrongAnswer !== null 
+            ? state.lastWrongAnswer 
+            : (document.getElementById('answer-input')?.value || '?'));
+
       const modal = document.getElementById('explanation-modal');
       const elWrong = document.getElementById('explain-wrong-val');
       const elCorrect = document.getElementById('explain-correct-val');
@@ -4175,12 +4218,12 @@
       const elBadge = document.getElementById('explain-misconception-badge');
       const elHint = document.getElementById('explain-byte-hint');
 
-      if (elWrong) elWrong.innerText = `${wrongVal} ✕`;
+      if (elWrong) elWrong.innerText = `${effectiveWrongVal} ✕`;
       if (elCorrect) elCorrect.innerText = `${prob.ans} ✓`;
       if (elEq) elEq.innerText = (prob.equationStr || '').replace('?', prob.ans);
 
       // Generate pedagogical steps
-      const steps = getDetailedProblemExplanation(prob, wrongVal);
+      const steps = getDetailedProblemExplanation(prob, effectiveWrongVal);
       if (elSteps) {
         elSteps.innerHTML = steps.map(s => `<div class="p-2.5 rounded-xl bg-white border border-slate-200 shadow-2xs">${s}</div>`).join('');
       }
@@ -4196,7 +4239,7 @@
       }
 
       // Prepare speech text
-      lastExplanationTextToRead = `Review and learn. You answered ${wrongVal}, but the correct answer is ${prob.ans}. Equation: ${(prob.equationStr || '').replace('?', prob.ans)}. ${steps.map(s => s.replace(/<[^>]*>/g, '')).join('. ')}`;
+      lastExplanationTextToRead = `Review and learn. You answered ${effectiveWrongVal}, but the correct answer is ${prob.ans}. Equation: ${(prob.equationStr || '').replace('?', prob.ans)}. ${steps.map(s => s.replace(/<[^>]*>/g, '')).join('. ')}`;
 
       if (modal) modal.classList.remove('hidden');
       if (window.lucide) lucide.createIcons();
