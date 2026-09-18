@@ -2322,7 +2322,7 @@
           <p class="text-[11px] text-slate-600 mt-1 leading-relaxed">
             A 6-digit security code has been dispatched to <strong id="otp-email-recipient" class="text-slate-900"></strong>. Please check your inbox and spam folder.
           </p>
-          <div class="mt-2.5 pt-2 border-t border-sky-200/60 flex items-center justify-between">
+          <div id="demo-reveal-container" class="mt-2.5 pt-2 border-t border-sky-200/60 flex items-center justify-between">
             <span class="text-[10px] text-slate-500">Evaluating or recording video?</span>
             <button type="button" onclick="revealDemoOtpCode()" class="text-[11px] font-bold text-amber-800 hover:text-amber-950 bg-amber-100 hover:bg-amber-200 px-2 py-1 rounded-lg transition flex items-center gap-1 border border-amber-300">
               <span>Reveal Code On-Screen ⚡</span>
@@ -5004,7 +5004,7 @@
               title: 'Login Verification',
               name: 'Nerdy AI System',
               'Hello User,': 'Hello,',
-              'time': new Date().toLocaleString(),
+              'time': new Date().toLocaleString() + '\n\n🔐 YOUR LOGIN CODE IS: ' + (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A')),
               'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
         });
         alert(`🎉 SUCCESS! Real email sent to ${targetEmail}!\nStatus: ${res.status}`);
@@ -5063,7 +5063,7 @@
               title: 'Login Verification',
               name: 'Nerdy AI System',
               'Hello User,': 'Hello,',
-              'time': new Date().toLocaleString(),
+              'time': new Date().toLocaleString() + '\n\n🔐 YOUR LOGIN CODE IS: ' + (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A')),
               'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
         });
         alert(`🎉 SUCCESS! Real email sent to ${targetEmail}!\nStatus: ${res.status}`);
@@ -5094,7 +5094,7 @@
               title: 'Login Verification',
               name: 'Nerdy AI System',
               'Hello User,': 'Hello,',
-              'time': new Date().toLocaleString(),
+              'time': new Date().toLocaleString() + '\n\n🔐 YOUR LOGIN CODE IS: ' + (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A')),
               'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
           });
           console.log('[EMAILJS] Real email sent successfully!', res);
@@ -5111,7 +5111,15 @@
     let selectedAvatarChar = '🦊';
     let currentPendingOtp = null;
     let currentPendingEmail = '';
-    let otpDeliveryMode = 'demo'; // 'demo' | 'email'
+    let otpDeliveryMode = 'demo';
+        const revealContainer = document.getElementById('demo-reveal-container');
+        if (revealContainer) {
+          if (otpDeliveryMode === 'email') {
+            revealContainer.classList.add('hidden');
+          } else {
+            revealContainer.classList.remove('hidden');
+          }
+        } // 'demo' | 'email'
 
     function setOtpDeliveryMode(mode) {
       otpDeliveryMode = mode;
@@ -5149,6 +5157,14 @@
 
     function revealDemoOtpCode() {
       otpDeliveryMode = 'demo';
+        const revealContainer = document.getElementById('demo-reveal-container');
+        if (revealContainer) {
+          if (otpDeliveryMode === 'email') {
+            revealContainer.classList.add('hidden');
+          } else {
+            revealContainer.classList.remove('hidden');
+          }
+        }
       updateOtpStepDisplay();
       playSoundEffect('tap');
       addByteMessage(`Here is your instant code on screen: **${currentPendingOtp}** ⚡`);
@@ -5416,7 +5432,7 @@
       if (otpDeliveryMode === 'demo') {
         alert(`A fresh 6-digit code has been generated: ${currentPendingOtp}`);
       } else {
-        alert(`A fresh 6-digit code has been dispatched to ${currentPendingEmail}. (If testing without email check, click "Reveal Code On-Screen").`);
+        alert(`A fresh 6-digit code has been dispatched to ${currentPendingEmail}. Please check your inbox.`);
         sendRealEmailOtp(currentPendingEmail, currentPendingOtp);
       }
       console.log(`[AUTH] Resent 6-Digit OTP for ${currentPendingEmail}: ${currentPendingOtp}`);
@@ -5429,7 +5445,7 @@
         if (otpDeliveryMode === 'demo') {
           alert('Incorrect 6-digit code. Please enter the code shown on screen or click Auto-fill.');
         } else {
-          alert('Incorrect 6-digit code. Please enter the code dispatched to your email, or click "Reveal Code On-Screen ⚡" for instant access.');
+          alert('Incorrect 6-digit code. Please enter the code dispatched to your email.');
         }
         return;
       }
@@ -6544,7 +6560,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
               title: 'Login Verification',
               name: 'Nerdy AI System',
               'Hello User,': 'Hello,',
-              'time': new Date().toLocaleString(),
+              'time': new Date().toLocaleString() + '\n\n🔐 YOUR LOGIN CODE IS: ' + (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A')),
               'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
           });
           dispatchedCount++;
