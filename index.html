@@ -5272,20 +5272,25 @@
       });
     }
 
-    function openSignInModal() {
-      // Hide all steps
-      document.getElementById('onboard-step-welcome').classList.add('hidden');
-      document.getElementById('onboard-step-tour').classList.add('hidden');
-      document.getElementById('onboard-step-launch').classList.add('hidden');
-      document.getElementById('onboard-step-email').classList.add('hidden');
-      document.getElementById('onboard-step-otp').classList.add('hidden');
-      document.getElementById('onboard-step-profile').classList.add('hidden');
-      
-      // Show role selection and modal
-      const roleSelect = document.getElementById('onboard-step-role-select');
-      if (roleSelect) roleSelect.classList.remove('hidden');
+    function openSignInModal(preSelectedRole = null) {
       document.getElementById('onboarding-modal').classList.remove('hidden');
-      if (window.lucide) lucide.createIcons();
+      
+      if (preSelectedRole) {
+        startEmailAuth(preSelectedRole);
+      } else {
+        // Hide all steps
+        document.getElementById('onboard-step-welcome').classList.add('hidden');
+        document.getElementById('onboard-step-tour').classList.add('hidden');
+        document.getElementById('onboard-step-launch').classList.add('hidden');
+        document.getElementById('onboard-step-email').classList.add('hidden');
+        document.getElementById('onboard-step-otp').classList.add('hidden');
+        document.getElementById('onboard-step-profile').classList.add('hidden');
+        
+        // Show role selection
+        const roleSelect = document.getElementById('onboard-step-role-select');
+        if (roleSelect) roleSelect.classList.remove('hidden');
+        if (window.lucide) lucide.createIcons();
+      }
     }
     function startEmailAuth(role) {
       onboardSelectedRole = role; // store role for later
@@ -5822,13 +5827,13 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
     function switchAppTab(tabName) {
       if (tabName === 'teacher') {
         if (state.profile.role !== 'teacher' && state.profile.role !== 'admin') {
-          openSignInModal();
+          openSignInModal('teacher');
           return;
         }
       }
       if (tabName === 'admin') {
         if (state.profile.role !== 'admin') {
-          openSignInModal();
+          openSignInModal('admin');
           return;
         }
       }
