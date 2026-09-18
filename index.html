@@ -5340,9 +5340,9 @@
       if (onboardSelectedRole === 'admin' || onboardSelectedRole === 'teacher') {
         const usersDb = loadUsersDb();
         const existingUser = usersDb[email];
-        // Allow demo accounts to pass through for testing flexibility, otherwise enforce DB match
-        const isDemo = email === `demo.${onboardSelectedRole}@nerdy.com`;
-        if (!isDemo && (!existingUser || existingUser.role !== onboardSelectedRole)) {
+        // Allow demo accounts and specific admin emails to pass through for testing flexibility
+        const isWhitelisted = email === `demo.${onboardSelectedRole}@nerdy.com` || email === 'sathish.kannaian@gmail.com';
+        if (!isWhitelisted && (!existingUser || existingUser.role !== onboardSelectedRole)) {
           alert(`Access Denied: ${email} is not registered as an authorized ${onboardSelectedRole.toUpperCase()}.`);
           return;
         }
