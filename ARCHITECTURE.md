@@ -64,12 +64,15 @@ graph TB
     ClientTier -. "Hosted On" .-> Firebase
     UI --> HUD
     UI --> Manipulatives
-    UI --> LogicLayer
-    LogicLayer --> UserDB
+    UI --> Auth
+    UI --> Classifier
+    Classifier --> UserDB
+    Auth --> UserDB
     
     %% AI and Auth Flow
     Auth -- "Dispatch 6-digit OTP" --> EmailJS
-    LogicLayer -- "Socratic Hint Request" --> GeminiFlash
+    Classifier -- "Socratic Hint Request" --> GeminiFlash
+    Guardrails -. "Intercept Spoilers" .-> Classifier
     GeminiFlash -. "Offline Fallback" .-> OfflineHeuristic
     UserDB -- "Live Dossier" --> VarsityTutor
 ```
