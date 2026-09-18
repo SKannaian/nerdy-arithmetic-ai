@@ -1979,29 +1979,34 @@
           <p class="text-xs text-slate-500 mt-1 max-w-md mx-auto">Common Core K–5 Socratic arithmetic with visual manipulatives, live AI tutor Byte, and SmartScore mastery.</p>
         </div>
 
-        <!-- Role Selector Pill Strip -->
+        <!-- Authentication & Login -->
         <div>
-          <label class="block font-bold text-slate-700 text-xs mb-1.5 text-center">Who is exploring today?</label>
-          <div class="grid grid-cols-3 gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-            <button type="button" onclick="setOnboardRole('student')" id="role-btn-student" class="py-2 px-2 rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 bg-white text-sky-800 shadow-xs border border-sky-200">
-              <span class="text-lg">🎒</span>
-              <span>Student</span>
-            </button>
-            <button type="button" onclick="setOnboardRole('parent')" id="role-btn-parent" class="py-2 px-2 rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 text-slate-600 hover:text-slate-900">
-              <span class="text-lg">👨‍👩‍👧</span>
-              <span>Parent</span>
-            </button>
-            <button type="button" onclick="setOnboardRole('teacher')" id="role-btn-teacher" class="py-2 px-2 rounded-xl text-xs font-bold transition flex flex-col items-center gap-1 text-purple-700 hover:text-purple-900 hover:bg-purple-50">
-              <span class="text-lg">🍎</span>
-              <span>Educator</span>
-            </button>
-          </div>
-          <!-- Teacher Direct Jump Notice (dynamically shown if Educator selected) -->
-          <div id="onboard-teacher-callout" class="hidden mt-2 p-2.5 bg-purple-50 border border-purple-200 rounded-xl text-xs text-purple-900 flex items-center justify-between">
-            <span class="text-[11px] font-semibold">Curriculum standards, class roster & live admin status:</span>
-            <button type="button" onclick="jumpDirectToAdminPortal()" class="px-2.5 py-1 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-[11px] shadow-xs shrink-0 ml-2">
-              Open Admin Command Center 🔒
-            </button>
+          <label class="block font-bold text-slate-700 text-sm mb-2 text-center">Login to Your Account</label>
+          <div class="space-y-3">
+            <div class="flex gap-2">
+              <button type="button" onclick="startEmailAuth('student')" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white shadow-md">
+                <span class="text-lg">🎒</span> Login as Student
+              </button>
+              <button type="button" onclick="startDemoAuth('student')" class="demo-auth-btn hidden px-4 py-3 rounded-xl font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 transition flex items-center justify-center shadow-md whitespace-nowrap">
+                ⚡ Demo
+              </button>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" onclick="startEmailAuth('teacher')" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white shadow-md">
+                <span class="text-lg">🍎</span> Login as Teacher
+              </button>
+              <button type="button" onclick="startDemoAuth('teacher')" class="demo-auth-btn hidden px-4 py-3 rounded-xl font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 transition flex items-center justify-center shadow-md whitespace-nowrap">
+                ⚡ Demo
+              </button>
+            </div>
+            <div class="flex gap-2">
+              <button type="button" onclick="startEmailAuth('admin')" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold transition flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md">
+                <span class="text-lg">🛡️</span> Login as Admin
+              </button>
+              <button type="button" onclick="startDemoAuth('admin')" class="demo-auth-btn hidden px-4 py-3 rounded-xl font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 transition flex items-center justify-center shadow-md whitespace-nowrap">
+                ⚡ Demo
+              </button>
+            </div>
           </div>
         </div>
 
@@ -2421,8 +2426,8 @@
           <button onclick="toggleProfileModal(); openOnboardingModal('welcome')" class="text-[11px] font-bold text-indigo-700 hover:text-indigo-900 px-2 py-1 rounded-lg bg-indigo-50 border border-indigo-200 transition" title="Replay onboarding tutorial & customize explorer avatar/grade">
             Explorer Tour ✨
           </button>
-          <button onclick="switchAccount()" class="text-[11px] font-bold text-sky-600 hover:text-sky-800 px-2 py-1 rounded-lg bg-sky-50 border border-sky-200 transition">
-            Switch Account
+          <button onclick="logoutAccount()" class="text-[11px] font-bold text-red-600 hover:text-red-800 px-2 py-1 rounded-lg bg-red-50 border border-red-200 transition">
+            Logout
           </button>
           <button onclick="toggleProfileModal()" class="text-slate-400 hover:text-slate-600 font-bold p-1">✕</button>
         </div>
@@ -3088,6 +3093,7 @@
       lastByteMessage: '',
       backendUrl: initialBackend,
       apiKey: localStorage.getItem('nerdy_api_key') || '',
+      enableDemoLogin: true,
       manipulativeState: {
         tenFrameSlots: new Array(10).fill(null), // null | 'blue' | 'amber' | 'crossed'
       }
@@ -5313,6 +5319,34 @@
       });
     }
 
+    function startEmailAuth(role) {
+      onboardSelectedRole = role; // store role for later
+      document.getElementById('onboard-step-welcome').classList.add('hidden');
+      document.getElementById('onboard-step-email').classList.remove('hidden');
+      document.getElementById('auth-email-input').focus();
+      playSoundEffect('tap');
+    }
+
+    function startDemoAuth(role) {
+      onboardSelectedRole = role;
+      currentPendingEmail = `demo.${role}@nerdy.com`;
+      state.profile.email = currentPendingEmail;
+      state.profile.onboarded = true;
+      state.profile.role = role;
+      state.profile.name = "Demo " + role.charAt(0).toUpperCase() + role.slice(1);
+      saveLearnerProfile();
+      
+      document.getElementById('onboarding-modal').classList.add('hidden');
+      if (role === 'admin' || role === 'teacher') {
+        switchAppTab('admin');
+      } else {
+        switchAppTab('practice');
+        generateProblem();
+      }
+      addByteMessage(`Welcome! You bypassed login via Instant Demo as **${role}**.`);
+      playSoundEffect('milestone');
+    }
+
     function handleSendOtp(e) {
       e.preventDefault();
       const input = document.getElementById('auth-email-input');
@@ -5437,24 +5471,24 @@
       addByteMessage(`Welcome aboard, **${name}**! Your account is activated with **${currentPendingEmail}**. Let's solve some fun math problems! 🚀`);
     }
 
-    function switchAccount() {
-      toggleProfileModal();
-      document.getElementById('onboard-step-welcome')?.classList.add('hidden');
-      document.getElementById('onboard-step-tour')?.classList.add('hidden');
-      document.getElementById('onboard-step-launch')?.classList.add('hidden');
-      document.getElementById('onboard-step-profile')?.classList.add('hidden');
-      document.getElementById('onboard-step-otp')?.classList.add('hidden');
-      document.getElementById('onboard-step-email')?.classList.remove('hidden');
-      document.getElementById('auth-email-input').value = '';
-      
-      const cancelLabel = document.getElementById('onboard-cancel-label');
-      if (cancelLabel) {
-        cancelLabel.innerText = `Cancel & Go Back to ${state.profile.name || 'Current Account'}`;
+    function logoutAccount() {
+      if (confirm("Are you sure you want to log out?")) {
+        state.profile = { 
+          onboarded: false,
+          name: '',
+          email: '',
+          gradeTier: 'k',
+          role: '',
+          dailyStreak: 0,
+          totalQuestionsSolved: 0,
+          skillsMastered: 0,
+          lastActiveDate: null,
+          highSmartScore: 0,
+          sessions: []
+        };
+        saveLearnerProfile();
+        location.reload();
       }
-
-      document.getElementById('onboarding-modal').classList.remove('hidden');
-      document.getElementById('auth-email-input').focus();
-      lucide.createIcons();
     }
 
     function cancelOnboarding() {
@@ -6872,9 +6906,28 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
     }
 
     // ── BOOTSTRAP ────────────────────────────────────────────────────────────
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       lucide.createIcons();
       initScratchpad();
+
+      try {
+        const healthRes = await fetch(`${state.backendUrl || ''}/health`);
+        const healthData = await healthRes.json();
+        if (healthData && typeof healthData.enable_demo_login !== 'undefined') {
+          state.enableDemoLogin = healthData.enable_demo_login;
+        }
+      } catch (e) {
+        console.log("Could not fetch /health for demo flag, defaulting to true.", e);
+      }
+
+      const demoBtns = document.querySelectorAll('.demo-auth-btn');
+      demoBtns.forEach(btn => {
+        if (state.enableDemoLogin) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
 
       // Check URL parameters for direct deep-link logins
       const urlParams = new URLSearchParams(window.location.search);

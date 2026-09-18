@@ -205,12 +205,16 @@ def classify_cognitive_misconception(equation: str, expected: str, user_val_str:
 def health_check():
     key_set = bool(os.environ.get("GEMINI_API_KEY"))
     emailjs_configured = bool(os.environ.get("EMAILJS_PUBLIC_KEY") and os.environ.get("EMAILJS_SERVICE_ID"))
+    # Default to True for demo purposes if not strictly set to false
+    enable_demo_login = os.environ.get("ENABLE_DEMO_LOGIN", "true").lower() == "true"
+    
     return {
         "status": "healthy",
         "service": "Nerdy Arithmetic AI Platform",
         "genai_sdk_loaded": GENAI_AVAILABLE,
         "gemini_api_key_configured": key_set,
         "emailjs_configured": emailjs_configured,
+        "enable_demo_login": enable_demo_login,
         "version": "2.0.0"
     }
 
