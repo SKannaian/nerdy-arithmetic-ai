@@ -2352,6 +2352,88 @@
     </div>
   </div>
 
+  <!-- ======================================================================= -->
+  <!-- INCORRECT ANSWER EXPLANATION POP-UP MODAL (LEARN & REVIEW)              -->
+  <!-- ======================================================================= -->
+  <div id="explanation-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl border border-slate-200 bounce-in relative max-h-[92vh] overflow-y-auto space-y-4">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeExplanationModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 font-bold p-1.5 rounded-full hover:bg-slate-100 transition" title="Close and Continue">
+        ✕
+      </button>
+
+      <!-- Header -->
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-2xl shadow-inner border border-amber-300 shrink-0">
+          💡
+        </div>
+        <div>
+          <h3 class="font-display font-extrabold text-xl text-slate-900">Review & Learn</h3>
+          <p class="text-xs text-slate-500">Mistakes help our brain grow! Here is why the answer is correct:</p>
+        </div>
+      </div>
+
+      <!-- Comparison Card: Your Answer vs Correct Answer -->
+      <div class="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200">
+        <div class="p-3 bg-rose-50/80 rounded-xl border border-rose-200 text-center">
+          <span class="text-[10px] uppercase font-bold text-rose-600 block">You Answered</span>
+          <div id="explain-wrong-val" class="font-mono text-xl font-black text-rose-700 line-through mt-0.5">--</div>
+        </div>
+        <div class="p-3 bg-emerald-50/80 rounded-xl border border-emerald-200 text-center">
+          <span class="text-[10px] uppercase font-bold text-emerald-700 block">Correct Answer</span>
+          <div id="explain-correct-val" class="font-mono text-xl font-black text-emerald-800 mt-0.5">--</div>
+        </div>
+      </div>
+
+      <!-- Solved Equation Banner -->
+      <div class="p-3 bg-sky-50 rounded-2xl border border-sky-200 text-center">
+        <span class="text-[10px] uppercase font-extrabold tracking-wider text-sky-600 block mb-1">Target Equation Solved</span>
+        <div id="explain-equation" class="font-mono text-lg font-black text-sky-950">--</div>
+      </div>
+
+      <!-- Step-by-Step Pedagogical Explanation -->
+      <div class="space-y-2">
+        <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> Step-by-Step Solution:
+        </span>
+        <div id="explain-steps-body" class="p-3.5 bg-slate-50/90 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-2 leading-relaxed font-medium">
+          <!-- Dynamic Steps Generated in JS -->
+        </div>
+      </div>
+
+      <!-- Byte's Socratic Tip & Misconception Diagnosis -->
+      <div class="p-3.5 bg-purple-50 rounded-2xl border border-purple-200 flex items-start gap-3">
+        <div class="w-9 h-9 rounded-xl bg-purple-200 text-purple-900 flex items-center justify-center text-lg shrink-0">
+          🤖
+        </div>
+        <div class="flex-1 text-xs">
+          <div class="flex items-center gap-2 mb-1 flex-wrap">
+            <strong class="text-purple-950">Byte's Learning Tip</strong>
+            <span id="explain-misconception-badge" class="text-[10px] bg-purple-200/80 text-purple-900 font-bold px-2 py-0.5 rounded-full">
+              Socratic Coach
+            </span>
+          </div>
+          <p id="explain-byte-hint" class="text-purple-900/90 leading-normal">
+            Take a deep breath and model this on your scratchpad!
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="pt-2 flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+        <button type="button" onclick="readExplanationAloud()" class="px-3.5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center justify-center gap-1.5 border border-slate-200 shrink-0" title="Listen to Explanation">
+          <i data-lucide="volume-2" class="w-4 h-4 text-sky-600"></i>
+          <span>Read Aloud 🔊</span>
+        </button>
+        <button type="button" onclick="closeExplanationModal()" class="w-full py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs shadow-md shadow-sky-600/25 transition flex items-center justify-center gap-2">
+          <span>Got It! Try Next Problem ➔</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- MASTERY TROPHY CELEBRATION MODAL (100 SMARTSCORE) -->
   <div id="mastery-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border-4 border-amber-400 bounce-in">
@@ -3708,8 +3790,11 @@
         banner.className = 'mt-4 min-h-[32px] text-center font-bold text-base text-rose-600';
         banner.innerHTML = `Not quite right. Let's see what Byte thinks!`;
 
-        // Trigger Socratic Diagnosis
+        // Trigger Socratic Diagnosis and Show Pedagogical Explanation Pop-Up
         triggerSocraticDiagnosis(val);
+        setTimeout(() => {
+          showExplanationModal(val);
+        }, 450);
       }
 
       updateStreakDisplay();
@@ -3760,7 +3845,8 @@
 
     // ── SOCRATIC AI MENTOR (BYTE) INTEGRATION ─────────────────────────────────
     async function triggerSocraticDiagnosis(wrongVal) {
-      const { equationStr, ans } = state.currentProblem;
+      const prob = state.currentProblem;
+      const { equationStr, ans } = prob;
       
       // 1. Direct Google Gemini REST API if user configured key
       if (state.apiKey) {
@@ -3888,6 +3974,183 @@
       item.innerHTML = `<span class="font-bold text-sky-700 block mb-1">🤖 Byte:</span> ${msg}`;
       feed.appendChild(item);
       feed.scrollTop = feed.scrollHeight;
+    }
+
+    // ── INCORRECT ANSWER EXPLANATION POP-UP CONTROLLER ─────────────────────
+    let lastExplanationTextToRead = '';
+
+    function getDetailedProblemExplanation(prob, wrongVal) {
+      const { n1, n2, op, ans, manipulativeType } = prob;
+      const mType = manipulativeType || 'ten_frame_single';
+      const steps = [];
+
+      if (mType === 'ten_frame_single') {
+        if (op === '+') {
+          steps.push(`<strong>Step 1:</strong> Start with <span class="text-sky-600 font-bold">${n1} blue counters</span> in the ten-frame.`);
+          steps.push(`<strong>Step 2:</strong> Add <span class="text-amber-600 font-bold">${n2} amber counters</span> to the frame.`);
+          steps.push(`<strong>Step 3:</strong> Count all counters combined: <strong>${n1} + ${n2} = ${ans}</strong>.`);
+        } else if (op === '-') {
+          steps.push(`<strong>Step 1:</strong> Start with all <span class="text-sky-600 font-bold">${n1} counters</span> in the ten-frame.`);
+          steps.push(`<strong>Step 2:</strong> Take away or cross out <span class="text-rose-600 font-bold">${n2} counters (✕)</span>.`);
+          steps.push(`<strong>Step 3:</strong> Count the uncrossed blue counters remaining: <strong>${n1} − ${n2} = ${ans}</strong>.`);
+        } else {
+          steps.push(`<strong>Step 1:</strong> A ten-frame holds 10 spaces. You currently have <span class="text-sky-600 font-bold">${n1}</span>.`);
+          steps.push(`<strong>Step 2:</strong> To find how many more make 10, count the empty spaces: <strong>10 − ${n1} = ${ans}</strong>.`);
+          steps.push(`<strong>Step 3:</strong> So <strong>${n1} + ${ans} = 10</strong>.`);
+        }
+      } else if (mType === 'ten_frame_double') {
+        if (prob.skill === 'g1_missing_addend' || prob.total) {
+          const tot = prob.total || (n1 + ans);
+          steps.push(`<strong>Step 1:</strong> The total target across both ten-frames is <span class="text-emerald-700 font-bold">${tot}</span>.`);
+          steps.push(`<strong>Step 2:</strong> You are given one part: <span class="text-sky-600 font-bold">${n1}</span>.`);
+          steps.push(`<strong>Step 3:</strong> Subtract the known part to find the missing addend: <strong>${tot} − ${n1} = ${ans}</strong>.`);
+        } else if (op === '+') {
+          const make10Need = 10 - n1;
+          steps.push(`<strong>Step 1 ("Make a Ten"):</strong> Fill the first frame with <span class="text-sky-600 font-bold">${n1}</span> plus <strong>${make10Need}</strong> more to make <strong>10</strong>.`);
+          steps.push(`<strong>Step 2:</strong> Place the remaining ones in the second frame: <strong>${n2 - make10Need}</strong>.`);
+          steps.push(`<strong>Step 3:</strong> Add 10 plus the extra ones: <strong>10 + ${ans - 10} = ${ans}</strong>.`);
+        } else {
+          steps.push(`<strong>Step 1:</strong> Model all <span class="text-sky-600 font-bold">${n1}</span> starting counters across both ten-frames.`);
+          steps.push(`<strong>Step 2:</strong> Cross out <span class="text-rose-600 font-bold">${n2} counters (✕)</span>.`);
+          steps.push(`<strong>Step 3:</strong> Count what is left: <strong>${n1} − ${n2} = ${ans}</strong>.`);
+        }
+      } else if (mType === 'base10') {
+        if (prob.tensCount !== undefined && prob.onesCount !== undefined) {
+          steps.push(`<strong>Step 1:</strong> Count Tens Rods: <span class="text-sky-700 font-bold">${prob.tensCount} tens = ${prob.tensCount * 10}</span>.`);
+          steps.push(`<strong>Step 2:</strong> Count Ones Cubes: <span class="text-amber-700 font-bold">${prob.onesCount} ones = ${prob.onesCount}</span>.`);
+          steps.push(`<strong>Step 3:</strong> Combine: <strong>${prob.tensCount * 10} + ${prob.onesCount} = ${ans}</strong>.`);
+        } else if (op === '+') {
+          const onesSum = (prob.ones1 || 0) + (prob.ones2 || 0);
+          const carry = onesSum >= 10 ? 1 : 0;
+          steps.push(`<strong>Step 1 (Add Ones):</strong> ${(prob.ones1 || 0)} + ${(prob.ones2 || 0)} = <strong>${onesSum}</strong>.`);
+          if (carry) {
+            steps.push(`<strong>Step 2 (Regroup/Carry):</strong> Since ${onesSum} $\ge$ 10, bundle 10 ones into <strong>1 ten rod</strong>. Keep <strong>${onesSum % 10}</strong> in the ones place.`);
+            steps.push(`<strong>Step 3 (Add Tens):</strong> ${(prob.tens1 || 0)} + ${(prob.tens2 || 0)} + 1 (carried) = <strong>${Math.floor(ans / 10)} tens</strong>.`);
+          } else {
+            steps.push(`<strong>Step 2 (Add Tens):</strong> ${(prob.tens1 || 0)} + ${(prob.tens2 || 0)} = <strong>${Math.floor(ans / 10)} tens</strong>.`);
+          }
+          steps.push(`<strong>Step 4:</strong> Combined total sum: <strong>${ans}</strong>.`);
+        } else {
+          steps.push(`<strong>Step 1 (Look at Ones):</strong> We have ${(prob.ones1 || 0)} ones and need to subtract ${(prob.ones2 || 0)} ones.`);
+          if ((prob.ones1 || 0) < (prob.ones2 || 0)) {
+            steps.push(`<strong>Step 2 (Unbundle a Ten):</strong> Unbundle 1 ten rod into 10 ones: ${(prob.ones1 || 0)} becomes <strong>${(prob.ones1 || 0) + 10}</strong>.`);
+            steps.push(`<strong>Step 3 (Subtract Ones):</strong> ${(prob.ones1 || 0) + 10} − ${(prob.ones2 || 0)} = <strong>${ans % 10}</strong>.`);
+            steps.push(`<strong>Step 4 (Subtract Tens):</strong> ${(prob.tens1 || 0) - 1} − ${(prob.tens2 || 0)} = <strong>${Math.floor(ans / 10)} tens</strong>.`);
+          } else {
+            steps.push(`<strong>Step 2 (Subtract Ones):</strong> ${(prob.ones1 || 0)} − ${(prob.ones2 || 0)} = <strong>${ans % 10}</strong>.`);
+            steps.push(`<strong>Step 3 (Subtract Tens):</strong> ${(prob.tens1 || 0)} − ${(prob.tens2 || 0)} = <strong>${Math.floor(ans / 10)} tens</strong>.`);
+          }
+          steps.push(`<strong>Step 5:</strong> Result: <strong>${ans}</strong>.`);
+        }
+      } else if (mType === 'equal_groups') {
+        steps.push(`<strong>Step 1:</strong> There are <span class="text-purple-700 font-bold">${n1} equal groups</span>.`);
+        steps.push(`<strong>Step 2:</strong> Each group card has <span class="text-sky-700 font-bold">${n2} items</span>.`);
+        steps.push(`<strong>Step 3:</strong> Skip-count by ${n2}: <strong>${Array.from({length: n1}, (_, i) => (i + 1) * n2).join(' ➔ ')}</strong>.`);
+        steps.push(`<strong>Step 4:</strong> Total: <strong>${n1} × ${n2} = ${ans}</strong>.`);
+      } else if (mType === 'arrays') {
+        if (op === '×') {
+          steps.push(`<strong>Step 1:</strong> The array grid has <span class="text-purple-700 font-bold">${n1} rows</span> and <span class="text-sky-700 font-bold">${n2} columns</span>.`);
+          steps.push(`<strong>Step 2:</strong> Multiplication represents equal rows and columns: <strong>${n1} × ${n2}</strong>.`);
+          steps.push(`<strong>Step 3:</strong> Counting all grid squares gives <strong>${ans}</strong>.`);
+        } else {
+          steps.push(`<strong>Step 1:</strong> Share <span class="text-purple-700 font-bold">${n1} items</span> into <span class="text-sky-700 font-bold">${n2} equal groups</span>.`);
+          steps.push(`<strong>Step 2:</strong> Think inverse: <em>What number × ${n2} = ${n1}?</em>`);
+          steps.push(`<strong>Step 3:</strong> Since <strong>${ans} × ${n2} = ${n1}</strong>, the quotient is <strong>${ans}</strong>.`);
+        }
+      } else if (mType === 'fractions') {
+        if (prob.p2 !== undefined) {
+          steps.push(`<strong>Step 1:</strong> Both fractions have the same denominator: <span class="text-sky-700 font-bold">${prob.denom}</span>.`);
+          steps.push(`<strong>Step 2:</strong> Keep the denominator the same. Add only the top numerators: <strong>${prob.p1} + ${prob.p2} = ${ans}</strong>.`);
+          steps.push(`<strong>Step 3:</strong> The combined sum is <strong>${ans}/${prob.denom}</strong>.`);
+        } else {
+          steps.push(`<strong>Step 1:</strong> The whole bar is divided into <span class="text-sky-700 font-bold">${prob.denom} equal parts</span>.`);
+          steps.push(`<strong>Step 2:</strong> Count the blue shaded parts: exactly <span class="text-amber-700 font-bold">${ans}</span>.`);
+          steps.push(`<strong>Step 3:</strong> The fraction is <strong>${ans}/${prob.denom}</strong>.`);
+        }
+      } else if (mType === 'partial_products') {
+        const t1 = Math.floor(n1 / 10) * 10;
+        const o1 = n1 % 10;
+        const t2 = Math.floor(n2 / 10) * 10;
+        const o2 = n2 % 10;
+        steps.push(`<strong>Step 1:</strong> Decompose factors into tens and ones: <strong>${n1} = ${t1} + ${o1}</strong> and <strong>${n2} = ${t2} + ${o2}</strong>.`);
+        steps.push(`<strong>Step 2:</strong> Multiply the 4 sub-boxes in the area model:`);
+        steps.push(`&nbsp;&nbsp;• ${t1} × ${t2} = <strong>${t1 * t2}</strong><br>&nbsp;&nbsp;• ${o1} × ${t2} = <strong>${o1 * t2}</strong><br>&nbsp;&nbsp;• ${t1} × ${o2} = <strong>${t1 * o2}</strong><br>&nbsp;&nbsp;• ${o1} × ${o2} = <strong>${o1 * o2}</strong>`);
+        steps.push(`<strong>Step 3:</strong> Add all 4 partial products: ${t1 * t2} + ${o1 * t2} + ${t1 * o2} + ${o1 * o2} = <strong>${ans}</strong>.`);
+      } else if (mType === 'division_remainders') {
+        steps.push(`<strong>Step 1:</strong> Divide <span class="text-amber-700 font-bold">${n1}</span> by <span class="text-sky-700 font-bold">${n2}</span>.`);
+        steps.push(`<strong>Step 2:</strong> Find how many complete groups fit: <strong>${n2} × ${ans} = ${n2 * ans}</strong>.`);
+        steps.push(`<strong>Step 3:</strong> Calculate the leftover remainder: <strong>${n1} − ${n2 * ans} = ${prob.remainder}</strong>.`);
+        steps.push(`<strong>Step 4:</strong> Whole quotient is <strong>${ans}</strong> (with remainder ${prob.remainder}).`);
+      } else if (mType === 'pemdas') {
+        steps.push(`<strong>Step 1 (Parentheses First):</strong> Evaluate inside parentheses: <strong>${prob.step1}</strong>.`);
+        steps.push(`<strong>Step 2 (Outer Operation):</strong> Solve the outer operation: <strong>${prob.step2 ? prob.step2.replace('?', ans) : prob.fullSolution}</strong>.`);
+        steps.push(`<strong>Step 3:</strong> Final answer: <strong>${ans}</strong>.`);
+      } else if (mType === 'decimals') {
+        steps.push(`<strong>Step 1:</strong> Align both numbers vertically at their decimal points.`);
+        steps.push(`<strong>Step 2:</strong> Calculate place-by-place (Ones with Ones, Tenths with Tenths).`);
+        steps.push(`<strong>Step 3:</strong> Drop the decimal point straight down: <strong>${n1} ${op} ${n2} = ${ans}</strong>.`);
+      } else {
+        steps.push(`<strong>Step 1:</strong> Solve the equation: <strong>${prob.equationStr.replace('?', ans)}</strong>.`);
+        steps.push(`<strong>Step 2:</strong> The correct value is <strong>${ans}</strong>.`);
+      }
+
+      return steps;
+    }
+
+    function showExplanationModal(wrongVal) {
+      const prob = state.currentProblem;
+      if (!prob) return;
+
+      const modal = document.getElementById('explanation-modal');
+      const elWrong = document.getElementById('explain-wrong-val');
+      const elCorrect = document.getElementById('explain-correct-val');
+      const elEq = document.getElementById('explain-equation');
+      const elSteps = document.getElementById('explain-steps-body');
+      const elBadge = document.getElementById('explain-misconception-badge');
+      const elHint = document.getElementById('explain-byte-hint');
+
+      if (elWrong) elWrong.innerText = `${wrongVal} ✕`;
+      if (elCorrect) elCorrect.innerText = `${prob.ans} ✓`;
+      if (elEq) elEq.innerText = (prob.equationStr || '').replace('?', prob.ans);
+
+      // Generate pedagogical steps
+      const steps = getDetailedProblemExplanation(prob, wrongVal);
+      if (elSteps) {
+        elSteps.innerHTML = steps.map(s => `<div class="p-2.5 rounded-xl bg-white border border-slate-200 shadow-2xs">${s}</div>`).join('');
+      }
+
+      // Socratic diagnostic pill & hint
+      const pillText = document.getElementById('misconception-text');
+      const pillEmoji = document.getElementById('misconception-emoji');
+      if (elBadge && pillText) {
+        elBadge.innerText = `${pillEmoji ? pillEmoji.innerText : '💡'} ${pillText.innerText || 'Socratic Coach'}`;
+      }
+      if (elHint) {
+        elHint.innerHTML = state.lastByteMessage || 'Take a deep breath and model this on your scratchpad!';
+      }
+
+      // Prepare speech text
+      lastExplanationTextToRead = `Review and learn. You answered ${wrongVal}, but the correct answer is ${prob.ans}. Equation: ${(prob.equationStr || '').replace('?', prob.ans)}. ${steps.map(s => s.replace(/<[^>]*>/g, '')).join('. ')}`;
+
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+      playSoundEffect('tap');
+    }
+
+    function closeExplanationModal() {
+      const modal = document.getElementById('explanation-modal');
+      if (modal) modal.classList.add('hidden');
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      generateProblem();
+      playSoundEffect('tap');
+    }
+
+    function readExplanationAloud() {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(lastExplanationTextToRead || "Here is the explanation for why this answer is correct.");
+      utter.rate = 0.92;
+      window.speechSynthesis.speak(utter);
     }
 
     function requestByteHint() {

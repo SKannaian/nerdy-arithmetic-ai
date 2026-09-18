@@ -241,7 +241,8 @@ def run_html_dom_audit():
         'questions-counter', 'time-counter', 'streak-badge', 'streak-num',
         'tier-badge', 'breadcrumb-tier', 'skill-selector', 'tab-nav-admin',
         'view-practice', 'view-report', 'view-admin', 'admin-auth-modal',
-        'admin-student-inspect-modal', 'admin-enroll-student-modal', 'mastery-modal'
+        'admin-student-inspect-modal', 'admin-enroll-student-modal', 'mastery-modal',
+        'explanation-modal', 'explain-wrong-val', 'explain-correct-val', 'explain-steps-body'
     ]
     
     for rid in required_ids:
@@ -259,7 +260,8 @@ def run_html_dom_audit():
         'instantAdminDemoLogin', 'logoutAdmin', 'openStudentInspectModal',
         'openEnrollStudentModal', 'handleEnrollStudentSubmit', 'exportRosterCsv',
         'broadcastParentReminder', 'readByteAloud', 'readEquationAloud',
-        'playSoundEffect', 'triggerConfetti', 'saveLearnerProfile'
+        'playSoundEffect', 'triggerConfetti', 'saveLearnerProfile',
+        'showExplanationModal', 'closeExplanationModal', 'readExplanationAloud'
     ]
     
     for fn in required_functions:
