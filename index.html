@@ -169,45 +169,23 @@
         </div>
       </div>
 
-      <!-- APP MODE TABS: PRACTICE ARENA VS PROGRESS REPORT VS ADMIN PORTAL -->
-      <nav class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0 gap-0.5">
-        <button onclick="switchAppTab('practice')" id="tab-nav-practice" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-sky-700 shadow-xs border border-slate-200">
-          <i data-lucide="gamepad-2" class="w-3.5 h-3.5 text-sky-600"></i>
-          <span>Practice</span>
+            <!-- APP MODE TABS: STUDENT, TEACHER, ADMIN -->
+      <nav class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0 gap-1">
+        <button onclick="switchAppTab('practice')" id="tab-nav-practice" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-white text-sky-700 shadow-xs border border-slate-200">
+          <i data-lucide="backpack" class="w-4 h-4 text-sky-600"></i>
+          <span>Student</span>
         </button>
-        <button onclick="switchAppTab('report')" id="tab-nav-report" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900">
-          <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 text-amber-500"></i>
-          <span class="hidden sm:inline">Progress</span><span>Report</span>
-          <span class="text-[9px] bg-emerald-100 text-emerald-800 font-extrabold px-1.5 py-0.5 rounded-md border border-emerald-300 hidden lg:inline">Live 📊</span>
+        <button onclick="switchAppTab('admin')" id="tab-nav-teacher" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:bg-white hover:text-purple-700">
+          <i data-lucide="apple" class="w-4 h-4 text-purple-500"></i>
+          <span>Teacher</span>
         </button>
-        <button onclick="switchAppTab('admin')" id="tab-nav-admin" class="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-purple-700 hover:bg-purple-50" title="Teacher & Admin Portal (Restricted)">
-          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i>
-          <span>Teacher & Admin</span>
-          <span class="text-[9px] bg-purple-100 text-purple-800 font-extrabold px-1.5 py-0.5 rounded-md border border-purple-300 hidden sm:inline">Portal 🔒</span>
+        <button onclick="switchAppTab('admin')" id="tab-nav-admin" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:bg-white hover:text-emerald-700">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+          <span>Admin</span>
         </button>
       </nav>
 
-      <!-- GRADE RIBBON SELECTOR (ALL 6 GRADES K THROUGH 5TH) -->
-      <nav id="tier-nav-bar" class="hidden md:flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0">
-        <button onclick="switchGradeTier('k')" id="tier-nav-k" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 bg-amber-400 text-slate-900 shadow-sm" title="Kindergarten">
-          <span>K</span>
-        </button>
-        <button onclick="switchGradeTier('1')" id="tier-nav-1" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="1st Grade">
-          <span>1st</span>
-        </button>
-        <button onclick="switchGradeTier('2')" id="tier-nav-2" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="2nd Grade">
-          <span>2nd</span>
-        </button>
-        <button onclick="switchGradeTier('3')" id="tier-nav-3" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="3rd Grade">
-          <span>3rd</span>
-        </button>
-        <button onclick="switchGradeTier('4')" id="tier-nav-4" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="4th Grade">
-          <span>4th</span>
-        </button>
-        <button onclick="switchGradeTier('5')" id="tier-nav-5" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="5th Grade">
-          <span>5th</span>
-        </button>
-      </nav>
+      
 
       <!-- Global Actions (Guaranteed 1st Row) -->
       <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
@@ -265,7 +243,7 @@
         <span class="bg-sky-600 text-white font-black px-2 py-0.5 rounded text-[11px] font-mono">MATH</span>
         <span class="text-slate-400">›</span>
         <!-- MOBILE GRADE DROPDOWN (VISIBLE ON SMALL SCREENS) -->
-        <select id="grade-dropdown-mobile" onchange="switchGradeTier(this.value)" class="md:hidden bg-amber-100 border border-amber-300 text-amber-900 font-extrabold rounded-lg px-2 py-0.5 text-xs outline-none">
+        <select id="grade-dropdown-mobile" style="display:none;" onchange="switchGradeTier(this.value)" class="md:hidden bg-amber-100 border border-amber-300 text-amber-900 font-extrabold rounded-lg px-2 py-0.5 text-xs outline-none">
           <option value="k">Kindergarten</option>
           <option value="1">1st Grade</option>
           <option value="2">2nd Grade</option>
@@ -273,7 +251,27 @@
           <option value="4">4th Grade</option>
           <option value="5">5th Grade</option>
         </select>
-        <span id="breadcrumb-tier" class="font-bold text-sky-900 hidden md:inline">Kindergarten</span>
+        <!-- GRADE RIBBON SELECTOR (ALL 6 GRADES K THROUGH 5TH) -->
+      <nav id="tier-nav-bar" class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner shrink-0">
+        <button onclick="switchGradeTier('k')" id="tier-nav-k" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 bg-amber-400 text-slate-900 shadow-sm" title="Kindergarten">
+          <span>K</span>
+        </button>
+        <button onclick="switchGradeTier('1')" id="tier-nav-1" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="1st Grade">
+          <span>1st</span>
+        </button>
+        <button onclick="switchGradeTier('2')" id="tier-nav-2" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="2nd Grade">
+          <span>2nd</span>
+        </button>
+        <button onclick="switchGradeTier('3')" id="tier-nav-3" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="3rd Grade">
+          <span>3rd</span>
+        </button>
+        <button onclick="switchGradeTier('4')" id="tier-nav-4" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="4th Grade">
+          <span>4th</span>
+        </button>
+        <button onclick="switchGradeTier('5')" id="tier-nav-5" class="px-2.5 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1 text-slate-600 hover:text-slate-900" title="5th Grade">
+          <span>5th</span>
+        </button>
+      </nav>
         <span class="text-slate-400">›</span>
         <!-- DYNAMIC SKILL SELECTOR DROPDOWN -->
         <div class="flex items-center gap-1">
