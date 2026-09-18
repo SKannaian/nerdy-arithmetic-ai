@@ -5006,12 +5006,6 @@
       }
     }
 
-
-      if (isAdminAuthenticated) {
-        syncAdminEmailJsUI();
-      }
-    }
-
     function saveSettings() {
       const isLocalEnv = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       state.backendUrl = document.getElementById('cfg-backend-url').value.trim() || (isLocalEnv ? 'http://127.0.0.1:8765' : window.location.origin);
