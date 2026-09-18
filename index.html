@@ -5417,6 +5417,12 @@
         saveLearnerProfile();
         updateProfileUI();
         document.getElementById('onboarding-modal').classList.add('hidden');
+        document.getElementById('main-app-content').classList.remove('hidden');
+        if (state.profile.role === 'admin' || state.profile.role === 'teacher') {
+          switchAppTab(state.profile.role);
+        } else {
+          switchAppTab('practice');
+        }
         switchGradeTier(normalizeTier(state.profile.gradeTier || 'k'));
         addByteMessage(`Welcome back, **${state.profile.name}**! Your progress and daily streak of **${state.profile.dailyStreak || 1} days** have been loaded! 🚀`);
       } else {
@@ -5427,10 +5433,17 @@
         state.profile.name = name;
         state.profile.avatar = selectedAvatarChar;
         state.profile.gradeTier = grade;
+        state.profile.role = onboardSelectedRole || 'student';
         state.profile.onboarded = true;
         saveLearnerProfile();
         updateProfileUI();
         document.getElementById('onboarding-modal').classList.add('hidden');
+        document.getElementById('main-app-content').classList.remove('hidden');
+        if (state.profile.role === 'admin' || state.profile.role === 'teacher') {
+          switchAppTab(state.profile.role);
+        } else {
+          switchAppTab('practice');
+        }
         switchGradeTier(grade);
         triggerConfetti();
         addByteMessage(`Welcome aboard, **${name}**! Your account is activated with **${currentPendingEmail}**. Let's solve some fun math problems! 🚀`);
@@ -5446,12 +5459,18 @@
       state.profile.name = name;
       state.profile.avatar = selectedAvatarChar;
       state.profile.gradeTier = grade;
+      state.profile.role = onboardSelectedRole || 'student';
       state.profile.onboarded = true;
       saveLearnerProfile();
-        updateProfileUI();
+      updateProfileUI();
 
       document.getElementById('onboarding-modal').classList.add('hidden');
       document.getElementById('main-app-content').classList.remove('hidden');
+      if (state.profile.role === 'admin' || state.profile.role === 'teacher') {
+        switchAppTab(state.profile.role);
+      } else {
+        switchAppTab('practice');
+      }
       switchGradeTier(grade);
       addByteMessage(`Welcome aboard, **${name}**! Your account is activated with **${currentPendingEmail}**. Let's solve some fun math problems! 🚀`);
     }
