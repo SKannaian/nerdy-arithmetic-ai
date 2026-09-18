@@ -67,13 +67,22 @@ Before we get into the demo, here is a quick look at how we built this:
 
 ---
 
-## 📋 Production Slide / Visual Asset Cheatsheet
+## 🖱️ Step-by-Step Click Sequence for the Demo
 
-1. **Minute 1 Visuals:**
-   * Action 1: Click `➖ Subtraction`, then click `Auto-Model Equation`.
-   * Action 2: Type in a wrong answer and hit `Submit` to show how the AI gives a hint.
-2. **Minute 2 Visuals:**
-   * Action 1: Click the `Progress Report` icon at the top.
-   * Action 2: Change your role to `Teacher` or `Admin` to quickly show the backend dashboard.
-   * Action 3: Show the [System Topology Diagram](ARCHITECTURE.md#1-high-level-system-topology) from the architecture doc.
-   * Action 4: Click `Live Varsity Tutor Help` to show how data is handed off to a human tutor.
+This is the exact sequence of buttons you should click during your screen recording to perfectly match the teleprompter script:
+
+1. **[0:00] Intro:** Start on the main app screen. *(Don't click anything yet, just introduce yourself).*
+2. **[0:15] Visual Modeling:** 
+   * Click the `➖ Subtraction` tab. 
+   * Click the `Auto-Model Equation` button to show the red counters visually crossing out.
+3. **[0:35] Byte the AI Tutor:** 
+   * Type a purposely incorrect answer into the keypad.
+   * Click `Submit` so the screen shakes and the AI spoken hint pops up.
+4. **[1:00] Dashboards:** 
+   * Click the `Progress Report` icon at the top of the screen to show the SmartScore ring.
+5. **[1:15] Admin Role:** 
+   * Change the User Role dropdown from `Student` to `Teacher` (or `Admin`) to reveal the secure settings panel.
+6. **[1:25] Varsity Tutors Handoff:** 
+   * Click the `Live Varsity Tutor Help` button to trigger the telemetry dossier popup.
+7. **[1:45] Tech Stack Wrap-up:** 
+   * Switch browser tabs to briefly flash the [Architecture Diagram](ARCHITECTURE.md#1-high-level-system-topology) while you deliver the final lines about Firebase and JavaScript.
