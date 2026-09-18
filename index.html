@@ -5000,7 +5000,12 @@
           recipient: targetEmail,
           otp_code: testOtp,
           message: `Admin Test from Nerdy Arithmetic AI (Verification Code: ${testOtp})`,
-          app_name: 'Nerdy Arithmetic AI'
+          app_name: 'Nerdy Arithmetic AI',
+              title: 'Login Verification',
+              name: 'Nerdy AI System',
+              'Hello User,': 'Hello,',
+              'time': new Date().toLocaleString(),
+              'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
         });
         alert(`🎉 SUCCESS! Real email sent to ${targetEmail}!\nStatus: ${res.status}`);
         addByteMessage(`Dispatched a real test email to **${targetEmail}** via EmailJS! Check your inbox 📬`);
@@ -5054,7 +5059,12 @@
           recipient: targetEmail,
           otp_code: testOtp,
           message: `Your Nerdy Arithmetic AI Test Code is: ${testOtp}`,
-          app_name: 'Nerdy Arithmetic AI'
+          app_name: 'Nerdy Arithmetic AI',
+              title: 'Login Verification',
+              name: 'Nerdy AI System',
+              'Hello User,': 'Hello,',
+              'time': new Date().toLocaleString(),
+              'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
         });
         alert(`🎉 SUCCESS! Real email sent to ${targetEmail}!\nStatus: ${res.status}`);
         addByteMessage(`Dispatched a real test email to **${targetEmail}** via EmailJS! Check your inbox 📬`);
@@ -5080,7 +5090,12 @@
             passcode: otpCode,
             subject: `Your Nerdy Arithmetic AI Code: ${otpCode}`,
             message: `Your Nerdy Arithmetic AI login code is: ${otpCode}`,
-            app_name: 'Nerdy Arithmetic AI'
+            app_name: 'Nerdy Arithmetic AI',
+              title: 'Login Verification',
+              name: 'Nerdy AI System',
+              'Hello User,': 'Hello,',
+              'time': new Date().toLocaleString(),
+              'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
           });
           console.log('[EMAILJS] Real email sent successfully!', res);
           return { success: true, provider: 'EmailJS' };
@@ -6525,7 +6540,12 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
             otp_code: 'BROADCAST',
             subject: `Nerdy Arithmetic AI - Weekly Classroom Progress Digest (${count} Students)`,
             message: `Hello! Weekly math report from Nerdy Arithmetic AI: Your classroom has solved over 1,028 problems with 94.8% accuracy. Keep your students' streaks alive!`,
-            app_name: 'Nerdy Arithmetic AI'
+            app_name: 'Nerdy Arithmetic AI',
+              title: 'Login Verification',
+              name: 'Nerdy AI System',
+              'Hello User,': 'Hello,',
+              'time': new Date().toLocaleString(),
+              'Nerdy Login code: ': (typeof otpCode !== 'undefined' ? otpCode : (typeof testOtp !== 'undefined' ? testOtp : 'N/A'))
           });
           dispatchedCount++;
           addByteMessage(`🚀 **Live Email Dispatched via EmailJS!** Real progress broadcast delivered to **${target}** and queued for all ${count} student parents.`);
