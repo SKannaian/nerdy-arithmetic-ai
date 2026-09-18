@@ -22,67 +22,54 @@
 
 ## 1. High-Level System Topology
 
-Nerdy Arithmetic AI is built on a **modern, decoupled, edge-capable architecture**. The frontend Single Page Application (SPA) runs client-side with zero external build dependencies, persisting state locally while dynamically interfacing with Google Cloud Firebase Hosting and Google Gemini 2.5 Flash via FastAPI.
+Nerdy Arithmetic AI is built on a **modern, decoupled, edge-capable architecture**. The frontend Single Page Application (SPA) runs entirely client-side with zero external build dependencies. All AI processing, cognitive classification, and security (Role-Based Auth) are handled natively in the browser, interfacing directly with Google Cloud Firebase Hosting, EmailJS, and Google Gemini 2.5 Flash.
 
 ```mermaid
 graph TB
-    subgraph ClientTier["Client Tier (Browser / iPad / Chromebook)"]
-        UI["Gamified Kid-Friendly UI (TailwindCSS / Outfit / Fredoka)"]
-        HUD["Mastery HUD (SmartScore 0-100 · Questions · Stopwatch)"]
+    subgraph ClientTier["Client Tier (Single Page App / Edge)"]
+        UI["Gamified Kid-Friendly UI (TailwindCSS)"]
+        HUD["Mastery HUD & Admin Dashboards"]
         
+        subgraph LogicLayer["Client-Side AI & Business Logic"]
+            Auth["Role-Based Auth (Email OTP)"]
+            Classifier["Cognitive Misconception Classifier"]
+            Guardrails["Socratic Anti-Spoil Guardrails"]
+            OfflineHeuristic["Zero-Crash Offline Engine"]
+            AntiRep["Anti-Repetition & Spaced Review"]
+        end
+
         subgraph Manipulatives["CRA Virtual Manipulatives"]
-            TenFrame["Ten-Frames Engine (K–1 Addition & Subtraction ✕)"]
-            Base10["Base-10 Regrouping (Grades 2–3 Tens/Ones)"]
-            AreaArray["Area Arrays Grid (Grades 4–5 Multiplication)"]
+            TenFrame["Ten-Frames Engine (K–1)"]
+            Base10["Base-10 Regrouping (Grades 2–3)"]
+            AreaArray["Area Arrays Grid (Grades 4–5)"]
         end
-
-        subgraph Engines["Core Client Engines"]
-            AntiRep["Anti-Repetition & Spaced Review Buffer"]
-            AudioSynth["Web Audio Chimes + Web Speech TTS"]
-            Scratchpad["Drawing Scratchpad Canvas"]
-            UserDB["Persistent User Database (localStorage['nerdy_users_db'])"]
-        end
+        
+        UserDB["Persistent User DB (localStorage)"]
     end
 
-    subgraph BackendTier["API Gateway & Telemetry Service (FastAPI :8765)"]
-        Router["/api/chat Endpoint"]
-        Classifier["Cognitive Misconception Classifier"]
-        Guardrails["Socratic Anti-Spoil Guardrails"]
-        OfflineHeuristic["Zero-Crash Offline Heuristic Engine"]
-    end
-
-    subgraph CloudTier["Google Cloud Platform & Varsity Tutors Ecosystem"]
+    subgraph CloudTier["Google Cloud Platform & External APIs"]
         Firebase["Google Cloud Firebase Hosting"]
         GeminiFlash["Google Gemini 2.5 Flash API"]
-        VarsityTutor["Varsity Tutors 1-on-1 Human Tutoring Bridge"]
-        WeeklyEmail["Sunday Evening Parent Summary Dispatcher"]
+        EmailJS["EmailJS (Real-world OTP Dispatch)"]
+        VarsityTutor["Varsity Tutors Human Telemetry Bridge"]
     end
 
     %% Client Interactions
+    ClientTier -. "Hosted On" .-> Firebase
     UI --> HUD
     UI --> Manipulatives
-    UI --> Scratchpad
-    UI --> AntiRep
-    UI --> UserDB
-    Manipulatives --> AudioSynth
-
-    %% Gateway & AI
-    UI -- "Answer Check / Hint Request" --> Router
-    Router --> Classifier
-    Classifier --> Guardrails
-    Guardrails --> GeminiFlash
-    GeminiFlash -. "Offline Fallback" .-> OfflineHeuristic
+    UI --> LogicLayer
+    LogicLayer --> UserDB
     
-    %% Hosting & Ecosystem
-    ClientTier -. "Hosted On" .-> Firebase
-    UI -- "Live Human Help" --> VarsityTutor
-    UserDB -- "7-Day Progress Sync" --> WeeklyEmail
+    %% AI and Auth Flow
+    Auth -- "Dispatch 6-digit OTP" --> EmailJS
+    LogicLayer -- "Socratic Hint Request" --> GeminiFlash
+    GeminiFlash -. "Offline Fallback" .-> OfflineHeuristic
+    UserDB -- "Live Dossier" --> VarsityTutor
 
     classDef client fill:#f0f9ff,stroke:#0284c7,stroke-width:2px,color:#0c4a6e;
-    classDef backend fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#14532d;
     classDef cloud fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#78350f;
     class ClientTier client;
-    class BackendTier backend;
     class CloudTier cloud;
 ```
 
