@@ -6960,6 +6960,11 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
       } else {
         document.getElementById('onboarding-modal').classList.add('hidden');
         document.getElementById('main-app-content').classList.remove('hidden');
+        if (state.profile.role === 'admin' || state.profile.role === 'teacher') {
+          switchAppTab(state.profile.role);
+        } else {
+          switchAppTab('practice');
+        }
       }
 
       setOperationChoice(state.selectedOperation || 'mixed');
