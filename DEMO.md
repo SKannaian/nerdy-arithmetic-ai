@@ -11,7 +11,7 @@
 ## 🛠️ Tech Stack & Automated Infrastructure
 Before we get into the demo, here is a quick look at how we built this:
 - **Frontend Core:** Pure Vanilla JavaScript, HTML, and TailwindCSS to keep things incredibly fast.
-- **AI Engine:** Powered by Google Gemini 2.5 Flash to act as our smart AI tutor.
+- **AI Engine:** Powered by Google Gemini 2.5 Flash for the live Socratic tutor, and built using Google AI Studio and Antigravity IDE for rapid prompt engineering and agentic coding.
 - **Hosting & Cloud:** Hosted on **Google Cloud Firebase Hosting**.
 - **Automated Deployments:** We set up a **GitHub Actions CI/CD Pipeline**. Whenever we push code to `main`, it automatically deploys to our live Firebase site.
 - **Extra Integrations:** We hooked up EmailJS to send real OTP emails, and used the browser's native Web Speech API to read text out loud.
