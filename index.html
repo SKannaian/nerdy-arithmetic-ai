@@ -1608,7 +1608,7 @@
               <span class="text-[10px] font-mono text-sky-600 font-normal">Account API Key</span>
             </label>
             <input 
-              type="text" 
+              type="password" 
               id="admin-emailjs-pubkey" 
               placeholder="e.g. user_abcdef12345 or public_key" 
               class="w-full bg-slate-50/70 border border-slate-200 rounded-xl p-2.5 text-xs font-mono text-slate-800 focus:border-sky-500 focus:bg-white outline-none transition" 
@@ -1622,7 +1622,7 @@
               <span class="text-[10px] font-mono text-sky-600 font-normal">Email Service</span>
             </label>
             <input 
-              type="text" 
+              type="password" 
               id="admin-emailjs-service" 
               placeholder="e.g. service_gmail or service_school" 
               class="w-full bg-slate-50/70 border border-slate-200 rounded-xl p-2.5 text-xs font-mono text-slate-800 focus:border-sky-500 focus:bg-white outline-none transition" 
@@ -1636,7 +1636,7 @@
               <span class="text-[10px] font-mono text-sky-600 font-normal">OTP / Progress Digest</span>
             </label>
             <input 
-              type="text" 
+              type="password" 
               id="admin-emailjs-template" 
               placeholder="e.g. template_otp or template_progress" 
               class="w-full bg-slate-50/70 border border-slate-200 rounded-xl p-2.5 text-xs font-mono text-slate-800 focus:border-sky-500 focus:bg-white outline-none transition" 
@@ -2642,16 +2642,16 @@
           <div class="space-y-2">
             <div>
               <label class="block font-semibold text-slate-700 text-[10px]">EmailJS Public Key</label>
-              <input type="text" id="cfg-emailjs-public-key" placeholder="e.g. user_abcdef12345 or public_key" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
+              <input type="password" id="cfg-emailjs-public-key" placeholder="e.g. user_abcdef12345 or public_key" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block font-semibold text-slate-700 text-[10px]">Service ID</label>
-                <input type="text" id="cfg-emailjs-service-id" placeholder="e.g. service_gmail" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
+                <input type="password" id="cfg-emailjs-service-id" placeholder="e.g. service_gmail" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
               </div>
               <div>
                 <label class="block font-semibold text-slate-700 text-[10px]">Template ID</label>
-                <input type="text" id="cfg-emailjs-template-id" placeholder="e.g. template_otp" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
+                <input type="password" id="cfg-emailjs-template-id" placeholder="e.g. template_otp" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px] font-mono focus:border-sky-500 outline-none" />
               </div>
             </div>
             <button type="button" onclick="testEmailJsDispatch()" class="w-full py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-[11px] transition shadow-xs flex items-center justify-center gap-1.5">
@@ -5335,6 +5335,17 @@
       if (!email || !email.includes('@')) {
         alert('Please enter a valid email address.');
         return;
+      }
+
+      if (onboardSelectedRole === 'admin' || onboardSelectedRole === 'teacher') {
+        const usersDb = loadUsersDb();
+        const existingUser = usersDb[email];
+        // Allow demo accounts to pass through for testing flexibility, otherwise enforce DB match
+        const isDemo = email === `demo.${onboardSelectedRole}@nerdy.com`;
+        if (!isDemo && (!existingUser || existingUser.role !== onboardSelectedRole)) {
+          alert(`Access Denied: ${email} is not registered as an authorized ${onboardSelectedRole.toUpperCase()}.`);
+          return;
+        }
       }
 
       currentPendingEmail = email;
