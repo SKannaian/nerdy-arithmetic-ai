@@ -37,7 +37,7 @@ Before we get into the demo, here is a quick look at how we built this:
 
 **[0:00 – 0:15] The Hook & Mission:**  
 *(Camera on speaker, then screen transitions to live app)*  
-> *"Hi everyone! I’m super excited to show you **Nerdy Arithmetic AI**, a fun math game we built for K-5 students. Instead of typical chatbots that just give away the answer, we built a hands-on learning experience that actually helps kids understand math visually."*
+> *"Hi everyone! I’m Sathish, an AI Data Engineer with 20 years of IT experience, and I’m super excited to show you **Nerdy Arithmetic AI**, a fun math game built for K-5 students. Instead of typical chatbots that just give away the answer, I built a hands-on learning experience that actually helps kids understand math visually."*
 
 **[0:15 – 0:35] Visual Math Tools:**  
 *(Screen: Click "➖ Subtraction", then click "Auto-Model Equation" on a subtraction problem)*  
