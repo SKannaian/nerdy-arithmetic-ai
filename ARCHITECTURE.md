@@ -35,12 +35,15 @@ graph LR
         direction TB
         UI["Gamified UI & CRA Manipulatives"]:::primary
         Auth["Role-Based Email Auth"]:::logic
+        Gen["Procedural Math Generator"]:::logic
         AI["Cognitive AI & Fallback Engine"]:::logic
         DB["Local User Database"]:::primary
         
         UI --> Auth
+        UI --> Gen
         UI --> AI
         Auth --> DB
+        Gen --> DB
         AI --> DB
     end
 
