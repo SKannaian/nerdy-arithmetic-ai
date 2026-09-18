@@ -25,56 +25,38 @@
 Nerdy Arithmetic AI is built on a **modern, decoupled, edge-capable architecture**. The frontend Single Page Application (SPA) runs entirely client-side with zero external build dependencies. All AI processing, cognitive classification, and security (Role-Based Auth) are handled natively in the browser, interfacing directly with Google Cloud Firebase Hosting, EmailJS, and Google Gemini 2.5 Flash.
 
 ```mermaid
-graph TB
+graph LR
     %% Styling - High Contrast for Presentations
     classDef primary fill:#2563eb,stroke:#1e40af,stroke-width:2px,color:#ffffff,font-weight:bold;
     classDef logic fill:#059669,stroke:#047857,stroke-width:2px,color:#ffffff,font-weight:bold;
     classDef cloud fill:#d97706,stroke:#b45309,stroke-width:2px,color:#ffffff,font-weight:bold;
-    classDef manip fill:#7c3aed,stroke:#5b21b6,stroke-width:2px,color:#ffffff,font-weight:bold;
 
-    subgraph ClientTier["Client Tier (Single Page App / Edge)"]
-        UI["Gamified Kid-Friendly UI"]:::primary
-        HUD["Mastery HUD & Admin Dashboards"]:::primary
+    subgraph Client ["Client Browser (Single Page App)"]
+        direction TB
+        UI["Gamified UI & CRA Manipulatives"]:::primary
+        Auth["Role-Based Email Auth"]:::logic
+        AI["Cognitive AI & Fallback Engine"]:::logic
+        DB["Local User Database"]:::primary
         
-        subgraph LogicLayer["Client-Side AI & Business Logic"]
-            Auth["Role-Based Auth (Email OTP)"]:::logic
-            Classifier["Cognitive Misconception Classifier"]:::logic
-            Guardrails["Socratic Anti-Spoil Guardrails"]:::logic
-            OfflineHeuristic["Zero-Crash Offline Engine"]:::logic
-            AntiRep["Anti-Repetition Engine"]:::logic
-        end
-
-        subgraph Manipulatives["CRA Virtual Manipulatives"]
-            TenFrame["Ten-Frames Engine (K–1)"]:::manip
-            Base10["Base-10 Regrouping (Grades 2–3)"]:::manip
-            AreaArray["Area Arrays Grid (Grades 4–5)"]:::manip
-        end
-        
-        UserDB["Persistent User DB (localStorage)"]:::primary
+        UI --> Auth
+        UI --> AI
+        Auth --> DB
+        AI --> DB
     end
 
-    subgraph CloudTier["Google Cloud Platform & External APIs"]
-        Firebase["Google Cloud Firebase Hosting"]:::cloud
-        GeminiFlash["Google Gemini 2.5 Flash API"]:::cloud
-        EmailJS["EmailJS (Real-world OTP)"]:::cloud
-        VarsityTutor["Varsity Tutors Human Bridge"]:::cloud
+    subgraph External ["Cloud Infrastructure & APIs"]
+        direction TB
+        Firebase["Google Firebase Hosting"]:::cloud
+        Email["EmailJS (OTP Dispatch)"]:::cloud
+        Gemini["Google Gemini 2.5 Flash"]:::cloud
+        Varsity["Varsity Tutors Bridge"]:::cloud
     end
 
-    %% Client Interactions
-    ClientTier -. "Hosted On" .-> Firebase
-    UI --> HUD
-    UI --> Manipulatives
-    UI --> Auth
-    UI --> Classifier
-    Classifier --> UserDB
-    Auth --> UserDB
-    
-    %% AI and Auth Flow
-    Auth -- "Dispatch 6-digit OTP" --> EmailJS
-    Classifier -- "Socratic Hint Request" --> GeminiFlash
-    Guardrails -. "Intercept Spoilers" .-> Classifier
-    GeminiFlash -. "Offline Fallback" .-> OfflineHeuristic
-    UserDB -- "Live Dossier" --> VarsityTutor
+    %% Cross-boundary connections
+    Client -. "Hosted On" .-> Firebase
+    Auth -- "Verify" --> Email
+    AI -- "Generate Hint" --> Gemini
+    DB -- "Sync Dossier" --> Varsity
 ```
 
 ---
