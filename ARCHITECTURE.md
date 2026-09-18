@@ -31,32 +31,32 @@ graph LR
     classDef logic fill:#059669,stroke:#047857,stroke-width:2px,color:#ffffff,font-weight:bold;
     classDef cloud fill:#d97706,stroke:#b45309,stroke-width:2px,color:#ffffff,font-weight:bold;
 
-    subgraph Client ["Client Browser (Single Page App)"]
-        direction TB
-        UI["Gamified UI & CRA Manipulatives"]:::primary
-        Auth["Role-Based Email Auth"]:::logic
-        Gen["Procedural Math Generator"]:::logic
-        AI["Cognitive AI & Fallback Engine"]:::logic
-        DB["Local User Database"]:::primary
-        
-        UI --> Auth
-        UI --> Gen
-        UI --> AI
-        Auth --> DB
-        Gen --> DB
-        AI --> DB
+    subgraph Firebase ["☁️ Hosted Globally on Google Firebase"]
+        subgraph Client ["Client Browser (Single Page App)"]
+            direction TB
+            UI["Gamified UI & CRA Manipulatives"]:::primary
+            Auth["Role-Based Email Auth"]:::logic
+            Gen["Procedural Math Generator"]:::logic
+            AI["Cognitive AI & Fallback Engine"]:::logic
+            DB["Local User Database"]:::primary
+            
+            UI --> Auth
+            UI --> Gen
+            UI --> AI
+            Auth --> DB
+            Gen --> DB
+            AI --> DB
+        end
     end
 
-    subgraph External ["Cloud Infrastructure & APIs"]
+    subgraph External ["External Cloud APIs"]
         direction TB
-        Firebase["Google Firebase Hosting"]:::cloud
         Email["EmailJS (OTP Dispatch)"]:::cloud
         Gemini["Google Gemini 2.5 Flash"]:::cloud
         Varsity["Varsity Tutors Bridge"]:::cloud
     end
 
     %% Cross-boundary connections
-    Client -. "Hosted On" .-> Firebase
     Auth -- "Verify" --> Email
     AI -- "Generate Hint" --> Gemini
     DB -- "Sync Dossier" --> Varsity
