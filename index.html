@@ -2581,7 +2581,7 @@
   </div>
 
   <!-- VARSITY TUTORS LIVE HUMAN INSTRUCTION HAND-OFF MODAL -->
-  <div id="tutor-handoff-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div id="tutor-handoff-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto bounce-in">
       
       <!-- MODAL HEADER -->
@@ -2950,6 +2950,40 @@
         addByteMessage(`Selected skill: **${skill.name}**! Let's practice!`);
       }
       generateProblem();
+    }
+
+    function getCurrentSkill() {
+      const tier = normalizeTier(state.tier || 'k');
+      const gradeData = CURRICULUM[tier] || CURRICULUM.k;
+      const activeSkill = state.selectedSkill || (gradeData.skills[0] && gradeData.skills[0].id);
+      let skillDef = gradeData.skills.find(s => s.id === activeSkill) || gradeData.skills[0];
+      if (!skillDef) {
+        skillDef = { id: 'k_ten_frame', name: 'K.1 Addition & Subtraction within 10', manipulative: 'ten_frame_single', ccss: 'CCSS.MATH.CONTENT.K.OA.A.1' };
+      }
+      if (!skillDef.ccss) {
+        const ccssLookup = {
+          k_ten_frame: 'CCSS.MATH.CONTENT.K.OA.A.1',
+          k_make_10: 'CCSS.MATH.CONTENT.K.OA.A.4',
+          k_decompose: 'CCSS.MATH.CONTENT.K.OA.A.3',
+          g1_within_20: 'CCSS.MATH.CONTENT.1.OA.C.6',
+          g1_missing_addend: 'CCSS.MATH.CONTENT.1.OA.D.8',
+          g1_tens_ones: 'CCSS.MATH.CONTENT.1.NBT.B.2',
+          g2_add_regroup: 'CCSS.MATH.CONTENT.2.NBT.B.5',
+          g2_sub_regroup: 'CCSS.MATH.CONTENT.2.NBT.B.5',
+          g2_skip_count: 'CCSS.MATH.CONTENT.2.OA.C.4',
+          g3_times_tables: 'CCSS.MATH.CONTENT.3.OA.C.7',
+          g3_division: 'CCSS.MATH.CONTENT.3.OA.A.2',
+          g3_fractions: 'CCSS.MATH.CONTENT.3.NF.A.1',
+          g4_mult_2digit: 'CCSS.MATH.CONTENT.4.NBT.B.5',
+          g4_div_remainders: 'CCSS.MATH.CONTENT.4.NBT.B.6',
+          g4_add_fractions: 'CCSS.MATH.CONTENT.4.NF.B.3',
+          g5_pemdas: 'CCSS.MATH.CONTENT.5.OA.A.1',
+          g5_decimal_add_sub: 'CCSS.MATH.CONTENT.5.NBT.B.7',
+          g5_decimal_mult: 'CCSS.MATH.CONTENT.5.NBT.B.7'
+        };
+        skillDef = { ...skillDef, ccss: ccssLookup[skillDef.id] || 'CCSS.MATH.PRACTICE' };
+      }
+      return skillDef;
     }
 
     // ── 6-GRADE CCSS PROBLEM GENERATOR ──────────────────────────────────────
@@ -6026,7 +6060,7 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
 
     // ── VARSITY TUTORS LIVE HUMAN INSTRUCTION HAND-OFF ──────────────────────
     function openTutorHandoffModal() {
-      const p = state.profile;
+      const p = state.profile || {};
       const avatarEl = document.getElementById('handoff-student-avatar');
       const nameEl = document.getElementById('handoff-student-name');
       const scoreEl = document.getElementById('handoff-smartscore');
@@ -6036,9 +6070,9 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
 
       if (avatarEl) avatarEl.innerText = p.avatar || '🦊';
       if (nameEl) nameEl.innerText = p.name || 'Alex';
-      if (scoreEl) scoreEl.innerText = `${state.smartScore} / 100`;
+      if (scoreEl) scoreEl.innerText = `${state.smartScore !== undefined ? state.smartScore : 0} / 100`;
 
-      const gradeName = CURRICULUM[state.tier]?.title || 'Kindergarten';
+      const gradeName = (CURRICULUM[state.tier] && CURRICULUM[state.tier].title) ? CURRICULUM[state.tier].title : 'Kindergarten';
       if (tierEl) tierEl.innerText = gradeName;
 
       const currentSkill = getCurrentSkill();
@@ -6050,12 +6084,20 @@ Direct Practice Link: ${window.location.origin}/?email=${encodeURIComponent(p.em
         : (state.smartScore >= 90 ? 'Gold Challenge Zone Mastery Polishing' : 'Active Foundational Scaffolding');
       if (miscEl) miscEl.innerText = misconception;
 
-      document.getElementById('tutor-handoff-modal').classList.remove('hidden');
-      lucide.createIcons();
+      // Close profile modal if open to prevent visual overlap
+      const profModal = document.getElementById('profile-modal');
+      if (profModal) profModal.classList.add('hidden');
+
+      const modal = document.getElementById('tutor-handoff-modal');
+      if (modal) modal.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+      playSoundEffect('tap');
     }
 
     function closeTutorHandoffModal() {
-      document.getElementById('tutor-handoff-modal').classList.add('hidden');
+      const modal = document.getElementById('tutor-handoff-modal');
+      if (modal) modal.classList.add('hidden');
+      playSoundEffect('tap');
     }
 
     function simulateTutorConnect() {
